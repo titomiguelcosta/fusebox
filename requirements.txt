@@ -1,4 +1,6 @@
 django
+requests
 slackclient
 spotipy
 gunicorn
+python-dotenv
