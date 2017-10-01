@@ -1,8 +1,10 @@
 pipeline {
     agent any
-
-    def dockerImage = "titomiguelcosta/fusebox"
-    def dockerHubAccountNameOnJenkins = "dockerhub-titomiguelcosta"
+    
+    environment {
+        dockerImage = "titomiguelcosta/fusebox"
+        dockerHubAccountNameOnJenkins = "dockerhub-titomiguelcosta"
+    }
 
     stages {
         stage("Build") {
