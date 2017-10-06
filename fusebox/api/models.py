@@ -41,7 +41,7 @@ class Playlist(models.Model):
         return self.name
 
 
-class PlaylistSongs(models.Model):
+class PlaylistTracks(models.Model):
     playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
 
@@ -52,7 +52,7 @@ class Rate(models.Model):
     score = models.IntegerField()
 
     def __str__(self):
-        return "User %s scored %s for song %s" % (self.user, self.score, self.track)
+        return "User %s scored %s on track %s" % (self.user, self.score, self.track)
 
 
 class Artist(models.Model):
@@ -66,4 +66,5 @@ class Artist(models.Model):
 
 
 class Played(models.Model):
-    song = models.ForeignKey(Track, on_delete=models.CASCADE)
+    track = models.ForeignKey(Track, on_delete=models.CASCADE)
+    on = models.DateTimeField()
