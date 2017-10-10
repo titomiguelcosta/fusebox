@@ -26,9 +26,9 @@ load_dotenv(dotenv_path)
 SECRET_KEY = 'wrqfp6%v80-*bi$w!c9#a(*gb#o*_#dok)ej%=n*1=p#-vq_3i'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool("True" == os.getenv("DEBUG", "False"))
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost',  '.amazonaws.com', '.ngrok.io']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost',  '.amazonaws.com', '.ngrok.io', '*']
 
 # Application definition
 
