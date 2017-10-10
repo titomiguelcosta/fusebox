@@ -5,11 +5,12 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.module_loading import import_string
 from django.http import HttpResponse, JsonResponse
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
-from django.conf import settings
 import boto3
 import requests
+from api.formatter import SlackFormatter
+import importlib
+from api.helpers.Spotify import SpotifyHelper
+
 
 def index(request):
     return JsonResponse({"status": "ok", "host": socket.gethostname()})
@@ -18,19 +19,22 @@ def index(request):
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def playing(request):
-    oauth = SpotifyOAuth(
-        os.getenv("SPOTIPY_CLIENT_ID"),
-        os.getenv("SPOTIPY_CLIENT_SECRET"),
-        os.getenv("SPOTIPY_REDIRECT_URI"),
-        scope="user-library-read user-read-currently-playing",
-        cache_path=settings.BASE_DIR+"/../.cache-" + os.getenv("SPOTIPY_USERNAME")
-    )
-    sp = spotipy.Spotify(auth=str(oauth.get_cached_token()["access_token"]))
-    track = sp._get("me/player/currently-playing")
+    print(request.body)
+    track, track_details = SpotifyHelper.current_playing_track()
+    requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={"text": "@%s requested current playing song. Listening to %s" % (request.POST.get("user_name", "Someone"), track.title)})
 
-    requests.post("https://hooks.slack.com/services/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", json={"text": str(track)})
+    return JsonResponse(SlackFormatter.current_playing_track(track))
 
-    return HttpResponse(str(track))
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def rate(request, score):
+    print(request.body)
+    track, track_details = SpotifyHelper.current_playing_track()
+    if track:
+        requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={"text": "%s just rated track %s" % ("me", track.title)})
+
+    return HttpResponse("Thanks for rating.")
 
 
 @csrf_exempt
@@ -41,15 +45,28 @@ def lex(request):
         botName=os.getenv("BOT_NAME"),
         botAlias=os.getenv("BOT_ALIAS"),
         userId="pixelfusion",
-        inputText='Current playing song'
+        inputText=request.GET.get("text", "Current playing song")
     )
 
     if "intentName" in response:
         slots = response["slots"] if "slots" in response else {}
-        handler = import_string("api.handlers.%s.handle" % response["intentName"])
-        response = handler(slots)
+        # handler = import_string("api.handlers.lex.%s" % response["intentName"])
+        handler = importlib.import_module("api.handlers.lex.%s" % "Test")
+        response = handler()
+        response = response.hello()
 
     return HttpResponse(str(response))
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def slack_interactive(request):
+    data = json.loads(request.POST.get('payload'))
+
+    handler = import_string("api.handlers.slack.%s" % data["callback_id"])
+    response = handler(data)
+
+    return HttpResponse(response)
 
 
 @csrf_exempt
@@ -62,7 +79,6 @@ def slack_listener(request):
     # Grab intent
     # Execute action
     # Post reply to slack
-    print(data)
 
     # if "event" in data and "bot_id" not in data["event"] and "channel" in data["event"]:
     #     sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
@@ -72,4 +88,4 @@ def slack_listener(request):
     #         text="Hello from Python! :tada:"
     #     )
 
-    return HttpResponse('adsasdasdas')
+    return HttpResponse('To be implemented')

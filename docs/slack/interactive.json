@@ -1,0 +1,103 @@
+{
+  'actions': [
+    {
+      'name': 'rate',
+      'type': 'button',
+      'value': '9'
+    }
+  ],
+  'callback_id': 'rate_currently_playing_track',
+  'team': {
+    'id': 'T025FEBUF',
+    'domain': 'pixelfusion'
+  },
+  'channel': {
+    'id': 'C77BR122J',
+    'name': 'fusebox'
+  },
+  'user': {
+    'id': 'U41070BCY',
+    'name': 'tito'
+  },
+  'action_ts': '1507522940.443153',
+  'message_ts': '1507522708.000118',
+  'attachment_id': '1',
+  'token': '8TGkT7LKNsvq11vIJ92G6L30',
+  'is_app_unfurl': False,
+  'type': 'interactive_message',
+  'original_message': {
+    'text': 'Currently playing: Just a Lover from Just a Lover by Hayden James <spotify:track:7qij4Or4NGEC24Y27N7vaZ>',
+    'bot_id': 'B76F1B0N6',
+    'attachments': [
+      {
+        'callback_id': 'rate_currently_playing_track',
+        'fallback': 'You were unable to rate.',
+        'text': 'How do you rate it?',
+        'id': 1,
+        'color': '3AA3E3',
+        'actions': [
+          {
+            'id': '1',
+            'name': 'rate',
+            'text': 'Hate',
+            'type': 'button',
+            'value': '1',
+            'style': ''
+          },
+          {
+            'id': '2',
+            'name': 'rate',
+            'text': "It's OK",
+            'type': 'button',
+            'value': '3',
+            'style': ''
+          },
+          {
+            'id': '3',
+            'name': 'rate',
+            'text': 'Not sure',
+            'type': 'button',
+            'value': '5',
+            'style': ''
+          },
+          {
+            'id': '4',
+            'name': 'rate',
+            'text': 'Like',
+            'type': 'button',
+            'value': '7',
+            'style': 'danger'
+          },
+          {
+            'id': '5',
+            'name': 'rate',
+            'text': 'Love it',
+            'type': 'button',
+            'value': '9',
+            'style': 'danger'
+          }
+        ]
+      },
+      {
+        'service_name': 'Spotify',
+        'service_url': 'https://www.spotify.com',
+        'title': 'Just a Lover',
+        'title_link': 'http://open.spotify.com/track/7qij4Or4NGEC24Y27N7vaZ',
+        'thumb_url': 'https://i.scdn.co/image/edb33566600390de037433477c53709ec9cf636d',
+        'thumb_width': 640,
+        'thumb_height': 640,
+        'fallback': 'Spotify Audio: Just a Lover',
+        'audio_html': '<iframe src="https://open.spotify.com/embed/track/7qij4Or4NGEC24Y27N7vaZ" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>',
+        'audio_html_width': 300,
+        'audio_html_height': 380,
+        'from_url': 'spotify:track:7qij4Or4NGEC24Y27N7vaZ',
+        'id': 2
+      }
+    ],
+    'type': 'message',
+    'subtype': 'bot_message',
+    'ts': '1507522708.000118'
+  },
+  'response_url': 'https://hooks.slack.com/actions/T025FEBUF/253263771330/nieft1Odw86P3BKK06M1ai0i',
+  'trigger_id': '252746725025.2185487967.3772d947941c4e5ee296dffdc3856bf6'
+}

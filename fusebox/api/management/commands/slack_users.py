@@ -6,16 +6,20 @@ from api.models import UserProfile
 
 
 class Command(BaseCommand):
-    help = 'Gets a list of all the users on slack and updates database'
+    help = "Gets a list of all the users on slack and updates database"
 
     def handle(self, *args, **options):
         sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
         response = sc.api_call("users.list")
 
         for slack_user in response["members"]:
-            user_profile = UserProfile.objects.get(slack_username=slack_user["id"])
-            if not user_profile and "profile" in slack_user and "email" in slack_user["profile"] and slack_user["profile"]["email"].endswith("pixelfusion.co.nz"):
-                user = User()
+            if "profile" in slack_user and "email" in slack_user["profile"] and slack_user["profile"]["email"].endswith("pixelfusion.co.nz"):
+                try:
+                    user_profile = UserProfile.objects.get(slack_username=slack_user["id"])
+                except UserProfile.DoesNotExist:
+                    user_profile = UserProfile()
+                    user = User()
+
                 user.username = slack_user["id"]
                 user.email = slack_user["profile"]["email"]
                 user.first_name = slack_user["profile"]["real_name"]
@@ -24,7 +28,6 @@ class Command(BaseCommand):
                 user.is_superuser = slack_user["is_admin"] if "is_admin" in slack_user else False
                 user.save()
 
-                user_profile = UserProfile()
                 user_profile.slack_username = slack_user["id"]
                 user_profile.user = user
                 user_profile.save()

@@ -32,6 +32,5 @@ services:
       - "5000:4000"
     networks:
       - webnet
-    command: ["./docker_boot.sh", "0.0.0.0:4000", "--chdir", "/app/fusebox/fusebox", "--reload", "wsgi:application"]
 networks:
   webnet:

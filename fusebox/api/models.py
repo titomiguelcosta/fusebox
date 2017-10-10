@@ -13,9 +13,21 @@ class UserProfile(models.Model):
         verbose_name_plural = "User profiles"
 
 
+class Artist(models.Model):
+    name = models.CharField(max_length=250)
+    popularity = models.IntegerField(default=0)
+    genres = models.CharField(max_length=250, blank=True)
+    spotify_id = models.CharField(max_length=250, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Track(models.Model):
     title = models.CharField(max_length=250)
     album = models.CharField(max_length=250, blank=True)
+    url = models.CharField(max_length=250, blank=True)
+    artists = models.ManyToManyField(Artist)
     spotify_id = models.CharField(max_length=250, blank=True)
     popularity = models.IntegerField(default=0.0)
     danceability = models.FloatField(default=0.0)
@@ -28,6 +40,12 @@ class Track(models.Model):
     valence = models.FloatField(default=0.0)
     tempo = models.FloatField(default=0.0)
 
+    @property
+    def artists_to_str(self):
+        artists = [str(artist) for artist in self.artists.all()]
+
+        return 'Unknown' if 0 == len(artists) else ", ".join(artists)
+
     def __str__(self):
         return self.title
 
@@ -36,14 +54,10 @@ class Playlist(models.Model):
     name = models.CharField(max_length=250)
     description = models.CharField(max_length=250, blank=True)
     spotify_id = models.CharField(max_length=250, blank=True)
+    tracks = models.ManyToManyField(Track)
 
     def __str__(self):
         return self.name
-
-
-class PlaylistTracks(models.Model):
-    playlist = models.ForeignKey(Playlist, on_delete=models.CASCADE)
-    track = models.ForeignKey(Track, on_delete=models.CASCADE)
 
 
 class Rate(models.Model):
@@ -53,16 +67,6 @@ class Rate(models.Model):
 
     def __str__(self):
         return "User %s scored %s on track %s" % (self.user, self.score, self.track)
-
-
-class Artist(models.Model):
-    name = models.CharField(max_length=250)
-    popularity = models.IntegerField(default=0)
-    genres = models.CharField(max_length=250, blank=True)
-    spotify_id = models.CharField(max_length=250, blank=True)
-
-    def __str__(self):
-        return self.name
 
 
 class Played(models.Model):

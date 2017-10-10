@@ -15,6 +15,12 @@ pipeline {
                     sh "docker push ${dockerImage}:latest"
                     sh "docker rmi -f ${dockerImage}"
                 }
+
+                if (env.BRANCH_NAME == "master") {
+                    withEnv(['AWS_PROFILE=pixelfusion']) {
+                        sh 'python deploy.py'
+                    }
+                }
             }
         }
         stage("Test") {

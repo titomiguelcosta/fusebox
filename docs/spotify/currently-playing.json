@@ -1,0 +1,211 @@
+{
+  "timestamp": 1507498335038,
+  "progress_ms": 163807,
+  "is_playing": "True",
+  "item": {
+    "album": {
+      "album_type": "single",
+      "artists": [
+        {
+          "external_urls": {
+            "spotify": "https://open.spotify.com/artist/356FCJoyYWyzONni54Dgrv"
+          },
+          "href": "https://api.spotify.com/v1/artists/356FCJoyYWyzONni54Dgrv",
+          "id": "356FCJoyYWyzONni54Dgrv",
+          "name": "Jerry Folk",
+          "type": "artist",
+          "uri": "spotify:artist:356FCJoyYWyzONni54Dgrv"
+        }
+      ],
+      "available_markets": [
+        "AD",
+        "AR",
+        "AT",
+        "AU",
+        "BE",
+        "BG",
+        "BO",
+        "BR",
+        "CA",
+        "CH",
+        "CL",
+        "CO",
+        "CR",
+        "CY",
+        "CZ",
+        "DE",
+        "DK",
+        "DO",
+        "EC",
+        "EE",
+        "ES",
+        "FI",
+        "FR",
+        "GB",
+        "GR",
+        "GT",
+        "HK",
+        "HN",
+        "HU",
+        "ID",
+        "IE",
+        "IS",
+        "IT",
+        "JP",
+        "LI",
+        "LT",
+        "LU",
+        "LV",
+        "MC",
+        "MT",
+        "MX",
+        "MY",
+        "NI",
+        "NL",
+        "NO",
+        "NZ",
+        "PA",
+        "PE",
+        "PH",
+        "PL",
+        "PT",
+        "PY",
+        "SE",
+        "SG",
+        "SK",
+        "SV",
+        "TR",
+        "TW",
+        "US",
+        "UY"
+      ],
+      "external_urls": {
+        "spotify": "https://open.spotify.com/album/6QizBlI5b0ypHR2pkBzg4f"
+      },
+      "href": "https://api.spotify.com/v1/albums/6QizBlI5b0ypHR2pkBzg4f",
+      "id": "6QizBlI5b0ypHR2pkBzg4f",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/fa512924b041585ee959daba4e4b6dbe74696ee4",
+          "width": 640
+        },
+        {
+          "height": 300,
+          "url": "https://i.scdn.co/image/53c15dd1310fce2908af6c9b6117c66c96b2e480",
+          "width": 300
+        },
+        {
+          "height": 64,
+          "url": "https://i.scdn.co/image/fe25df0d0073f4e8766aa91e453049248f26fadb",
+          "width": 64
+        }
+      ],
+      "name": "Purple Feelings (feat. Rainsford)",
+      "type": "album",
+      "uri": "spotify:album:6QizBlI5b0ypHR2pkBzg4f"
+    },
+    "artists": [
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/356FCJoyYWyzONni54Dgrv"
+        },
+        "href": "https://api.spotify.com/v1/artists/356FCJoyYWyzONni54Dgrv",
+        "id": "356FCJoyYWyzONni54Dgrv",
+        "name": "Jerry Folk",
+        "type": "artist",
+        "uri": "spotify:artist:356FCJoyYWyzONni54Dgrv"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/4XxCuxkBeoJUdzaVRGJjrJ"
+        },
+        "href": "https://api.spotify.com/v1/artists/4XxCuxkBeoJUdzaVRGJjrJ",
+        "id": "4XxCuxkBeoJUdzaVRGJjrJ",
+        "name": "Rainsford",
+        "type": "artist",
+        "uri": "spotify:artist:4XxCuxkBeoJUdzaVRGJjrJ"
+      }
+    ],
+    "available_markets": [
+      "AD",
+      "AR",
+      "AT",
+      "AU",
+      "BE",
+      "BG",
+      "BO",
+      "BR",
+      "CA",
+      "CH",
+      "CL",
+      "CO",
+      "CR",
+      "CY",
+      "CZ",
+      "DE",
+      "DK",
+      "DO",
+      "EC",
+      "EE",
+      "ES",
+      "FI",
+      "FR",
+      "GB",
+      "GR",
+      "GT",
+      "HK",
+      "HN",
+      "HU",
+      "ID",
+      "IE",
+      "IS",
+      "IT",
+      "JP",
+      "LI",
+      "LT",
+      "LU",
+      "LV",
+      "MC",
+      "MT",
+      "MX",
+      "MY",
+      "NI",
+      "NL",
+      "NO",
+      "NZ",
+      "PA",
+      "PE",
+      "PH",
+      "PL",
+      "PT",
+      "PY",
+      "SE",
+      "SG",
+      "SK",
+      "SV",
+      "TR",
+      "TW",
+      "US",
+      "UY"
+    ],
+    "disc_number": 1,
+    "duration_ms": 205380,
+    "explicit": "False",
+    "external_ids": {
+      "isrc": "TCADA1776421"
+    },
+    "external_urls": {
+      "spotify": "https://open.spotify.com/track/7HNw6ITDQbdHFdm0IC7jMC"
+    },
+    "href": "https://api.spotify.com/v1/tracks/7HNw6ITDQbdHFdm0IC7jMC",
+    "id": "7HNw6ITDQbdHFdm0IC7jMC",
+    "name": "Purple Feelings (feat. Rainsford)",
+    "popularity": 55,
+    "preview_url": "https://p.scdn.co/mp3-preview/ecb3781c83e2609bd49efa27dbe42262fbec9c71?cid=f3655d0890ab46e181a1e71c5e6b2f7d",
+    "track_number": 1,
+    "type": "track",
+    "uri": "spotify:track:7HNw6ITDQbdHFdm0IC7jMC"
+  },
+  "context": "None"
+}
