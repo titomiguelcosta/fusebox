@@ -5,6 +5,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.module_loading import import_string
 from django.http import HttpResponse, JsonResponse
+from django.utils import timezone
 import boto3
 import requests
 from api.formatter import SlackFormatter
@@ -12,7 +13,7 @@ from api.helpers.Spotify import SpotifyHelper
 
 
 def index(request):
-    return JsonResponse({"status": "ok", "host": socket.gethostname()})
+    return JsonResponse({"status": "ok", "host": socket.gethostname(), "date": timezone.now()})
 
 
 @csrf_exempt
