@@ -8,7 +8,6 @@ from django.http import HttpResponse, JsonResponse
 import boto3
 import requests
 from api.formatter import SlackFormatter
-import importlib
 from api.helpers.Spotify import SpotifyHelper
 
 
@@ -19,7 +18,6 @@ def index(request):
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def playing(request):
-    print(request.body)
     track, track_details = SpotifyHelper.current_playing_track()
     requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={"text": "@%s requested current playing song. Listening to %s" % (request.POST.get("user_name", "Someone"), track.title)})
 
@@ -45,15 +43,13 @@ def lex(request):
         botName=os.getenv("BOT_NAME"),
         botAlias=os.getenv("BOT_ALIAS"),
         userId="pixelfusion",
-        inputText=request.GET.get("text", "Current playing song")
+        inputText=request.GET.get("text", request.GET.get("text", "Current playing song"))
     )
 
     if "intentName" in response:
         slots = response["slots"] if "slots" in response else {}
-        # handler = import_string("api.handlers.lex.%s" % response["intentName"])
-        handler = importlib.import_module("api.handlers.lex.%s" % "Test")
-        response = handler()
-        response = response.hello()
+        handler = import_string("api.handlers.lex.%s" % response["intentName"])
+        response = handler(slots)
 
     return HttpResponse(str(response))
 
@@ -61,7 +57,7 @@ def lex(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def slack_interactive(request):
-    data = json.loads(request.POST.get('payload'))
+    data = json.loads(request.POST.get("payload"))
 
     handler = import_string("api.handlers.slack.%s" % data["callback_id"])
     response = handler(data)

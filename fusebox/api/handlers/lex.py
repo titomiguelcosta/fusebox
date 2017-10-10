@@ -14,8 +14,3 @@ def SongDetails(slots):
     track = None if "track" not in slots else slots["track"]
 
     return "I can not recognise this song."
-
-
-class Test(object):
-    def hello(self):
-        return "Okasdasdsas1212 "
