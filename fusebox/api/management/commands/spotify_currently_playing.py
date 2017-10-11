@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from api.models import Track, Played
 from django.utils import timezone
-from fusebox.services import get_spotify
+from api.services import get_spotify
 
 
 class Command(BaseCommand):

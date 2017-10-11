@@ -9,7 +9,7 @@ from django.utils import timezone
 import boto3
 import requests
 from api.formatter import SlackFormatter
-from api.helpers.Spotify import SpotifyHelper
+from api.helpers.spotify import SpotifyHelper
 from api.models import Track
 
 
@@ -29,7 +29,7 @@ def playing(request):
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def played(request):
-    # requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={"text": "@%s requested recently played song." % request.POST.get("user_name", "Someone")})
+    requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={"text": "@%s requested recently played song." % request.POST.get("user_name", "Someone")})
 
     tracks = Track.objects.all().order_by("-id")[:3]
 

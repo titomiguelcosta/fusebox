@@ -72,3 +72,11 @@ class Rate(models.Model):
 class Played(models.Model):
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
     on = models.DateTimeField()
+
+
+class Configuration(models.Model):
+    name = models.CharField(max_length=250)
+    value = models.TextField()
+
+    def __str__(self):
+        return self.name

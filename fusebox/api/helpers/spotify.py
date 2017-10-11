@@ -1,5 +1,5 @@
 from api.models import Track, Artist
-from fusebox.services import get_spotify
+from api.services import get_spotify
 
 
 class SpotifyHelper(object):
@@ -34,3 +34,4 @@ class SpotifyHelper(object):
             track = None
 
         return track, track_details
+
