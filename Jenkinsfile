@@ -17,7 +17,7 @@ pipeline {
                 }
                 script {
                     if (env.BRANCH_NAME == "master") {
-                        sh 'ecs deploy --ignore-warnings --profilepixelfusion fusebox-cluster fusebox-service'
+                        sh 'ecs deploy --ignore-warnings --profile pixelfusion fusebox-cluster fusebox-service'
                     }
                 }
             }
