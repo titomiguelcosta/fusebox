@@ -17,9 +17,7 @@ pipeline {
                 }
                 script {
                     if (env.BRANCH_NAME == "master") {
-                        withEnv(['AWS_PROFILE=pixelfusion']) {
-                            sh 'python deploy.py'
-                        }
+                        sh 'ecs deploy --ignore-warnings --profilepixelfusion fusebox-cluster fusebox-service'
                     }
                 }
             }

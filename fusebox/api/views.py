@@ -29,7 +29,7 @@ def playing(request):
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def played(request):
-    requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={"text": "@%s requested recently played song." % request.POST.get("user_name", "Someone")})
+    requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={"text": "@%s requested recently played songs." % request.POST.get("user_name", "Someone")})
 
     tracks = Track.objects.all().order_by("-id")[:3]
 
@@ -43,7 +43,7 @@ def rate(request, score):
     if track:
         requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={"text": "%s just rated track %s" % ("me", track.title)})
 
-    return HttpResponse("Thanks for rating.")
+    return HttpResponse("")
 
 
 @csrf_exempt
@@ -79,7 +79,6 @@ def slack_interactive(request):
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def slack_listener(request):
-    data = json.loads(request.body)
     # FLOW #####
     # Get body message
     # Pass to Lex

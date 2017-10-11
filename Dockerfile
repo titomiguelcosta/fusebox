@@ -7,7 +7,7 @@ ADD . /app
 RUN pip install -r /app/requirements.txt
 RUN python /app/fusebox/manage.py collectstatic -c --noinput
 
-EXPOSE 4000
+#EXPOSE 4000
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH $PYTHONPATH:/app/fusebox
