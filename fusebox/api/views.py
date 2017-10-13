@@ -7,10 +7,10 @@ from django.utils.module_loading import import_string
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 import boto3
-import requests
 from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
-from api.models import Track
+from api.models import Track, UserProfile
+from api.handlers.slack import RATE_CATEGORY_LIKE
 
 
 def index(request):
@@ -21,29 +21,46 @@ def index(request):
 @require_http_methods(["GET", "POST"])
 def playing(request):
     track, track_details = SpotifyHelper.current_playing_track()
-    requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={"text": "@%s requested current playing song. Listening to %s" % (request.POST.get("user_name", "Someone"), track.title)})
 
-    return JsonResponse(SlackFormatter.current_playing_track(track))
+    return JsonResponse(SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE))
 
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def played(request):
-    requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={"text": "@%s requested recently played songs." % request.POST.get("user_name", "Someone")})
+    track = Track.objects.order_by("-id")[0]
 
-    tracks = Track.objects.all().order_by("-id")[:3]
-
-    return JsonResponse(SlackFormatter.recently_played(tracks))
+    return JsonResponse(SlackFormatter.recently_played(track, category=RATE_CATEGORY_LIKE))
 
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
-def rate(request, score):
-    track, track_details = SpotifyHelper.current_playing_track()
-    if track:
-        requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={"text": "%s just rated track %s" % ("me", track.title)})
+def slack_subscribe(request):
+    user_name = request.POST.get("user_name", "")
+    user_id = request.POST.get("user_id", "")
+    try:
+        user_profile = UserProfile.objects.get(slack_username=user_id)
+        user_profile.notifications = True
+        user_profile.save()
 
-    return HttpResponse("")
+        return HttpResponse("Happy to have you around %s" % user_name)
+    except UserProfile.DoesNotExist:
+        return HttpResponse("Invalid user.")
+
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def slack_unsubscribe(request):
+    user_name = request.POST.get("user_name", "")
+    user_id = request.POST.get("user_id", "")
+    try:
+        user_profile = UserProfile.objects.get(slack_username=user_id)
+        user_profile.notifications = False
+        user_profile.save()
+
+        return HttpResponse("Sad to see you leave us %s" % user_name)
+    except UserProfile.DoesNotExist:
+        return HttpResponse("Invalid user.")
 
 
 @csrf_exempt
@@ -73,25 +90,4 @@ def slack_interactive(request):
     handler = import_string("api.handlers.slack.%s" % data["callback_id"])
     response = handler(data)
 
-    return HttpResponse(response)
-
-
-@csrf_exempt
-@require_http_methods(["GET", "POST"])
-def slack_listener(request):
-    # FLOW #####
-    # Get body message
-    # Pass to Lex
-    # Grab intent
-    # Execute action
-    # Post reply to slack
-
-    # if "event" in data and "bot_id" not in data["event"] and "channel" in data["event"]:
-    #     sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
-    #     sc.api_call(
-    #         "chat.postMessage",
-    #         channel=data["event"]["channel"],
-    #         text="Hello from Python! :tada:"
-    #     )
-
-    return HttpResponse('To be implemented')
+    return response

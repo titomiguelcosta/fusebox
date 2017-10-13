@@ -3,7 +3,7 @@
     {
       'name': 'rate',
       'type': 'button',
-      'value': '9'
+      'value': '1:4:3'
     }
   ],
   'callback_id': 'rate_currently_playing_track',

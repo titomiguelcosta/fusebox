@@ -6,7 +6,10 @@ class SpotifyHelper(object):
     @staticmethod
     def current_playing_track():
         client = get_spotify()
-        track_details = client._get("me/player/currently-playing")
+        try:
+            track_details = client._get("me/player/currently-playing")
+        except Exception:
+            track_details = None
 
         if track_details:
             try:
@@ -34,4 +37,3 @@ class SpotifyHelper(object):
             track = None
 
         return track, track_details
-

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     slack_username = models.CharField(max_length=200)
+    notifications = models.BooleanField(default=True)
 
     def __str__(self):
         return "%s's profile" % self.user
@@ -26,7 +27,7 @@ class Artist(models.Model):
 class Track(models.Model):
     title = models.CharField(max_length=250)
     album = models.CharField(max_length=250, blank=True)
-    url = models.CharField(max_length=250, blank=True)
+    url = models.CharField(max_length=250, blank=True, null="")
     artists = models.ManyToManyField(Artist)
     spotify_id = models.CharField(max_length=250, blank=True)
     popularity = models.IntegerField(default=0.0)
@@ -64,6 +65,8 @@ class Rate(models.Model):
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.IntegerField()
+    category = models.CharField(max_length=250, default="like")
+    on = models.DateTimeField()
 
     def __str__(self):
         return "User %s scored %s on track %s" % (self.user, self.score, self.track)
