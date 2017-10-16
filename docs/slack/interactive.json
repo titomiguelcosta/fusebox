@@ -3,10 +3,10 @@
     {
       'name': 'rate',
       'type': 'button',
-      'value': '1:4:3'
+      'value': '1:4:1:1'
     }
   ],
-  'callback_id': 'rate_currently_playing_track',
+  'callback_id': 'rate_track',
   'team': {
     'id': 'T025FEBUF',
     'domain': 'pixelfusion'

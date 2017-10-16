@@ -15,7 +15,7 @@ def rate_track(data):
     response = HttpResponse("Thanks for voting")
     if counter <= MESSAGE_RATE_LIMIT:
         try:
-            track = Track.objects.order_by("-id").filter(pk__lt=track_id)[0]
+            track = Track.objects.get(pk=track_id)
             user_profile = UserProfile.objects.get(slack_username=data["user"]["id"])
 
             if user_profile and track:

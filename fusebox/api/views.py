@@ -85,7 +85,9 @@ def lex(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def slack_interactive(request):
-    data = json.loads(request.POST.get("payload"))
+    data = json.loads(request.POST.get("payload", "{}"))
+
+    print(str(request.POST))
 
     handler = import_string("api.handlers.slack.%s" % data["callback_id"])
     response = handler(data)
