@@ -31,6 +31,8 @@ def rate_track(data):
 
                 if counter < MESSAGE_RATE_LIMIT:
                     response = JsonResponse(SlackFormatter.recently_played(track, category=RATE_CATEGORY_LIKE, counter=1+counter))
+            else:
+                response = HttpResponse("System is not aware of your user.")
         except Track.DoesNotExist:
             response = HttpResponse("Sorry. Song is not available.")
 
