@@ -30,7 +30,15 @@ def rate_track(data):
                 rate.save()
 
                 if counter < MESSAGE_RATE_LIMIT:
-                    response = JsonResponse(SlackFormatter.recently_played(track, category=RATE_CATEGORY_LIKE, counter=1+counter))
+                    try:
+                        previous_track = Track.objects.order_by("-id").filter(pk__lt=track_id)[0]
+                        response = JsonResponse(
+                            SlackFormatter.recently_played(
+                                previous_track, category=RATE_CATEGORY_LIKE, counter=1+counter
+                            )
+                        )
+                    except Track.DoesNotExist:
+                        response = HttpResponse("Failed to retrieve previous song.")
             else:
                 response = HttpResponse("System is not aware of your user.")
         except Track.DoesNotExist:
