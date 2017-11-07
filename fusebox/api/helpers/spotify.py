@@ -1,14 +1,17 @@
 from api.models import Track, Artist
 from api.services import get_spotify
+import logging
 
 
 class SpotifyHelper(object):
     @staticmethod
     def current_playing_track():
         client = get_spotify()
+        logger = logging.getLogger(__name__)
         try:
             track_details = client._get("me/player/currently-playing")
-        except Exception:
+        except Exception as e:
+            logger.error("Failed to retrieve details about current playing song: " + str(e))
             track_details = None
 
         if track_details:
