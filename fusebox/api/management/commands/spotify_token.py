@@ -8,14 +8,13 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("username", nargs="+", type=str)
-        # user-read-recently-played user-read-currently-playing user-top-read user-library-read user-follow-read playlist-read-private
+        # user-read-recently-played user-read-currently-playing user-top-read user-library-read user-follow-read playlist-read-private user-read-playback-state
         parser.add_argument("scope", nargs="+", type=str)
 
     def handle(self, *args, **options):
         username = options["username"][0]
         scope = options["scope"][0]
         token = util.prompt_for_user_token(username, scope)
-        print(token)
         if token:
             sp = spotipy.Spotify(auth=token)
             results = sp.current_user_saved_tracks()
