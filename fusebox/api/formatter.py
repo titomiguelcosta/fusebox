@@ -1,7 +1,7 @@
 class SlackFormatter(object):
     @staticmethod
     def current_playing_track(track, category):
-        if track is None:
+        if track:
             data = {
                 "text": "Currently playing",
                 "attachments": [
@@ -74,7 +74,7 @@ class SlackFormatter(object):
 
     @staticmethod
     def recently_played(track, category, counter=1):
-        if track is not None:
+        if track:
             data = {
                 "text": "Recently played",
                 "attachments": [

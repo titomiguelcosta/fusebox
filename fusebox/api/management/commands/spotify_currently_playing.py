@@ -8,6 +8,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         track, track_details = SpotifyHelper.current_playing_track()
         if track:
-            print("Playing track %s by %s." % (track.title, track.artists_to_str))
+            print("Playing track: '%s' by '%s'." % (track.title, track.artists_to_str))
         else:
             print("Nothing playing at the moment.")

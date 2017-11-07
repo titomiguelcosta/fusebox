@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'fusebox.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': os.getenv('DATABASE_ENGINE', 'django.db.backends.mysql'),
         'NAME': os.getenv('MYSQL_DATABASE'),
         'USER': os.getenv('MYSQL_USER'),
         'PASSWORD': os.getenv('MYSQL_PASSWORD'),
@@ -122,10 +122,7 @@ if os.getenv('AWS_ACCESS_KEY_ID', False) and os.getenv('AWS_SECRET_ACCESS_KEY', 
                 'class': 'watchtower.CloudWatchLogHandler',
                 'log_group': 'fusebox',
                 'boto3_session': boto3_session
-            },
-            'console': {
-                'class': 'logging.StreamHandler',
-            },
+            }
         },
         'loggers': {
             'django': {
