@@ -6,3 +6,4 @@ gunicorn
 python-dotenv
 mysqlclient>=1.3.12
 boto3
+watchtower

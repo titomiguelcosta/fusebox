@@ -4,6 +4,7 @@ from api.formatter import SlackFormatter
 from django.utils import timezone
 import requests
 import os
+import random
 
 MESSAGE_RATE_LIMIT = 3
 RATE_CATEGORY_LIKE = 1
@@ -12,7 +13,8 @@ RATE_CATEGORY_LIKE = 1
 def rate_track(data):
     # value is a string in format score:track_id:counter:category
     score, track_id, counter, category_id = list(map(int, data["actions"][0]["value"].split(":")))
-    response = HttpResponse("Thanks for voting")
+    thanks = ["Thanks for voting.", "Fantastic. Much appreciated.", "Glorious. Your vote counts."]
+    response = HttpResponse(random.choice(thanks))
     if counter <= MESSAGE_RATE_LIMIT:
         try:
             track = Track.objects.get(pk=track_id)

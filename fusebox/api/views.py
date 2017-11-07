@@ -1,12 +1,13 @@
 import json
 import os
 import socket
+import logging
+import boto3
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.module_loading import import_string
 from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
-import boto3
 from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
 from api.models import Track, UserProfile
@@ -87,7 +88,7 @@ def lex(request):
 def slack_interactive(request):
     data = json.loads(request.POST.get("payload", "{}"))
 
-    print(str(request.POST))
+    logging.getLogger(__name__).debug(request.POST)
 
     handler = import_string("api.handlers.slack.%s" % data["callback_id"])
     response = handler(data)

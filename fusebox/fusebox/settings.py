@@ -106,6 +106,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGGING = {
+      'version': 1,
+      'handlers': {
+          'watchtower':  {
+              'level': 'DEBUG',
+              'class': 'watchtower.CloudWatchLogHandler',
+              'log_group': 'fusebox',
+          },
+      },
+      'loggers': {
+          'django': {
+              'handlers': ['watchtower'],
+              'level': 'DEBUG',
+              'propagate': True,
+          },
+      }
+  }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
