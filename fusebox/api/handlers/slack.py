@@ -13,7 +13,21 @@ RATE_CATEGORY_LIKE = 1
 def rate_track(data):
     # value is a string in format score:track_id:counter:category
     score, track_id, counter, category_id = list(map(int, data["actions"][0]["value"].split(":")))
-    thanks = ["Thanks for voting.", "Fantastic. Much appreciated.", "Glorious. Your vote counts."]
+    thanks = [
+        "Thanks for rating this song, enjoy the rest of your day!",
+        "Got it. Who's awesome? You're awesome!",
+        "You just helped make this office a better place.",
+        "All done. Feel free keep rating songs throughout the day.",
+        "That's exactly what I would've rated it, too!",
+        "Your rating is music to my ears.",
+        "Remember: The more you vote the smarter I get."
+        "As a wise person once said: \"Please don't stop the music.\"",
+        "Sweet as.",
+        "Look at you sharing your musical feels. Way to go!",
+        "Thank you, I appreciate it.",
+        "Cheers for that, this will make my research so much easier.",
+        "Alright, I made a note of that."
+    ]
     response = HttpResponse(random.choice(thanks))
     if counter <= MESSAGE_RATE_LIMIT:
         try:
