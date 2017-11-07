@@ -122,10 +122,13 @@ LOGGING = {
             'log_group': 'fusebox',
             'boto3_session': boto3_session
         },
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['watchtower'],
+            'handlers': [os.getenv("LOGGER_HANDLER", "console")],
             'level': 'DEBUG',
             'propagate': True,
         },
