@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from dotenv import load_dotenv
+from boto3.session import Session
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -106,23 +107,30 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+boto3_session = Session(
+    aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID', ''),
+    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY', ''),
+    region_name=os.getenv('AWS_REGION', '')
+)
+
 LOGGING = {
-      'version': 1,
-      'handlers': {
-          'watchtower':  {
-              'level': 'DEBUG',
-              'class': 'watchtower.CloudWatchLogHandler',
-              'log_group': 'fusebox',
-          },
-      },
-      'loggers': {
-          'django': {
-              'handlers': ['watchtower'],
-              'level': 'DEBUG',
-              'propagate': True,
-          },
-      }
-  }
+    'version': 1,
+    'handlers': {
+        'watchtower':  {
+            'level': 'DEBUG',
+            'class': 'watchtower.CloudWatchLogHandler',
+            'log_group': 'fusebox',
+            'boto3_session': boto3_session
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['watchtower'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
