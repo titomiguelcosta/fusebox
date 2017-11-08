@@ -20,7 +20,7 @@ def rate_track(data):
         "All done. Feel free keep rating songs throughout the day.",
         "That's exactly what I would've rated it, too!",
         "Your rating is music to my ears.",
-        "Remember: The more you vote the smarter I get."
+        "Remember: The more you vote the smarter I get.",
         "As a wise person once said: \"Please don't stop the music.\"",
         "Sweet as.",
         "Look at you sharing your musical feels. Way to go!",

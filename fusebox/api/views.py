@@ -12,6 +12,7 @@ from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
 from api.models import Track, UserProfile
 from api.handlers.slack import RATE_CATEGORY_LIKE
+from slackclient import SlackClient
 
 
 def index(request):
@@ -62,6 +63,30 @@ def slack_unsubscribe(request):
         return HttpResponse("Sad to see you leave us %s" % user_name)
     except UserProfile.DoesNotExist:
         return HttpResponse("Invalid user.")
+
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def slack_notify(request):
+    track, track_details = SpotifyHelper.current_playing_track()
+    if track:
+        user_profiles = UserProfile.objects.filter(notifications=True, user__is_active=True,
+                                                   slack_username__isnull=False)
+        logging.getLogger(__name__).debug("About to notify %d users." % len(user_profiles))
+        for user_profile in user_profiles:
+            logging.getLogger(__name__).debug("Notifying user %s" % user_profile.user.first_name)
+            sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+            sc.api_call(
+                "chat.postMessage",
+                channel="%s" % user_profile.slack_username,
+                text="Please rate this song to improve our playlist",
+                attachments=SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE)["attachments"],
+                username="@Fusebox",
+                as_user=True
+
+            )
+    else:
+        return HttpResponse("Nothing playing at the moment.")
 
 
 @csrf_exempt
