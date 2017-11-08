@@ -1,6 +1,7 @@
-from api.models import Track, Artist
+from api.models import Track, Artist, Played
 from api.services import get_spotify
 import logging
+from datetime import datetime, timedelta
 
 
 class SpotifyHelper(object):
@@ -36,6 +37,15 @@ class SpotifyHelper(object):
 
                 track.artists.add(artist)
                 track.save()
+
+            # Update played song if it has not played recently
+            time_threshold = datetime.now() - timedelta(minutes=10)
+            played = Played.objects.filter(track=track, on__gt=time_threshold)
+            if 0 == len(played):
+                played = Played()
+                played.on = datetime.now()
+                played.track = track
+                played.save()
         else:
             track = None
 
