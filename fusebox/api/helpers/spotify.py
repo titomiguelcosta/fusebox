@@ -9,7 +9,7 @@ class SpotifyHelper(object):
         client = get_spotify()
         logger = logging.getLogger(__name__)
         try:
-            track_details = client._get("me/player/currently-playing")
+            track_details = client._get("me/player")
         except Exception as e:
             logger.error("Failed to retrieve details about current playing song: " + str(e))
             track_details = None
