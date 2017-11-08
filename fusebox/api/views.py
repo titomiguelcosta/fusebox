@@ -85,6 +85,7 @@ def slack_notify(request):
                 as_user=True
 
             )
+        return HttpResponse("Notified %d users." % len(user_profiles))
     else:
         return HttpResponse("Nothing playing at the moment.")
 
