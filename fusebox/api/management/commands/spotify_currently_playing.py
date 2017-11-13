@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = "Gets details of the current playing track"
 
     def handle(self, *args, **options):
-        track, track_details = SpotifyHelper.current_playing_track()
+        track, track_details, played = SpotifyHelper.current_playing_track()
         if track:
             print("Playing track: '%s' by '%s'." % (track.title, track.artists_to_str))
         else:

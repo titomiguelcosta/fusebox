@@ -10,7 +10,7 @@ from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
-from api.models import Track, UserProfile
+from api.models import UserProfile, Played
 from api.handlers.slack import RATE_CATEGORY_LIKE
 from slackclient import SlackClient
 
@@ -22,17 +22,17 @@ def index(request):
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def playing(request):
-    track, track_details = SpotifyHelper.current_playing_track()
+    track, track_details, played = SpotifyHelper.current_playing_track()
 
-    return JsonResponse(SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE))
+    return JsonResponse(SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played_id=played.id))
 
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def played(request):
-    track = Track.objects.order_by("-id")[0]
+    played = Played.objects.order_by("-id")[0]
 
-    return JsonResponse(SlackFormatter.recently_played(track, category=RATE_CATEGORY_LIKE))
+    return JsonResponse(SlackFormatter.recently_played(played.track, category=RATE_CATEGORY_LIKE, played_id=played.id))
 
 
 @csrf_exempt
@@ -68,7 +68,7 @@ def slack_unsubscribe(request):
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def slack_notify(request):
-    track, track_details = SpotifyHelper.current_playing_track()
+    track, track_details, played = SpotifyHelper.current_playing_track()
     if track:
         user_profiles = UserProfile.objects.filter(notifications=True, user__is_active=True,
                                                    slack_username__isnull=False)

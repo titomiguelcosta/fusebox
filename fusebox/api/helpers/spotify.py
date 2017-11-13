@@ -9,6 +9,7 @@ class SpotifyHelper(object):
     def current_playing_track():
         client = get_spotify()
         logger = logging.getLogger(__name__)
+        played = None
         try:
             track_details = client._get("me/player")
         except Exception as e:
@@ -46,7 +47,9 @@ class SpotifyHelper(object):
                 played.on = datetime.now()
                 played.track = track
                 played.save()
+            else:
+                played = played[0]
         else:
             track = None
 
-        return track, track_details
+        return track, track_details, played

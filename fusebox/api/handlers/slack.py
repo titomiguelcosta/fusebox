@@ -1,5 +1,5 @@
 from django.http import HttpResponse, JsonResponse
-from api.models import Track, UserProfile, Rate
+from api.models import Track, UserProfile, Rate, Played
 from api.formatter import SlackFormatter
 from django.utils import timezone
 import requests
@@ -11,8 +11,8 @@ RATE_CATEGORY_LIKE = 1
 
 
 def rate_track(data):
-    # value is a string in format score:track_id:counter:category
-    score, track_id, counter, category_id = list(map(int, data["actions"][0]["value"].split(":")))
+    # value is a string in format score:played_id:counter:category
+    score, played_id, counter, category_id = list(map(int, data["actions"][0]["value"].split(":")))
     thanks = [
         "Thanks for rating this song, enjoy the rest of your day!",
         "Got it. Who's awesome? You're awesome!",
@@ -31,7 +31,8 @@ def rate_track(data):
     response = HttpResponse(random.choice(thanks))
     if counter <= MESSAGE_RATE_LIMIT:
         try:
-            track = Track.objects.get(pk=track_id)
+            played = Played.objects.get(pk=played_id)
+            track = played.track
             user_profile = UserProfile.objects.get(slack_username=data["user"]["id"])
 
             if user_profile and track:
@@ -47,10 +48,11 @@ def rate_track(data):
 
                 if counter < MESSAGE_RATE_LIMIT:
                     try:
-                        previous_track = Track.objects.order_by("-id").filter(pk__lt=track_id)[0]
+                        previous_played = Played.objects.order_by("-id").filter(pk__lt=played_id)[0]
+                        previous_track = previous_played.track
                         response = JsonResponse(
                             SlackFormatter.recently_played(
-                                previous_track, category=RATE_CATEGORY_LIKE, counter=1+counter
+                                previous_track, category=RATE_CATEGORY_LIKE, played_id= previous_played.id, counter=1+counter
                             )
                         )
                     except Track.DoesNotExist:
