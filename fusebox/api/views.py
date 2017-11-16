@@ -125,6 +125,7 @@ def slack_interactive(request):
 def users_populate(request):
     sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
     response = sc.api_call("users.list")
+    data = []
 
     for slack_user in response["members"]:
         if "profile" in slack_user \
@@ -149,6 +150,6 @@ def users_populate(request):
             user_profile.user = user
             user_profile.save()
 
-            print("Details for user %s updated." % slack_user["profile"]["real_name"])
+            data.append("Details for user %s updated." % slack_user["profile"]["real_name"])
 
-    return response
+    return JsonResponse(data)
