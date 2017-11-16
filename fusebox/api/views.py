@@ -80,7 +80,7 @@ def slack_notify(request):
                 "chat.postMessage",
                 channel="%s" % user_profile.slack_username,
                 text="Please rate this song to improve our playlist",
-                attachments=SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE)["attachments"],
+                attachments=SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played_id=played.id)["attachments"],
                 username="@Fusebox",
                 as_user=True
 
