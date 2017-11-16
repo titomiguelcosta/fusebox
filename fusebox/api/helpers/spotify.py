@@ -2,6 +2,7 @@ from api.models import Track, Artist, Played
 from api.services import get_spotify
 import logging
 from datetime import datetime, timedelta
+from django.utils import timezone
 
 
 class SpotifyHelper(object):
@@ -45,7 +46,7 @@ class SpotifyHelper(object):
                 played = Played.objects.filter(track=track, on__gt=time_threshold)[:1].get()
             except Played.DoesNotExist:
                 played = Played()
-                played.on = datetime.now()
+                played.on = timezone.now()
                 played.track = track
                 played.save()
         else:
