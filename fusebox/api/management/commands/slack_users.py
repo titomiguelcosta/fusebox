@@ -18,7 +18,7 @@ class Command(BaseCommand):
                     user_profile = UserProfile.objects.get(slack_username=slack_user["id"])
                     user = user_profile.user
                 except UserProfile.DoesNotExist:
-                    user_profile = UserProfile()
+                    user_profile.notifications = True
                     user = User()
 
                 user.username = slack_user["id"]

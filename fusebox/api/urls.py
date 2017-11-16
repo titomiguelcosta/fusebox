@@ -10,5 +10,6 @@ urlpatterns = [
     url(r'^slack/unsubscribe', views.slack_unsubscribe, name='slack_unsubscribe'),
     url(r'^slack/interactive$', views.slack_interactive, name='slack_interactive'),
     url(r'^slack/notify', views.slack_notify, name='slack_notify'),
+    url(r'^users/populate', views.users_populate, name='users_populate'),
     url(r'^lex$', views.lex, name='lex'),
 ]
