@@ -17,7 +17,10 @@ class SpotifyHelper(object):
             logger.error("Failed to retrieve details about current playing song: " + str(e))
             track_details = None
 
-        if track_details:
+        if track_details \
+                and "item" in track_details \
+                and "uri" in track_details["item"] \
+                and "artists" in track_details["item"]:
             try:
                 track = Track.objects.get(spotify_id=track_details["item"]["uri"])
             except Track.DoesNotExist:
