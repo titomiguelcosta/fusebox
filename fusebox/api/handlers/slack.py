@@ -52,7 +52,7 @@ def rate_track(data):
                         previous_track = previous_played.track
                         response = JsonResponse(
                             SlackFormatter.recently_played(
-                                previous_track, category=RATE_CATEGORY_LIKE, played_id= previous_played.id, counter=1+counter
+                                previous_track, category=RATE_CATEGORY_LIKE, played=previous_played, counter=1+counter
                             )
                         )
                     except Track.DoesNotExist:

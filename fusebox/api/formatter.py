@@ -1,7 +1,7 @@
 class SlackFormatter(object):
     @staticmethod
-    def current_playing_track(track, category, played_id):
-        if track:
+    def current_playing_track(track, category, played):
+        if track and played:
             data = {
                 "text": "Currently playing",
                 "attachments": [
@@ -35,31 +35,31 @@ class SlackFormatter(object):
                                 "name": "rate",
                                 "text": ":scream:",
                                 "type": "button",
-                                "value": "1:%s:3:%s" % (played_id, category)
+                                "value": "1:%s:3:%s" % (played.id, category)
                             },
                             {
                                 "name": "rate",
                                 "text": ":thumbsdown:",
                                 "type": "button",
-                                "value": "3:%s:3:%s" % (played_id, category)
+                                "value": "3:%s:3:%s" % (played.id, category)
                             },
                             {
                                 "name": "rate",
                                 "text": ":neutral_face:",
                                 "type": "button",
-                                "value": "5:%s:3:%s" % (played_id, category)
+                                "value": "5:%s:3:%s" % (played.id, category)
                             },
                             {
                                 "name": "rate",
                                 "text": ":thumbsup:",
                                 "type": "button",
-                                "value": "7:%s:3:%s" % (played_id, category)
+                                "value": "7:%s:3:%s" % (played.id, category)
                             },
                             {
                                 "name": "rate",
                                 "text": ":heart_eyes:",
                                 "type": "button",
-                                "value": "9:%s:3:%s" % (played_id, category)
+                                "value": "9:%s:3:%s" % (played.id, category)
                             }
                         ]
                     }
@@ -73,8 +73,8 @@ class SlackFormatter(object):
         return data
 
     @staticmethod
-    def recently_played(track, category, played_id, counter=1):
-        if track:
+    def recently_played(track, category, played, counter=1):
+        if track and played:
             data = {
                 "text": "Recently played",
                 "attachments": [
@@ -104,31 +104,31 @@ class SlackFormatter(object):
                                 "name": "rate",
                                 "text": ":scream:",
                                 "type": "button",
-                                "value": "1:%s:%s:%s" % (played_id, counter, category)
+                                "value": "1:%s:%s:%s" % (played.id, counter, category)
                             },
                             {
                                 "name": "rate",
                                 "text": ":thumbsdown:",
                                 "type": "button",
-                                "value": "3:%s:%s:%s" % (played_id, counter, category)
+                                "value": "3:%s:%s:%s" % (played.id, counter, category)
                             },
                             {
                                 "name": "rate",
                                 "text": ":neutral_face:",
                                 "type": "button",
-                                "value": "5:%s:%s:%s" % (played_id, counter, category)
+                                "value": "5:%s:%s:%s" % (played.id, counter, category)
                             },
                             {
                                 "name": "rate",
                                 "text": ":thumbsup:",
                                 "type": "button",
-                                "value": "7:%s:%s:%s" % (played_id, counter, category)
+                                "value": "7:%s:%s:%s" % (played.id, counter, category)
                             },
                             {
                                 "name": "rate",
                                 "text": ":heart_eyes:",
                                 "type": "button",
-                                "value": "9:%s:%s:%s" % (played_id, counter, category)
+                                "value": "9:%s:%s:%s" % (played.id, counter, category)
                             }
                         ]
                     }

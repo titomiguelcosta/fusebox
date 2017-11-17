@@ -24,7 +24,7 @@ def index(request):
 def playing(request):
     track, track_details, played = SpotifyHelper.current_playing_track()
 
-    return JsonResponse(SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played_id=played.id))
+    return JsonResponse(SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played=played))
 
 
 @csrf_exempt
@@ -32,7 +32,7 @@ def playing(request):
 def played(request):
     played = Played.objects.order_by("-id")[0]
 
-    return JsonResponse(SlackFormatter.recently_played(played.track, category=RATE_CATEGORY_LIKE, played_id=played.id))
+    return JsonResponse(SlackFormatter.recently_played(played.track, category=RATE_CATEGORY_LIKE, played=played))
 
 
 @csrf_exempt
@@ -69,7 +69,7 @@ def slack_unsubscribe(request):
 @require_http_methods(["GET", "POST"])
 def slack_notify(request):
     track, track_details, played = SpotifyHelper.current_playing_track()
-    if track:
+    if track and played:
         user_profiles = UserProfile.objects.filter(notifications=True, user__is_active=True,
                                                    slack_username__isnull=False)
         logging.getLogger(__name__).debug("About to notify %d users." % len(user_profiles))
@@ -80,7 +80,7 @@ def slack_notify(request):
                 "chat.postMessage",
                 channel="%s" % user_profile.slack_username,
                 text="Please rate this song to improve our playlist",
-                attachments=SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played_id=played.id)["attachments"],
+                attachments=SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played=played)["attachments"],
                 username="@Fusebox",
                 as_user=True
 
@@ -150,6 +150,6 @@ def users_populate(request):
             user_profile.user = user
             user_profile.save()
 
-            data.append("Details for user %s updated." % slack_user["profile"]["real_name"])
+            data.append("User %s synced." % slack_user["profile"]["real_name"])
 
-    return JsonResponse(data)
+    return JsonResponse(data, safe=False)
