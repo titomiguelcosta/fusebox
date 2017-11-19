@@ -44,7 +44,7 @@ def played(request):
 @require_http_methods(["GET", "POST"])
 def tracks_populate(request):
     client = get_spotify()
-    tracks = Track.objects.filter(populate=False, spotify_id__isnull=False)
+    tracks = Track.objects.filter(populated=False, spotify_id__isnull=False)
     errors = []
     for track in tracks:
         try:
