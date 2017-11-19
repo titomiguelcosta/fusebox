@@ -4,7 +4,7 @@ from api.models import UserProfile, User
 from slackclient import SlackClient
 
 
-def populate(request):
+def populate() -> JsonResponse:
     sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
     response = sc.api_call("users.list")
     data = []

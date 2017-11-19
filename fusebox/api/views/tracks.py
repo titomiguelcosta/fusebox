@@ -10,7 +10,7 @@ from django.http import JsonResponse
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
-def playing(request):
+def playing() -> JsonResponse:
     track, track_details, played = SpotifyHelper.current_playing_track()
 
     return JsonResponse(SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played=played))
@@ -18,7 +18,7 @@ def playing(request):
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
-def played(request):
+def played() -> JsonResponse:
     try:
         played = Played.objects.order_by("-id")[0]
         response = SlackFormatter.recently_played(played.track, category=RATE_CATEGORY_LIKE, played=played)
@@ -30,7 +30,7 @@ def played(request):
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
-def populate(request):
+def populate() -> JsonResponse:
     client = get_spotify()
     errors = []
 

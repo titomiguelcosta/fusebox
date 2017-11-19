@@ -5,11 +5,11 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 
 
-def index(request):
+def index() -> JsonResponse:
     return JsonResponse({"status": "ok", "host": socket.gethostname(), "date": timezone.now()})
 
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def proxy(request):
+def proxy(request: HttpRequest) -> JsonResponse:
     return JsonResponse(request.POST.items(), safe=False)

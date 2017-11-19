@@ -4,7 +4,7 @@ import logging
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.module_loading import import_string
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
 from api.models import UserProfile
@@ -14,7 +14,7 @@ from slackclient import SlackClient
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
-def subscribe(request):
+def subscribe(request: HttpRequest) -> HttpResponse:
     user_name = request.POST.get("user_name", "")
     user_id = request.POST.get("user_id", "")
     try:
@@ -29,7 +29,7 @@ def subscribe(request):
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
-def unsubscribe(request):
+def unsubscribe(request: HttpRequest) -> HttpResponse:
     user_name = request.POST.get("user_name", "")
     user_id = request.POST.get("user_id", "")
     try:
@@ -44,7 +44,7 @@ def unsubscribe(request):
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
-def notify(request):
+def notify() -> HttpResponse:
     track, track_details, played = SpotifyHelper.current_playing_track()
     if track and played:
         user_profiles = UserProfile.objects.filter(notifications=True, user__is_active=True,
@@ -70,7 +70,7 @@ def notify(request):
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def interactive(request):
+def interactive(request: HttpRequest) -> HttpResponse:
     data = json.loads(request.POST.get("payload", "{}"))
 
     logging.getLogger(__name__).debug(request.POST)
