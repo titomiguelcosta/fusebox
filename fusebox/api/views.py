@@ -48,7 +48,7 @@ def tracks_populate(request):
     errors = []
     for track in tracks:
         try:
-            data = client._get("audio-features/"+track.spotify_id)
+            data = client._get("audio-features/"+client._get_uri("track", track.spotify_id))
         except Exception as e:
             errors.append(str(e))
             continue
