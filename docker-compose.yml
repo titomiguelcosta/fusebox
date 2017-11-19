@@ -1,10 +1,8 @@
-version: "3"
+version: "2.0"
 services:
   mysql:
     image: mysql:5.7
     restart: always
-    env_file:
-      - ./fusebox/.env
     volumes:
       - ./database:/var/lib/mysql
     ports:
@@ -14,20 +12,11 @@ services:
   fusebox:
     image: titomiguelcosta/fusebox:latest
     build: .
+    working_dir: /app/fusebox/fusebox
     volumes:
       - .:/app
-    env_file:
-      - ./fusebox/.env
     depends_on:
       - mysql
-    deploy:
-      replicas: 5
-      resources:
-        limits:
-          cpus: "0.1"
-          memory: 256M
-      restart_policy:
-        condition: on-failure
     ports:
       - "5000:4000"
     networks:

@@ -10,9 +10,10 @@ from django.http import HttpResponse, JsonResponse
 from django.utils import timezone
 from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
-from api.models import UserProfile, Played, User
+from api.models import UserProfile, Played, User, Track
 from api.handlers.slack import RATE_CATEGORY_LIKE
 from slackclient import SlackClient
+from api.services import get_spotify
 
 
 def index(request):
@@ -30,9 +31,42 @@ def playing(request):
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def played(request):
-    played = Played.objects.order_by("-id")[0]
+    try:
+        played = Played.objects.order_by("-id")[0]
+        response = SlackFormatter.recently_played(played.track, category=RATE_CATEGORY_LIKE, played=played)
+    except IndexError:
+        response = {"text": "No songs have ever been played."}
 
-    return JsonResponse(SlackFormatter.recently_played(played.track, category=RATE_CATEGORY_LIKE, played=played))
+    return JsonResponse(response)
+
+
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def tracks_populate(request):
+    client = get_spotify()
+    tracks = Track.objects.filter(populate=False, spotify_id__isnull=False)
+    errors = []
+    for track in tracks:
+        try:
+            data = client._get("audio-features/"+track.spotify_id)
+        except Exception as e:
+            errors.append(str(e))
+            continue
+
+        track.danceability = data["danceability"]
+        track.energy = data["energy"]
+        track.loudness = data["loudness"]
+        track.speechiness = data["speechiness"]
+        track.acousticness = data["acousticness"]
+        track.instrumentalness = data["instrumentalness"]
+        track.liveness = data["liveness"]
+        track.valence = data["valence"]
+        track.tempo = data["tempo"]
+        track.duration_ms = data["duration_ms"]
+        track.populated = True
+        track.save()
+
+    return JsonResponse({"populated": len(tracks), "errors": errors})
 
 
 @csrf_exempt

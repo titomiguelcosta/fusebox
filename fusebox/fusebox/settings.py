@@ -17,7 +17,7 @@ from boto3.session import Session
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-dotenv_path = os.path.join(BASE_DIR, '.env')
+dotenv_path = os.path.join(BASE_DIR + "/../", '.env')
 load_dotenv(dotenv_path)
 
 # Quick-start development settings - unsuitable for production
@@ -29,7 +29,7 @@ SECRET_KEY = 'wrqfp6%v80-*bi$w!c9#a(*gb#o*_#dok)ej%=n*1=p#-vq_3i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool("True" == os.getenv("DEBUG", "False"))
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost',  '.amazonaws.com', '.ngrok.io', '*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.amazonaws.com', '.ngrok.io', '*']
 
 # Application definition
 
@@ -73,7 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'fusebox.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -87,7 +86,6 @@ DATABASES = {
         'PORT': os.getenv('MYSQL_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -117,7 +115,7 @@ if os.getenv('AWS_ACCESS_KEY_ID', False) and os.getenv('AWS_SECRET_ACCESS_KEY', 
     LOGGING = {
         'version': 1,
         'handlers': {
-            'watchtower':  {
+            'watchtower': {
                 'level': 'DEBUG',
                 'class': 'watchtower.CloudWatchLogHandler',
                 'log_group': 'fusebox',
@@ -141,7 +139,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

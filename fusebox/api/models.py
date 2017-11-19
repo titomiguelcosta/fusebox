@@ -40,6 +40,8 @@ class Track(models.Model):
     liveness = models.FloatField(default=0.0)
     valence = models.FloatField(default=0.0)
     tempo = models.FloatField(default=0.0)
+    duration_ms = models.FloatField(default=0.0)
+    populated = models.BooleanField(default=False)
 
     @property
     def artists_to_str(self):
