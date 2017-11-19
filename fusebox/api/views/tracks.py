@@ -5,12 +5,12 @@ from api.helpers.spotify import SpotifyHelper
 from api.handlers.slack import RATE_CATEGORY_LIKE
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest
 
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
-def playing() -> JsonResponse:
+def playing(request: HttpRequest) -> JsonResponse:
     track, track_details, played = SpotifyHelper.current_playing_track()
 
     return JsonResponse(SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played=played))
@@ -18,7 +18,7 @@ def playing() -> JsonResponse:
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
-def played() -> JsonResponse:
+def played(request: HttpRequest) -> JsonResponse:
     try:
         played = Played.objects.order_by("-id")[0]
         response = SlackFormatter.recently_played(played.track, category=RATE_CATEGORY_LIKE, played=played)
@@ -30,7 +30,7 @@ def played() -> JsonResponse:
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
-def populate() -> JsonResponse:
+def populate(request: HttpRequest) -> JsonResponse:
     client = get_spotify()
     errors = []
 

@@ -44,7 +44,7 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
 
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
-def notify() -> HttpResponse:
+def notify(request: HttpRequest) -> HttpResponse:
     track, track_details, played = SpotifyHelper.current_playing_track()
     if track and played:
         user_profiles = UserProfile.objects.filter(notifications=True, user__is_active=True,

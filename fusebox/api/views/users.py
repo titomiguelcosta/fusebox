@@ -1,10 +1,10 @@
 import os
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpRequest
 from api.models import UserProfile, User
 from slackclient import SlackClient
 
 
-def populate() -> JsonResponse:
+def populate(request: HttpRequest) -> JsonResponse:
     sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
     response = sc.api_call("users.list")
     data = []
