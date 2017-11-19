@@ -4,6 +4,7 @@ from fusebox.api.views import generic, tracks, slack, users
 
 urlpatterns = [
     url(r'^$', generic.index, name='index'),
+    url(r'^proxy$', generic.proxy, name='proxy'),
     url(r'^tracks/playing$', tracks.playing, name='tracks_playing'),
     url(r'^tracks/played$', tracks.played, name='tracks_played'),
     url(r'^tracks/populate$', tracks.populate, name='tracks_populate'),
