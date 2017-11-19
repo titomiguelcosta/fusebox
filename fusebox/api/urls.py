@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from fusebox.api.views import generic, tracks, slack, users
+from .views import generic, tracks, slack, users
 
 urlpatterns = [
     url(r'^$', generic.index, name='index'),
