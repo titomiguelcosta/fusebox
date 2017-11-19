@@ -13,4 +13,4 @@ EXPOSE 4000
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH $PYTHONPATH:/app/fusebox
 
-CMD ["gunicorn", "-b", "0.0.0.0:4000", "--timeout", "3600", "--chdir", "/app/fusebox/fusebox", "--pythonpath", "/app/fusebox", "--reload", "wsgi:application"]
+CMD ["gunicorn", "-b", "0.0.0.0:4000", "--timeout", "60", "--chdir", "/app/fusebox/fusebox", "--pythonpath", "/app/fusebox", "--reload", "wsgi:application"]
