@@ -44,27 +44,32 @@ def played(request):
 @require_http_methods(["GET", "POST"])
 def tracks_populate(request):
     client = get_spotify()
-    tracks = Track.objects.filter(populated=False, spotify_id__isnull=False)
     errors = []
-    for track in tracks:
-        try:
-            data = client._get("audio-features/"+client._get_uri("track", track.spotify_id))
-        except Exception as e:
-            errors.append(str(e))
-            continue
 
-        track.danceability = data["danceability"]
-        track.energy = data["energy"]
-        track.loudness = data["loudness"]
-        track.speechiness = data["speechiness"]
-        track.acousticness = data["acousticness"]
-        track.instrumentalness = data["instrumentalness"]
-        track.liveness = data["liveness"]
-        track.valence = data["valence"]
-        track.tempo = data["tempo"]
-        track.duration_ms = data["duration_ms"]
-        track.populated = True
-        track.save()
+    while True:
+        tracks = Track.objects.filter(populated=False, spotify_id__isnull=False)[:25]
+        for track in tracks:
+            try:
+                data = client._get("audio-features/" + client._get_uri("track", track.spotify_id))
+            except Exception as e:
+                errors.append(str(e))
+                continue
+
+            track.danceability = data["danceability"]
+            track.energy = data["energy"]
+            track.loudness = data["loudness"]
+            track.speechiness = data["speechiness"]
+            track.acousticness = data["acousticness"]
+            track.instrumentalness = data["instrumentalness"]
+            track.liveness = data["liveness"]
+            track.valence = data["valence"]
+            track.tempo = data["tempo"]
+            track.duration_ms = data["duration_ms"]
+            track.populated = True
+            track.save()
+
+        if 0 == len(tracks):
+            break
 
     return JsonResponse({"populated": len(tracks), "errors": errors})
 
@@ -114,7 +119,8 @@ def slack_notify(request):
                 "chat.postMessage",
                 channel="%s" % user_profile.slack_username,
                 text="Please rate this song to improve our playlist",
-                attachments=SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played=played)["attachments"],
+                attachments=SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played=played)[
+                    "attachments"],
                 username="@Fusebox",
                 as_user=True
 
