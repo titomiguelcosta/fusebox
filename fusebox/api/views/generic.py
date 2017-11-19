@@ -12,4 +12,4 @@ def index(request: HttpRequest) -> JsonResponse:
 @csrf_exempt
 @require_http_methods(["POST"])
 def proxy(request: HttpRequest) -> JsonResponse:
-    return JsonResponse(request.POST.items(), safe=False)
+    return JsonResponse(request.POST, safe=False)
