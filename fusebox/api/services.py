@@ -4,14 +4,16 @@ from api.models import Configuration
 from spotipy.oauth2 import SpotifyOAuth
 import json
 
+SPOTIFY_SCOPE_DEFAULT = "user-read-recently-played user-read-currently-playing user-top-read user-library-read user-follow-read playlist-read-private user-read-playback-state"
 
-def get_spotify(scope="user-library-read user-read-currently-playing"):
+
+def get_spotify(scope=None):
     oauth = SpotifyToken(
         os.getenv("SPOTIPY_CLIENT_ID"),
         os.getenv("SPOTIPY_CLIENT_SECRET"),
         os.getenv("SPOTIPY_REDIRECT_URI"),
         cache_path=None,
-        scope=scope
+        scope=SPOTIFY_SCOPE_DEFAULT if scope is None else scope
     )
     access_token = str(oauth.get_cached_token()["access_token"])
     client = spotipy.Spotify(auth=access_token)
