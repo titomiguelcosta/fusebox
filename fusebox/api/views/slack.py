@@ -50,7 +50,7 @@ def notify(request: HttpRequest) -> HttpResponse:
         user_profiles = UserProfile.objects.filter(
             notifications=True,
             user__is_active=True,
-            slack_username="user_profile.slack_username"
+            slack_username="U41070BCY"
         )
         attachments = SlackFormatter.current_playing_track(
             track,
