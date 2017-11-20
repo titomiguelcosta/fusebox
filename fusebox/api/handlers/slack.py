@@ -1,13 +1,61 @@
-from django.http import HttpResponse, JsonResponse
-from api.models import Track, UserProfile, Rate, Played
-from api.formatter import SlackFormatter
+from django.http import HttpResponse, JsonResponse, HttpRequest
 from django.utils import timezone
 import requests
 import os
 import random
+from api.models import Track, UserProfile, Rate, Played
+from api.formatter import SlackFormatter
+from api.helpers.spotify import SpotifyHelper
+
 
 MESSAGE_RATE_LIMIT = 3
 RATE_CATEGORY_LIKE = 1
+
+
+def ratesong(request: HttpRequest) -> JsonResponse:
+    track, track_details, played = SpotifyHelper.current_playing_track()
+
+    return JsonResponse(SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played=played))
+
+
+def lastsongs(request: HttpRequest) -> JsonResponse:
+    try:
+        played = Played.objects.order_by("-id")[0]
+        response = SlackFormatter.recently_played(played.track, category=RATE_CATEGORY_LIKE, played=played)
+    except IndexError:
+        response = {"text": "No song has ever been played."}
+
+    return JsonResponse(response)
+
+
+def help(request: HttpRequest):
+    return JsonResponse({"text": "Available commands: ratesong, lastsongs, subscribe, unsubscribe and help"})
+
+
+def subscribe(request: HttpRequest) -> HttpResponse:
+    user_name = request.POST.get("user_name", "")
+    user_id = request.POST.get("user_id", "")
+    try:
+        user_profile = UserProfile.objects.get(slack_username=user_id)
+        user_profile.notifications = True
+        user_profile.save()
+
+        return HttpResponse("Happy to have you around %s" % user_name)
+    except UserProfile.DoesNotExist:
+        return HttpResponse("Invalid user.")
+
+
+def unsubscribe(request: HttpRequest) -> HttpResponse:
+    user_name = request.POST.get("user_name", "")
+    user_id = request.POST.get("user_id", "")
+    try:
+        user_profile = UserProfile.objects.get(slack_username=user_id)
+        user_profile.notifications = False
+        user_profile.save()
+
+        return HttpResponse("Sad to see you leave us %s" % user_name)
+    except UserProfile.DoesNotExist:
+        return HttpResponse("Invalid user.")
 
 
 def rate_track(data):

@@ -1,8 +1,9 @@
 import socket
-from django.http import JsonResponse, HttpRequest, HttpResponse
+from django.http import JsonResponse, HttpRequest
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.module_loading import import_string
 
 
 def index(request: HttpRequest) -> JsonResponse:
@@ -11,5 +12,10 @@ def index(request: HttpRequest) -> JsonResponse:
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def proxy(request: HttpRequest) -> HttpResponse:
-    return HttpResponse(str(request.POST)+request.POST.get("hello", "nothing"))
+def proxy(request: HttpRequest) -> JsonResponse:
+    valid_commands = ["ratesong", "lastsongs", "subscribe", "unsubscribe", "help"]
+    command = request.POST.get("text", "help") if request.POST.get("text", "help") in valid_commands else "help"
+
+    handler = import_string("api.handlers.slack.%s" % command)
+
+    return handler(request)
