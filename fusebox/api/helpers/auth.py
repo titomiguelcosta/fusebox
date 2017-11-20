@@ -12,5 +12,5 @@ def protected(view):
 
             return response
         else:
-            view(request, *args, **kwargs)
+            return view(request, *args, **kwargs)
     return inner
