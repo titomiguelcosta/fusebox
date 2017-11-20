@@ -71,7 +71,9 @@ class Rate(models.Model):
     on = models.DateTimeField()
 
     def __str__(self):
-        return "User %s scored %s on track %s" % (self.user, self.score, self.track)
+        return "%s scored %s on track %s by %s" % (
+            self.user.first_name, self.score, self.track, self.track.artists_to_str
+        )
 
 
 class Played(models.Model):
