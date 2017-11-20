@@ -1,5 +1,5 @@
 import socket
-from django.http import JsonResponse, HttpRequest
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
@@ -11,5 +11,5 @@ def index(request: HttpRequest) -> JsonResponse:
 
 @csrf_exempt
 @require_http_methods(["POST"])
-def proxy(request: HttpRequest) -> JsonResponse:
-    return JsonResponse(request.POST, safe=False)
+def proxy(request: HttpRequest) -> HttpResponse:
+    return HttpResponse(str(request.POST), safe=False)
