@@ -65,7 +65,7 @@ def notify(request: HttpRequest) -> HttpResponse:
             sc.api_call(
                 "chat.postMessage",
                 channel="%s" % user_profile.slack_username,
-                text="Please rate this song to improve our playlist",
+                text="Please rate this song to improve our playlist: "+track.spotify_id,
                 attachments=attachments,
                 username="@Fusebox",
                 as_user=True
