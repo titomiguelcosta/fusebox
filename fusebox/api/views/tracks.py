@@ -3,11 +3,13 @@ from api.services import get_spotify
 from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
 from api.handlers.slack import RATE_CATEGORY_LIKE
+from api.helpers.auth import protected
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpRequest
 
 
+@protected
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def playing(request: HttpRequest) -> JsonResponse:
@@ -16,6 +18,7 @@ def playing(request: HttpRequest) -> JsonResponse:
     return JsonResponse(SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played=played))
 
 
+@protected
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def played(request: HttpRequest) -> JsonResponse:
@@ -28,6 +31,7 @@ def played(request: HttpRequest) -> JsonResponse:
     return JsonResponse(response)
 
 
+@protected
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def populate(request: HttpRequest) -> JsonResponse:
