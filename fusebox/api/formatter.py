@@ -1,13 +1,13 @@
 class SlackFormatter(object):
     @staticmethod
-    def current_playing_track(track, category, played):
+    def current_playing_track(track, category, played, embed=False):
         if track and played:
             data = {
                 "text": "Currently playing",
                 "attachments": [
                     {
                         "title": track.title,
-                        "title_link": track.url,
+                        "title_link": track.spotify_id if embed else track.url,
                         "fields": [
                             {
                                 "title": "Album",

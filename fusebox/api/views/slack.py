@@ -47,8 +47,17 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
 def notify(request: HttpRequest) -> HttpResponse:
     track, track_details, played = SpotifyHelper.current_playing_track()
     if track and played:
-        user_profiles = UserProfile.objects.filter(notifications=True, user__is_active=True,
-                                                   slack_username__isnull=False)
+        user_profiles = UserProfile.objects.filter(
+            notifications=True,
+            user__is_active=True,
+            slack_username="user_profile.slack_username"
+        )
+        attachments = SlackFormatter.current_playing_track(
+            track,
+            category=RATE_CATEGORY_LIKE,
+            played=played,
+            embed=bool(request.GET.get("embed", 0))
+        )["attachments"]
         logging.getLogger(__name__).debug("About to notify %d users." % len(user_profiles))
         for user_profile in user_profiles:
             logging.getLogger(__name__).debug("Notifying user %s" % user_profile.user.first_name)
@@ -57,11 +66,9 @@ def notify(request: HttpRequest) -> HttpResponse:
                 "chat.postMessage",
                 channel="%s" % user_profile.slack_username,
                 text="Please rate this song to improve our playlist",
-                attachments=SlackFormatter.current_playing_track(track, category=RATE_CATEGORY_LIKE, played=played)[
-                    "attachments"],
+                attachments=attachments,
                 username="@Fusebox",
                 as_user=True
-
             )
         return HttpResponse("Notified %d users." % len(user_profiles))
     else:
