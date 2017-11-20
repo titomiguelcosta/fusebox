@@ -6,7 +6,7 @@ class SlackFormatter(object):
                 "text": "Currently playing",
                 "attachments": [
                     {
-                        "title": track.title + " " + track.spotify_id if embed else "",
+                        "title": track.title + " <%s|Preview>" % track.spotify_id if embed else "",
                         "title_link": track.spotify_id if embed else track.url,
                         "fields": [
                             {
@@ -22,7 +22,7 @@ class SlackFormatter(object):
                                 "color": "#FF0000",
                             },
                         ],
-                        "image_url": track.spotify_id
+                        "attachment_type": "default"
                     },
                     {
                         "title": "How do you feel about this song?",
