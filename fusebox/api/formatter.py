@@ -6,7 +6,7 @@ class SlackFormatter(object):
                 "text": "Currently playing",
                 "attachments": [
                     {
-                        "title": track.title,
+                        "title": track.title + " " + track.spotify_id if embed else "",
                         "title_link": track.spotify_id if embed else track.url,
                         "fields": [
                             {
