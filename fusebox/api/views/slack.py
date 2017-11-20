@@ -50,14 +50,14 @@ def notify(request: HttpRequest) -> HttpResponse:
         user_profiles = UserProfile.objects.filter(
             notifications=True,
             user__is_active=True,
-            slack_username="U41070BCY"
+            slack_username__isnull=False
         )
         attachments = SlackFormatter.current_playing_track(
             track,
             category=RATE_CATEGORY_LIKE,
-            played=played,
-            embed=bool(request.GET.get("embed", 0))
+            played=played
         )["attachments"]
+        track_url = ": %s" % track.spotify_id if bool(request.GET.get("embed", 0)) else ""
         logging.getLogger(__name__).debug("About to notify %d users." % len(user_profiles))
         for user_profile in user_profiles:
             logging.getLogger(__name__).debug("Notifying user %s" % user_profile.user.first_name)
@@ -65,7 +65,7 @@ def notify(request: HttpRequest) -> HttpResponse:
             sc.api_call(
                 "chat.postMessage",
                 channel="%s" % user_profile.slack_username,
-                text="Please rate this song to improve our playlist: "+track.spotify_id,
+                text="Please rate this song to improve our playlist %s" % track_url,
                 attachments=attachments,
                 username="@Fusebox",
                 as_user=True
