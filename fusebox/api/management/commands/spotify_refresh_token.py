@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from api.services import SpotifyToken
+from api.services import SpotifyToken, SPOTIFY_SCOPE_DEFAULT
 import os
 
 
@@ -12,6 +12,6 @@ class Command(BaseCommand):
             os.getenv("SPOTIPY_CLIENT_SECRET"),
             os.getenv("SPOTIPY_REDIRECT_URI"),
             cache_path=None,
-            scope="user-library-read user-read-currently-playing"
+            scope=SPOTIFY_SCOPE_DEFAULT
         )
         oauth.refresh_access_token(oauth.get_cached_token())

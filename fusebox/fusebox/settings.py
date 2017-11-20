@@ -29,7 +29,7 @@ SECRET_KEY = 'wrqfp6%v80-*bi$w!c9#a(*gb#o*_#dok)ej%=n*1=p#-vq_3i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool("True" == os.getenv("DEBUG", "False"))
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.amazonaws.com', '.ngrok.io', '*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.amazonaws.com', '.ngrok.io', '.pxlfsn.co']
 
 # Application definition
 
@@ -116,7 +116,7 @@ if os.getenv('AWS_ACCESS_KEY_ID', False) and os.getenv('AWS_SECRET_ACCESS_KEY', 
         'version': 1,
         'handlers': {
             'watchtower': {
-                'level': 'DEBUG',
+                'level': 'INFO',
                 'class': 'watchtower.CloudWatchLogHandler',
                 'log_group': 'fusebox',
                 'boto3_session': boto3_session
@@ -125,7 +125,7 @@ if os.getenv('AWS_ACCESS_KEY_ID', False) and os.getenv('AWS_SECRET_ACCESS_KEY', 
         'loggers': {
             'django': {
                 'handlers': ['watchtower'],
-                'level': 'DEBUG',
+                'level': 'INFO',
                 'propagate': True,
             },
         }
@@ -134,8 +134,8 @@ if os.getenv('AWS_ACCESS_KEY_ID', False) and os.getenv('AWS_SECRET_ACCESS_KEY', 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'en-nz'
+TIME_ZONE = 'Pacific/Auckland'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
