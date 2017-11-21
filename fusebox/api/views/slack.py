@@ -17,32 +17,18 @@ from api.helpers.auth import protected
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def subscribe(request: HttpRequest) -> HttpResponse:
-    user_name = request.POST.get("user_name", "")
-    user_id = request.POST.get("user_id", "")
-    try:
-        user_profile = UserProfile.objects.get(slack_username=user_id)
-        user_profile.notifications = True
-        user_profile.save()
+    handler = import_string("api.handlers.slack.subscribe")
 
-        return HttpResponse("Happy to have you around %s" % user_name)
-    except UserProfile.DoesNotExist:
-        return HttpResponse("Invalid user.")
+    return handler(request)
 
 
 @protected
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def unsubscribe(request: HttpRequest) -> HttpResponse:
-    user_name = request.POST.get("user_name", "")
-    user_id = request.POST.get("user_id", "")
-    try:
-        user_profile = UserProfile.objects.get(slack_username=user_id)
-        user_profile.notifications = False
-        user_profile.save()
+    handler = import_string("api.handlers.slack.unsubscribe")
 
-        return HttpResponse("Sad to see you leave us %s" % user_name)
-    except UserProfile.DoesNotExist:
-        return HttpResponse("Invalid user.")
+    return handler(request)
 
 
 @protected
@@ -63,9 +49,10 @@ def notify(request: HttpRequest) -> HttpResponse:
         )["attachments"]
         track_url = ": %s" % track.spotify_id if bool(request.GET.get("embed", 0)) else ""
         logging.getLogger(__name__).debug("About to notify %d users." % len(user_profiles))
+
+        sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
         for user_profile in user_profiles:
             logging.getLogger(__name__).debug("Notifying user %s" % user_profile.user.first_name)
-            sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
             sc.api_call(
                 "chat.postMessage",
                 channel="%s" % user_profile.slack_username,
