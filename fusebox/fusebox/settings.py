@@ -29,7 +29,7 @@ SECRET_KEY = 'wrqfp6%v80-*bi$w!c9#a(*gb#o*_#dok)ej%=n*1=p#-vq_3i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool("True" == os.getenv("DEBUG", "False"))
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.amazonaws.com', '.ngrok.io', '.pxlfsn.co']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.amazonaws.com', '.ngrok.io', '.pxlfsn.co', '*']
 
 # Application definition
 
