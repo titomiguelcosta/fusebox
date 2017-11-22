@@ -13,7 +13,9 @@ class Command(BaseCommand):
         response = sc.api_call("users.list")
 
         for slack_user in response["members"]:
-            if "profile" in slack_user and "email" in slack_user["profile"] and slack_user["profile"]["email"].endswith("pixelfusion.co.nz"):
+            if "profile" in slack_user \
+                    and "email" in slack_user["profile"] \
+                    and slack_user["profile"]["email"].endswith("pixelfusion.co.nz"):
                 try:
                     user_profile = UserProfile.objects.get(slack_username=slack_user["id"])
                     user = user_profile.user

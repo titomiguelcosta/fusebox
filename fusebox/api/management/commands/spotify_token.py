@@ -12,7 +12,7 @@ class Command(BaseCommand):
         parser.add_argument("username", nargs="+", type=str)
 
     def handle(self, *args, **options):
-        username = options["username"][0] # pixelfusion
+        username = options["username"][0]  # pixelfusion
         token = util.prompt_for_user_token(username, SPOTIFY_SCOPE_DEFAULT)
         if token:
             sp = spotipy.Spotify(auth=token)

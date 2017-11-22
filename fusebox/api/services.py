@@ -4,7 +4,8 @@ from api.models import Configuration
 from spotipy.oauth2 import SpotifyOAuth
 import json
 
-SPOTIFY_SCOPE_DEFAULT = "user-read-recently-played user-read-currently-playing user-top-read user-library-read user-follow-read playlist-read-private user-read-playback-state"
+SPOTIFY_SCOPE_DEFAULT = "user-read-recently-played user-read-currently-playing user-top-read " \
+                        "user-library-read user-follow-read playlist-read-private user-read-playback-state"
 
 
 def get_spotify(scope=None):

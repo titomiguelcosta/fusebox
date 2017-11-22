@@ -1,0 +1,12 @@
+FROM python:3.6
+
+WORKDIR /app
+
+ADD . /app
+
+RUN pip install -r /app/requirements-dev.txt
+RUN pip install -e .
+RUN python /app/fusebox/manage.py collectstatic -c --noinput
+
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONPATH $PYTHONPATH:/app/fusebox
