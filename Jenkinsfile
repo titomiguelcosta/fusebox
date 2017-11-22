@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         dockerImage = "titomiguelcosta/fusebox"
-        dockerImageTest = "${dockerImage}:build-${commitHash}-b${env.BUILD_NUMBER}"
+        dockerImageTest = "${dockerImage}:build-${env.BUILD_NUMBER}"
         dockerHubAccountNameOnJenkins = "dockerhub-titomiguelcosta"
     }
 
@@ -11,8 +11,8 @@ pipeline {
         stage("Test") {
             steps {
                 sh "docker build -t ${dockerImageTest} -f Dockerfile.ci ."
-                sh "docker run ${testContainer} make lint"
-                sh "docker run ${testContainer} make tests"
+                sh "docker run ${dockerImageTest} make lint"
+                sh "docker run ${dockerImageTest} make tests"
                 sh "docker rmi -f ${dockerImageTest}"
             }
         }
