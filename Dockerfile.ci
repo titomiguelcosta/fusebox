@@ -6,6 +6,7 @@ ADD . /app
 
 RUN pip install -r /app/requirements-dev.txt
 RUN pip install -e .
+RUN cp /app/.env.test /app/.env
 RUN python /app/fusebox/manage.py collectstatic -c --noinput
 
 ENV PYTHONUNBUFFERED 1
