@@ -4,6 +4,7 @@ from .views import generic, tracks, slack, users
 
 urlpatterns = [
     url(r'^$', generic.index, name='index'),
+    url(r'^csv$', generic.index, name='csv'),
     url(r'^proxy$', generic.proxy, name='proxy'),
     url(r'^tracks/playing$', tracks.playing, name='tracks_playing'),
     url(r'^tracks/played$', tracks.played, name='tracks_played'),
