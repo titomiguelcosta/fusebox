@@ -31,7 +31,7 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == "master") {
                         echo "Deploying.."
-                        sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion fusebox-cluster fusebox-service'
+                        sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox'
                     }
                 }
             }
