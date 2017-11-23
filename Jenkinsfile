@@ -11,21 +11,21 @@ pipeline {
         stage("Test") {
             steps {
                 script {
-                    sh "docker build -t ${dockerImageTest} -f Dockerfile.ci ."
-                    sh "docker run ${dockerImageTest} make lint"
-                    sh "docker run ${dockerImageTest} make tests"
-                    sh "docker rmi -f ${dockerImageTest}"
+                    sh 'docker build -t ${dockerImageTest} -f Dockerfile.ci .'
+                    sh 'docker run ${dockerImageTest} make lint'
+                    sh 'docker run ${dockerImageTest} make tests'
+                    sh 'docker rmi -f ${dockerImageTest}'
                 }
             }
         }
         stage("Build") {
             steps {
                 script {
-                    sh "docker build -t ${dockerImage} ."
+                    sh 'docker build -t ${dockerImage} .'
                     withCredentials([[$class: "UsernamePasswordMultiBinding", credentialsId: "${dockerHubAccountNameOnJenkins}", usernameVariable: "USERNAME", passwordVariable: "PASSWORD"]]) {
-                        sh "docker login --username=$USERNAME --password=$PASSWORD"
-                        sh "docker push ${dockerImage}:latest"
-                        sh "docker rmi -f ${dockerImage}"
+                        sh 'docker login --username=$USERNAME --password=$PASSWORD'
+                        sh 'docker push ${dockerImage}:latest'
+                        sh 'docker rmi -f ${dockerImage}'
                     }
                 }
             }
