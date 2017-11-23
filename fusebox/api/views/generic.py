@@ -35,7 +35,12 @@ def dump(request: HttpRequest) -> HttpResponse:
         "speechiness", "acousticness", "instrumentalness", "liveness",
         "valence", "tempo", "duration_ms", "num_played", "rate"
     ]
-    tracks = Track.objects.filter(populated=True)
+    tracks = Track.objects.raw(
+        '''select t.id, avg(r.score) as rate, count(distinct p.id) as num_played from api_track t 
+            inner join api_played p on t.id = p.track_id
+            inner join api_rate r on r.track_id = t.id
+            group by t.id'''
+    )
 
     writer = csv.writer(response)
     writer.writerow(fieldnames)
@@ -55,8 +60,8 @@ def dump(request: HttpRequest) -> HttpResponse:
             track.valence,
             track.tempo,
             track.duration_ms,
-            0,
-            0.0
+            track.num_played,
+            track.rate
         ])
 
     return response
