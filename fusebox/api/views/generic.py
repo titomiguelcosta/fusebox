@@ -38,25 +38,25 @@ def dump(request: HttpRequest) -> HttpResponse:
     tracks = Track.objects.filter(populated=True)
 
     writer = csv.writer(response, fieldnames=fieldnames)
-    writer.writeheader()
+    writer.writerow(fieldnames)
 
     for track in tracks:
-        writer.writerow({
-            "artist": track.artists_to_str,
-            "album": track.album,
-            "title": track.title,
-            "danceability": track.danceability,
-            "energy": track.energy,
-            "loudness": track.loudness,
-            "speechiness": track.speechiness,
-            "acousticness": track.acousticness,
-            "instrumentalness": track.instrumentalness,
-            "liveness": track.liveness,
-            "valence": track.valence,
-            "tempo": track.tempo,
-            "duration_ms": track.duration_ms,
-            "num_played": 0,
-            "rate": 0.0
-        })
+        writer.writerow([
+            track.artists_to_str,
+            track.album,
+            track.title,
+            track.danceability,
+            track.energy,
+            track.loudness,
+            track.speechiness,
+            track.acousticness,
+            track.instrumentalness,
+            track.liveness,
+            track.valence,
+            track.tempo,
+            track.duration_ms,
+            0,
+            0.0
+        ])
 
     return response
