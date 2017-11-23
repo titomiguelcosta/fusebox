@@ -139,6 +139,7 @@ TIME_ZONE = 'Pacific/Auckland'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+DATETIME_FORMAT = '%b %-d, %Y, %-I:%-M%P'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

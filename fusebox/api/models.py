@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import localtime
+from django.conf import settings
 
 
 class UserProfile(models.Model):
@@ -79,6 +81,14 @@ class Rate(models.Model):
 class Played(models.Model):
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
     on = models.DateTimeField()
+
+    def __str__(self):
+        return "%s by %s played on %s" % (
+            self.track.title, self.track.artists_to_str, localtime(self.on).strftime(settings.DATETIME_FORMAT)
+        )
+
+    class Meta:
+        verbose_name_plural = "Played"
 
 
 class Configuration(models.Model):
