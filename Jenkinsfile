@@ -8,6 +8,11 @@ pipeline {
     }
 
     stages {
+        stage("Start") {
+            steps {
+                echo 'About to deploy'
+            }
+        }
         stage("Test") {
             steps {
                 script {
