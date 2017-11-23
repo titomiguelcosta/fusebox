@@ -37,7 +37,7 @@ def dump(request: HttpRequest) -> HttpResponse:
     ]
     tracks = Track.objects.filter(populated=True)
 
-    writer = csv.writer(response, fieldnames=fieldnames)
+    writer = csv.writer(response)
     writer.writerow(fieldnames)
 
     for track in tracks:
