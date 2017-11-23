@@ -8,12 +8,7 @@ pipeline {
     }
 
     stages {
-        stage("Start") {
-            steps {
-                echo 'About to deploy'
-            }
-        }
-        stage("Prepare") {
+        stage("Validate") {
             steps {
                 script {
                     sh 'docker build -t ${dockerImageTest} -f Dockerfile.ci .'
