@@ -30,7 +30,7 @@ def played(request: HttpRequest) -> JsonResponse:
 @require_http_methods(["GET", "POST"])
 def top(request: HttpRequest) -> JsonResponse:
     tracks = Played.objects.raw(
-        '''select p.*, t.*, count(p.track_id) as total from api_played p
+        '''select t.*, count(p.track_id) as total from api_played p
         inner join api_track t on t.id  = p.track_id
         group by p.track_id
         order by total desc'''
@@ -38,8 +38,8 @@ def top(request: HttpRequest) -> JsonResponse:
 
     data = {}
     for track in tracks:
-        data["track_"+track.id] = {
-            "type": 'integer', "value": track.total, "label": track.title
+        data["track_"+str(track.id)] = {
+            "type": "integer", "value": track.total, "label": track.title
         }
 
     return JsonResponse(data)
