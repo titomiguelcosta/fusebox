@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^tracks/playing$', tracks.playing, name='tracks_playing'),
     url(r'^tracks/played$', tracks.played, name='tracks_played'),
     url(r'^tracks/populate$', tracks.populate, name='tracks_populate'),
+    url(r'^tracks/top', tracks.top, name='tracks_top'),
     url(r'^slack/subscribe', slack.subscribe, name='slack_subscribe'),
     url(r'^slack/unsubscribe', slack.unsubscribe, name='slack_unsubscribe'),
     url(r'^slack/interactive$', slack.interactive, name='slack_interactive'),

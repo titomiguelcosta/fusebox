@@ -1,4 +1,4 @@
-from api.models import Track
+from api.models import Track, Played
 from api.services import get_spotify
 from api.helpers.auth import protected
 from django.views.decorators.http import require_http_methods
@@ -23,6 +23,26 @@ def played(request: HttpRequest) -> JsonResponse:
     handler = import_string("api.handlers.slack.lastsongs")
 
     return handler(request)
+
+
+@protected
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def top(request: HttpRequest) -> JsonResponse:
+    tracks = Played.objects.raw(
+        '''select p.*, t.*, count(p.track_id) as total from api_played p 
+        inner join api_track t on t.id  = p.track_id
+        group by p.track_id 
+        order by total desc'''
+    )[:10]
+
+    data = {}
+    for track in tracks:
+        data["track_"+track.id] = {
+            "type": 'integer', "value": track.total, "label": track.title
+        }
+
+    return JsonResponse(data)
 
 
 @protected
