@@ -13,7 +13,7 @@ pipeline {
                 echo 'About to deploy'
             }
         }
-        stage("Test") {
+        stage("Prepare") {
             steps {
                 script {
                     sh 'docker build -t ${dockerImageTest} -f Dockerfile.ci .'
