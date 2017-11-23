@@ -26,11 +26,15 @@ def proxy(request: HttpRequest) -> JsonResponse:
 
 
 @protected
-def csv(request: HttpRequest) -> HttpResponse:
+def dump(request: HttpRequest) -> HttpResponse:
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="fusebox.csv"'
 
-    fieldnames = ["artist", "album", "title", "danceability", "energy", "loudness", "speechiness", "acousticness", "instrumentalness", "liveness", "valence", "tempo", "duration_ms", "num_played", "rate"]
+    fieldnames = [
+        "artist", "album", "title", "danceability", "energy", "loudness",
+        "speechiness", "acousticness", "instrumentalness", "liveness",
+        "valence", "tempo", "duration_ms", "num_played", "rate"
+    ]
     tracks = Track.objects.filter(populated=True)
 
     writer = csv.writer(response, fieldnames=fieldnames)
