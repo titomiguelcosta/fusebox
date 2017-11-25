@@ -4,7 +4,7 @@ import logging
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.module_loading import import_string
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
 from api.models import UserProfile
@@ -58,12 +58,24 @@ def notify(request: HttpRequest) -> HttpResponse:
                 channel="%s" % user_profile.slack_username,
                 text="Please rate this song to improve our playlist %s" % track_url,
                 attachments=attachments,
-                username="@Fusebox",
+                username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
                 as_user=True
             )
         return HttpResponse("Notified %d users." % len(user_profiles))
     else:
         return HttpResponse("Nothing playing at the moment.")
+
+
+@protected
+@csrf_exempt
+@require_http_methods(["POST"])
+def proxy(request: HttpRequest) -> JsonResponse:
+    valid_commands = ["ratesong", "lastsongs", "subscribe", "unsubscribe", "predict", "help"]
+    command = request.POST.get("text", "help") if request.POST.get("text", "help") in valid_commands else "help"
+
+    handler = import_string("api.handlers.slack.%s" % command)
+
+    return handler(request)
 
 
 @protected

@@ -3,10 +3,13 @@ from django.utils import timezone
 import requests
 import os
 import random
+from slackclient import SlackClient
 from api.models import Track, UserProfile, Rate, Played
 from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
-
+from api.services import get_spotify
+import logging
+import boto3
 
 MESSAGE_RATE_LIMIT = 3
 RATE_CATEGORY_LIKE = 1
@@ -28,8 +31,34 @@ def lastsongs(request: HttpRequest) -> JsonResponse:
     return JsonResponse(response)
 
 
+def predict(request: HttpRequest) -> HttpResponse:
+    sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+    sc.api_call(
+        "dialog.open",
+        channel=request.POST.get("channel_id"),
+        token=request.POST.get("token"),
+        trigger_id=request.POST.get("trigger_id"),
+        dialog={
+            "callback_id": "prediction",
+            "title": "Fusebox Dev",
+            "submit_label": "Prediction",
+            "elements": [
+                {
+                    "type": "text",
+                    "label": "Title of the song",
+                    "name": "title",
+                }
+            ]
+        },
+        username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
+        as_user=True
+    )
+
+    return HttpResponse("")
+
+
 def help(request: HttpRequest):
-    return JsonResponse({"text": "Available commands: ratesong, lastsongs, subscribe, unsubscribe and help"})
+    return JsonResponse({"text": "Available commands: ratesong, lastsongs, subscribe, unsubscribe and predict"})
 
 
 def subscribe(request: HttpRequest) -> HttpResponse:
@@ -56,6 +85,70 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
         return HttpResponse("Sad to see you leave us %s" % user_name)
     except UserProfile.DoesNotExist:
         return HttpResponse("Invalid user.")
+
+
+def prediction(data) -> HttpResponse:
+    logging.getLogger(__name__).error(data)
+    title = data["submission"]["title"]
+    if len(title) > 0:
+        sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+        spotify_client = get_spotify()
+        tracks = spotify_client.search(title, limit=1)
+        logging.getLogger(__name__).debug(tracks)
+        if 1 == len(tracks["tracks"]["items"]):
+            try:
+                track = tracks["tracks"]["items"][0]
+                track_details = spotify_client._get("audio-features/" + track["id"])
+
+                aws_client = boto3.client('machinelearning', region_name="us-east-1")
+                predicted = aws_client.predict(
+                    MLModelId='ml-M8WNNOAV6oy',
+                    Record={
+                        'title': track["name"],
+                        'album': track["album"]["name"],
+                        'artist': track["artists"][0]["name"],
+                        'danceability': str(track_details["danceability"]),
+                        'energy': str(track_details["energy"]),
+                        'loudness': str(track_details["loudness"]),
+                        'speechiness': str(track_details["speechiness"]),
+                        'acousticness': str(track_details["acousticness"]),
+                        'instrumentalness': str(track_details["instrumentalness"]),
+                        'liveness': str(track_details["liveness"]),
+                        'valence': str(track_details["valence"]),
+                        'tempo': str(track_details["tempo"]),
+                        'duration_ms': str(track_details["duration_ms"]),
+                        'played': str(Played.objects.filter(track__spotify_id=track["id"]).count())
+                    },
+                    PredictEndpoint='https://realtime.machinelearning.us-east-1.amazonaws.com'
+                )
+                sc.api_call(
+                    "chat.postMessage",
+                    channel=data["user"]["id"],
+                    text="The song *%s* by *%s* got a predicted rate of %.2f" % (
+                        track["name"],
+                        track["artists"][0]["name"],
+                        predicted["Prediction"]["predictedValue"]
+                    ),
+                    markdown=True,
+                    username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
+                    as_user=True
+                )
+            except Exception as e:
+                logging.getLogger(__name__).error("Something failed: " + str(e))
+
+        response = HttpResponse("")
+    else:
+        logging.getLogger(__name__).error("Invalid song title: %s" % title)
+        response = JsonResponse({
+            "errors": [
+                {
+                    "name": "title",
+                    "error": "Invalid title"
+                }
+            ]
+        })
+
+    return response
 
 
 def rate_track(data):

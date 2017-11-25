@@ -27,7 +27,7 @@ class Command(BaseCommand):
                     attachments=SlackFormatter.current_playing_track(
                         track, category=RATE_CATEGORY_LIKE, played=played
                     )["attachments"],
-                    username="@Fusebox",
+                    username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
                     as_user=True
                 )
         else:

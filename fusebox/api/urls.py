@@ -5,7 +5,6 @@ from .views import generic, tracks, slack, users
 urlpatterns = [
     url(r'^$', generic.index, name='index'),
     url(r'^csv$', generic.dump, name='csv'),
-    url(r'^proxy$', generic.proxy, name='proxy'),
     url(r'^tracks/playing$', tracks.playing, name='tracks_playing'),
     url(r'^tracks/played$', tracks.played, name='tracks_played'),
     url(r'^tracks/populate$', tracks.populate, name='tracks_populate'),
@@ -14,5 +13,6 @@ urlpatterns = [
     url(r'^slack/unsubscribe', slack.unsubscribe, name='slack_unsubscribe'),
     url(r'^slack/interactive$', slack.interactive, name='slack_interactive'),
     url(r'^slack/notify', slack.notify, name='slack_notify'),
+    url(r'^slack/proxy$', slack.proxy, name='slack_proxy'),
     url(r'^users/populate', users.populate, name='users_populate'),
 ]

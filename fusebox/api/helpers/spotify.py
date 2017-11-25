@@ -1,7 +1,7 @@
 from api.models import Track, Artist, Played
 from api.services import get_spotify
 import logging
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.utils import timezone
 
 
@@ -44,7 +44,7 @@ class SpotifyHelper(object):
                 track.save()
 
             # Update played song if it has not played recently
-            time_threshold = datetime.now() - timedelta(minutes=10)
+            time_threshold = timezone.now() - timedelta(minutes=10)
             try:
                 played = Played.objects.filter(track=track, on__gt=time_threshold)[:1].get()
             except Played.DoesNotExist:
