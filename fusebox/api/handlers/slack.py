@@ -14,6 +14,8 @@ import boto3
 MESSAGE_RATE_LIMIT = 3
 RATE_CATEGORY_LIKE = 1
 
+# Endpoints for the command /fusebox [operation]
+
 
 def ratesong(request: HttpRequest) -> JsonResponse:
     track, track_details, played = SpotifyHelper.current_playing_track()
@@ -87,8 +89,9 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
         return HttpResponse("Invalid user.")
 
 
+# Interaction commands
+
 def prediction(data) -> HttpResponse:
-    logging.getLogger(__name__).error(data)
     title = data["submission"]["title"]
     if len(title) > 0:
         sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
@@ -184,7 +187,7 @@ def rate_track(data):
                 rate = Rate()
                 rate.user = user_profile.user
                 rate.track = track
-                rate.category = get_rate_category(category_id)
+                rate.category = _get_rate_category(category_id)
                 rate.score = score
                 rate.on = timezone.now()
                 rate.save()
@@ -208,7 +211,7 @@ def rate_track(data):
     return response
 
 
-def get_rate_category(category_id):
+def _get_rate_category(category_id):
     categories = {RATE_CATEGORY_LIKE: "like"}
 
     return categories[category_id] if category_id in categories else "like"
