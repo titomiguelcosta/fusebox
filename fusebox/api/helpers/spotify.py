@@ -44,7 +44,7 @@ class SpotifyHelper(object):
                 track.save()
 
             # Update played song if it has not played recently
-            time_threshold = timezone.now() - timedelta(minutes=10)
+            time_threshold = timezone.now() - timedelta(minutes=120)
             try:
                 played = Played.objects.filter(track=track, on__gt=time_threshold)[:1].get()
             except Played.DoesNotExist:
