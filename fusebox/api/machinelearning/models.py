@@ -53,8 +53,10 @@ class Adaline(object):
             errors = y - output
             self._w[1:] += self.eta * x.T.dot(errors)
             self._w[0] += self.eta * errors.sum()
-            cost = (errors ** 2) / 2.0
+            cost = (errors ** 2).sum() / 2.0
             self._cost.append(cost)
+
+        return self
 
     def predict(self, x):
         return np.where(self._net_input(x) >= 0, 1, -1)
@@ -72,13 +74,14 @@ if __name__ == "__main__":
 
     ppn = Perceptron()
     ppn.fit(X, y)
-    print(ppn.predict(np.array([5.1, 1.4])))
-    print(ppn.predict(np.array([5.9, 4.8])))
+    print(ppn.predict(np.array([5.0, 1.4])))
+    print(ppn.predict(np.array([7.0, 4.7])))
     print(ppn._errors)
 
-    adl = Adaline()
+    adl = Adaline(eta=0.01, epocs=15)
     X[:, 0] = (X[:, 0] - X[:, 0].mean()) / X[:, 0].std()
     X[:, 1] = (X[:, 1] - X[:, 1].mean()) / X[:, 1].std()
     adl.fit(X, y)
-    print(adl.predict(np.array([5.1, 1.4])))
-    print(adl.predict(np.array([5.9, 4.8])))
+    print(adl.predict(np.array([5.0, 1.4])))
+    print(adl.predict(np.array([7.0, 4.7])))
+    print(adl._cost)
