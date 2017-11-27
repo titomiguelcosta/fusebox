@@ -95,11 +95,6 @@ class Command(BaseCommand):
                             username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
                             as_user=True
                         )
-
-                        sqs.delete_message(
-                            QueueUrl=os.getenv('SLACK_PREDICT_QUEUE'),
-                            ReceiptHandle=sqs_msg['ReceiptHandle']
-                        )
                     except Exception as e:
                         logging.getLogger(__name__).error("Something failed: " + str(e))
                 else:
@@ -111,3 +106,8 @@ class Command(BaseCommand):
                         username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
                         as_user=True
                     )
+
+                sqs.delete_message(
+                    QueueUrl=os.getenv('SLACK_PREDICT_QUEUE'),
+                    ReceiptHandle=sqs_msg['ReceiptHandle']
+                )
