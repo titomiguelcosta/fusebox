@@ -12,13 +12,13 @@ class Perceptron(object):
         self._errors = []
         self._w = np.array([])
 
-    def fit(self, X, y):
-        self._w = np.zeros(1 + X.shape[1])
+    def fit(self, x, y):
+        self._w = np.zeros(1 + x.shape[1])
         self._errors = []
 
         for _ in range(self.epocs):
             errors = 0
-            for xi, target in zip(X, y):
+            for xi, target in zip(x, y):
                 update = self.eta * (target - self.predict(xi))
                 self._w[1:] += update * xi
                 self._w[0] = update
@@ -26,11 +26,11 @@ class Perceptron(object):
 
             self._errors.append(errors)
 
-    def predict(self, X):
-        return np.where(self._net_input(X) >= 0, 1, -1)
+    def predict(self, x):
+        return np.where(self._net_input(x) >= 0, 1, -1)
 
-    def _net_input(self, X):
-        return np.dot(X, self._w[1:]) + self._w[0]
+    def _net_input(self, x):
+        return np.dot(x, self._w[1:]) + self._w[0]
 
 
 class Adaline(object):
@@ -44,23 +44,23 @@ class Adaline(object):
         self._cost = []
         self._w = np.array([])
 
-    def fit(self, X, y):
-        self._w = np.zeros(1 + X.shape[1])
+    def fit(self, x, y):
+        self._w = np.zeros(1 + x.shape[1])
         self._cost = []
 
         for _ in range(self.epocs):
-            output = self._net_input(X)
+            output = self._net_input(x)
             errors = y - output
-            self._w[1:] += self.eta * X.T.dot(errors)
+            self._w[1:] += self.eta * x.T.dot(errors)
             self._w[0] += self.eta * errors.sum()
             cost = (errors ** 2) / 2.0
-            self._cost.append(errors)
+            self._cost.append(cost)
 
-    def predict(self, X):
-        return np.where(self._net_input(X) >= 0, 1, -1)
+    def predict(self, x):
+        return np.where(self._net_input(x) >= 0, 1, -1)
 
-    def _net_input(self, X):
-        return np.dot(X, self._w[1:]) + self._w[0]
+    def _net_input(self, x):
+        return np.dot(x, self._w[1:]) + self._w[0]
 
 
 if __name__ == "__main__":
@@ -72,8 +72,8 @@ if __name__ == "__main__":
 
     ppn = Perceptron()
     ppn.fit(X, y)
-    print(ppn.predict(np.array([5.1,1.4])))
-    print(ppn.predict(np.array([5.9,4.8])))
+    print(ppn.predict(np.array([5.1, 1.4])))
+    print(ppn.predict(np.array([5.9, 4.8])))
     print(ppn._errors)
 
     adl = Adaline()
