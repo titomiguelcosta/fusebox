@@ -16,16 +16,17 @@ class Command(BaseCommand):
         super().__init__(stdout=stdout, stderr=stderr, no_color=no_color)
         self.kill_now = False
 
+        signal.signal(signal.SIGINT, self.exit_gracefully)
+        signal.signal(signal.SIGTERM, self.exit_gracefully)
+
     def add_arguments(self, parser):
         pass
 
     def exit_gracefully(self, signum, frame):
+        logging.getLogger(__name__).warning("About to terminate")
         self.kill_now = True
 
     def handle(self, *args, **options):
-        signal.signal(signal.SIGINT, self.exit_gracefully)
-        signal.signal(signal.SIGTERM, self.exit_gracefully)
-
         sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
         spotify_client = get_spotify()
         sqs = boto3.client('sqs', region_name=os.getenv('AWS_REGION', 'ap-southeast-2'))
@@ -43,14 +44,13 @@ class Command(BaseCommand):
             )
 
             if 'Messages' not in response:
-                logging.getLogger(__name__).debug('No results on predict slack queue')
                 continue
 
             for sqs_msg in response['Messages']:
                 try:
                     body = json.loads(sqs_msg['Body'])
-                except json.decoder.JSONDecodeError:
-                    logging.getLogger(__name__).warning("Invalid json")
+                except json.decoder.JSONDecodeError as e:
+                    logging.getLogger(__name__).error("Invalid json: " + str(e))
                     continue
 
                 title = body["search"]["q"]
