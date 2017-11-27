@@ -14,3 +14,7 @@ docs:
 .PHONY: tests
 tests:
 	cd fusebox && python manage.py test --noinput
+
+.PHONY: predictions
+predictions:
+	cd fusebox && python manage.py slack_predict

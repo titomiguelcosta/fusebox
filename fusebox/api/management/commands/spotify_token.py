@@ -1,7 +1,6 @@
 import spotipy.util as util
 from django.core.management.base import BaseCommand
 from api.services import SPOTIFY_SCOPE_DEFAULT
-
 import spotipy
 
 
