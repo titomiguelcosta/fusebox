@@ -27,14 +27,26 @@ pipeline {
             }
         }
         stage("Deploy") {
-            steps {
-                script {
-                    if (env.BRANCH_NAME == "master") {
-                        sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2'
-                        sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-predictions-service'
+            parallel (
+                'Main Application': {
+                    steps {
+                        script {
+                            if (env.BRANCH_NAME == "master") {
+                                sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2'
+                            }
+                        }
+                    }
+                },
+                'Prediction Worker': {
+                    steps {
+                        script {
+                            if (env.BRANCH_NAME == "master") {
+                                sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-predictions-service'
+                            }
+                        }
                     }
                 }
-            }
+            )
         }
     }
 }

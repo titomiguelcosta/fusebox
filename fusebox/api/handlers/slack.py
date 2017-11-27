@@ -96,14 +96,17 @@ def prediction(data) -> HttpResponse:
     if len(title) > 0:
         # Put message in the queue
         sqs = boto3.client('sqs', region_name=os.getenv('AWS_REGION', 'ap-southeast-2'))
-        sqs.send(json.dumps({
-            "search": {
-                "q": title,
-            },
-            "user": {
-                "slack_id": data["user"]["id"]
-            }
-        }))
+        sqs.send_message(
+            QueueUrl=os.getenv('SLACK_PREDICT_QUEUE'),
+            MessageBody=json.dumps({
+                "search": {
+                    "q": title,
+                },
+                "user": {
+                    "slack_id": data["user"]["id"]
+                }
+            })
+        )
         response = HttpResponse("")
     else:
         logging.getLogger(__name__).error("Invalid song title: %s" % title)
