@@ -9,6 +9,7 @@ from api.models import Track, UserProfile, Rate, Played
 from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
 import logging
+import json
 
 MESSAGE_RATE_LIMIT = 3
 RATE_CATEGORY_LIKE = 1
@@ -95,14 +96,14 @@ def prediction(data) -> HttpResponse:
     if len(title) > 0:
         # Put message in the queue
         sqs = boto3.client('sqs', region_name=os.getenv('AWS_REGION', 'ap-southeast-2'))
-        sqs.send({
+        sqs.send(json.dumps({
             "search": {
                 "q": title,
             },
             "user": {
                 "slack_id": data["user"]["id"]
             }
-        })
+        }))
         response = HttpResponse("")
     else:
         logging.getLogger(__name__).error("Invalid song title: %s" % title)
