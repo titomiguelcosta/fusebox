@@ -64,7 +64,7 @@ class Command(BaseCommand):
 
                         aws_client = boto3.client('machinelearning', region_name="us-east-1")
                         predicted = aws_client.predict(
-                            MLModelId='ml-M8WNNOAV6oy',
+                            MLModelId=os.getenv('ML_MODEL_ID', 'ml-0vlfzxpmeGb'),
                             Record={
                                 'id': track["id"],
                                 'danceability': str(track_details["danceability"]),
