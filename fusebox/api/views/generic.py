@@ -16,7 +16,7 @@ def dump(request: HttpRequest) -> HttpResponse:
     response['Content-Disposition'] = 'attachment; filename="fusebox.csv"'
 
     fieldnames = [
-        "artist", "album", "title", "danceability", "energy", "loudness",
+        "id", "artist", "album", "title", "danceability", "energy", "loudness",
         "speechiness", "acousticness", "instrumentalness", "liveness",
         "valence", "tempo", "duration_ms", "num_played", "rate"
     ]
@@ -32,6 +32,7 @@ def dump(request: HttpRequest) -> HttpResponse:
 
     for track in tracks:
         writer.writerow([
+            track.spotify_id,
             track.artists_to_str,
             track.album,
             track.title,

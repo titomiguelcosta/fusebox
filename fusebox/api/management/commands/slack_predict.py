@@ -66,9 +66,7 @@ class Command(BaseCommand):
                         predicted = aws_client.predict(
                             MLModelId='ml-M8WNNOAV6oy',
                             Record={
-                                'title': track["name"],
-                                'album': track["album"]["name"],
-                                'artist': track["artists"][0]["name"],
+                                'id': track["id"],
                                 'danceability': str(track_details["danceability"]),
                                 'energy': str(track_details["energy"]),
                                 'loudness': str(track_details["loudness"]),
