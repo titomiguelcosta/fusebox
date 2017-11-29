@@ -28,6 +28,24 @@ def played(request: HttpRequest) -> JsonResponse:
 @protected
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
+def queue(request: HttpRequest) -> JsonResponse:
+    handler = import_string("api.handlers.slack.queue")
+
+    return handler(request)
+
+
+@protected
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
+def dequeue(request: HttpRequest) -> JsonResponse:
+    handler = import_string("api.handlers.slack.dequeue")
+
+    return handler(request)
+
+
+@protected
+@csrf_exempt
+@require_http_methods(["GET", "POST"])
 def top(request: HttpRequest) -> JsonResponse:
     tracks = Played.objects.raw(
         '''select t.*, count(p.track_id) as total from api_played p

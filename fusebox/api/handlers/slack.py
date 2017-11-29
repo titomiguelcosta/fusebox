@@ -89,6 +89,58 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
         return HttpResponse("Invalid user.")
 
 
+def queue(request: HttpRequest) -> HttpResponse:
+    sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+    sc.api_call(
+        "dialog.open",
+        channel=request.POST.get("channel_id"),
+        token=request.POST.get("token"),
+        trigger_id=request.POST.get("trigger_id"),
+        dialog={
+            "callback_id": "queueing",
+            "title": "Fusebox",
+            "submit_label": "Queue",
+            "elements": [
+                {
+                    "type": "text",
+                    "label": "Title of the song",
+                    "name": "title",
+                }
+            ]
+        },
+        username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
+        as_user=True
+    )
+
+    return HttpResponse("")
+
+
+def dequeue(request: HttpRequest) -> HttpResponse:
+    sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+    sc.api_call(
+        "dialog.open",
+        channel=request.POST.get("channel_id"),
+        token=request.POST.get("token"),
+        trigger_id=request.POST.get("trigger_id"),
+        dialog={
+            "callback_id": "dequeueing",
+            "title": "Fusebox",
+            "submit_label": "Dequeue",
+            "elements": [
+                {
+                    "type": "text",
+                    "label": "Title of the song",
+                    "name": "title",
+                }
+            ]
+        },
+        username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
+        as_user=True
+    )
+
+    return HttpResponse("")
+
+
 # Interaction commands
 
 def prediction(data) -> HttpResponse:
@@ -107,6 +159,72 @@ def prediction(data) -> HttpResponse:
                 }
             })
         )
+        response = HttpResponse("")
+    else:
+        logging.getLogger(__name__).error("Invalid song title: %s" % title)
+        response = JsonResponse({
+            "errors": [
+                {
+                    "name": "title",
+                    "error": "Invalid title"
+                }
+            ]
+        })
+
+    return response
+
+
+def queueing(data) -> HttpResponse:
+    title = data["submission"]["title"]
+    if len(title) > 0:
+        # Put message in the queue
+        sqs = boto3.client('sqs', region_name=os.getenv('AWS_REGION', 'ap-southeast-2'))
+        sqs.send_message(
+            QueueUrl=os.getenv('SLACK_PLAYLIST_QUEUE'),
+            MessageBody=json.dumps({
+                "action": "queue",
+                "search": {
+                    "q": title,
+                },
+                "user": {
+                    "slack_id": data["user"]["id"]
+                }
+            })
+        )
+
+        response = HttpResponse("")
+    else:
+        logging.getLogger(__name__).error("Invalid song title: %s" % title)
+        response = JsonResponse({
+            "errors": [
+                {
+                    "name": "title",
+                    "error": "Invalid title"
+                }
+            ]
+        })
+
+    return response
+
+
+def dequeueing(data) -> HttpResponse:
+    title = data["submission"]["title"]
+    if len(title) > 0:
+        # Put message in the queue
+        sqs = boto3.client('sqs', region_name=os.getenv('AWS_REGION', 'ap-southeast-2'))
+        sqs.send_message(
+            QueueUrl=os.getenv('SLACK_PLAYLIST_QUEUE'),
+            MessageBody=json.dumps({
+                "action": "dequeue",
+                "search": {
+                    "q": title,
+                },
+                "user": {
+                    "slack_id": data["user"]["id"]
+                }
+            })
+        )
+
         response = HttpResponse("")
     else:
         logging.getLogger(__name__).error("Invalid song title: %s" % title)
