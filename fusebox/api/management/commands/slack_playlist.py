@@ -4,7 +4,6 @@ import boto3
 import os
 import logging
 from slackclient import SlackClient
-from api.models import Played
 import signal
 import json
 
