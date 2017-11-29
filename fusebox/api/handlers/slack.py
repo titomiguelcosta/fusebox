@@ -10,6 +10,7 @@ from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
 import logging
 import json
+from api.services import get_spotify
 
 MESSAGE_RATE_LIMIT = 3
 RATE_CATEGORY_LIKE = 1
@@ -60,7 +61,9 @@ def predict(request: HttpRequest) -> HttpResponse:
 
 
 def help(request: HttpRequest):
-    return JsonResponse({"text": "Available commands: ratesong, lastsongs, subscribe, unsubscribe and predict"})
+    return JsonResponse({
+        "text": "Available commands: ratesong, lastsongs, subscribe, unsubscribe, predict, queue, dequeue and playlist"
+    })
 
 
 def subscribe(request: HttpRequest) -> HttpResponse:
@@ -139,6 +142,16 @@ def dequeue(request: HttpRequest) -> HttpResponse:
     )
 
     return HttpResponse("")
+
+
+def playlist(request: HttpRequest) -> JsonResponse:
+    spotify = get_spotify()
+    tracks = spotify.user_playlist_tracks(
+        os.getenv("SPOTIPY_USERNAME"),
+        os.getenv("SPOTIFY_PLAYLIST_ID"),
+    )
+
+    return JsonResponse(SlackFormatter.playlist(tracks))
 
 
 # Interaction commands

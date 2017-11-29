@@ -140,3 +140,19 @@ class SlackFormatter(object):
             }
 
         return data
+
+    @staticmethod
+    def playlist(tracks):
+        data = ""
+        if tracks and "items" in tracks:
+            for track in tracks["items"]:
+                try:
+                    data += "*%s* by *%s*\n" % (track["track"]["name"], track["track"]["artists"][0]["name"])
+                except KeyError:
+                    pass
+            else:
+                data = "Empty playlist."
+        else:
+            data = "Error retrieving playlist."
+
+        return {"text": data}
