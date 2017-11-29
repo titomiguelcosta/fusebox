@@ -62,13 +62,13 @@ class Command(BaseCommand):
                         track = tracks["tracks"]["items"][0]
                         if "queue" == action:
                             spotify_client.user_playlist_add_tracks(
-                                os.getenv("SPOTIFY_USERNAME"),
+                                os.getenv("SPOTIPY_USERNAME"),
                                 os.getenv("SPOTIFY_PLAYLIST_ID"),
                                 [track["id"]]
                             )
                         elif "dequeue" == action:
                             spotify_client.user_playlist_remove_all_occurrences_of_tracks(
-                                os.getenv("SPOTIFY_USERNAME"),
+                                os.getenv("SPOTIPY_USERNAME"),
                                 os.getenv("SPOTIFY_PLAYLIST_ID"),
                                 [track["id"]]
                             )
