@@ -64,13 +64,13 @@ class Command(BaseCommand):
                             spotify_client.user_playlist_add_tracks(
                                 os.getenv("SPOTIFY_USERNAME"),
                                 os.getenv("SPOTIFY_PLAYLIST_ID"),
-                                track["id"]
+                                [track["id"]]
                             )
                         elif "dequeue" == action:
                             spotify_client.user_playlist_remove_all_occurrences_of_tracks(
                                 os.getenv("SPOTIFY_USERNAME"),
                                 os.getenv("SPOTIFY_PLAYLIST_ID"),
-                                track["id"]
+                                [track["id"]]
                             )
 
                         sc.api_call(
