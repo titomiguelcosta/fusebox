@@ -70,7 +70,7 @@ def notify(request: HttpRequest) -> HttpResponse:
 @csrf_exempt
 @require_http_methods(["POST"])
 def proxy(request: HttpRequest) -> JsonResponse:
-    valid_commands = ["ratesong", "lastsongs", "subscribe", "unsubscribe", "predict", "help"]
+    valid_commands = ["ratesong", "lastsongs", "subscribe", "unsubscribe", "predict", "help", "queue", "dequeue"]
     command = request.POST.get("text", "help") if request.POST.get("text", "help") in valid_commands else "help"
 
     handler = import_string("api.handlers.slack.%s" % command)
