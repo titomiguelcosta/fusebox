@@ -34,7 +34,7 @@ pipeline {
                         withCredentials([[$class: "FileBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
                             script {
                                 if (env.BRANCH_NAME == "master") {
-                                    def env_values = readFile "$ENV_FILE"
+                                    env_values = readFile "$ENV_FILE"
                                     sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2 ${env_values}'
                                 }
                             }
@@ -43,10 +43,10 @@ pipeline {
                 }
                 stage('Prediction Worker') {
                     steps {
-                        withCredentials([[$class: "StringBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
+                        withCredentials([[$class: "FileBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
                             script {
                                 if (env.BRANCH_NAME == "master") {
-                                    def env_values = readFile "$ENV_FILE"
+                                    env_values = readFile "$ENV_FILE"
                                     sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-predictions-service ${env_values}'
                                 }
                             }
@@ -55,10 +55,10 @@ pipeline {
                 }
                 stage('Playlist Worker') {
                     steps {
-                        withCredentials([[$class: "StringBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
+                        withCredentials([[$class: "FileBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
                             script {
                                 if (env.BRANCH_NAME == "master") {
-                                    def env_values = readFile "$ENV_FILE"
+                                    env_values = readFile "$ENV_FILE"
                                     sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-playlist-service ${env_values}'
                                 }
                             }
