@@ -3,5 +3,6 @@
 /.idea
 __pycache__
 .env
+.env.prod
 .cache-*
 /fusebox/public/static/admin

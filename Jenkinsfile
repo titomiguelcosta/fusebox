@@ -5,7 +5,7 @@ pipeline {
         dockerImage = "titomiguelcosta/fusebox"
         dockerImageTest = "${dockerImage}:build-${env.BUILD_NUMBER}"
         dockerHubAccountNameOnJenkins = "dockerhub-titomiguelcosta"
-        envVariablesOnJenkins = "fusebox-env-variables"
+        envVariablesOnJenkins = "fusebox-env-variables-prod"
     }
 
     stages {
@@ -31,10 +31,11 @@ pipeline {
             parallel {
                 stage('Main Application') {
                     steps {
-                        withCredentials([[$class: "StringBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_VALUES"]]) {
+                        withCredentials([[$class: "FileBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
                             script {
                                 if (env.BRANCH_NAME == "master") {
-                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2 $ENV_VALUES'
+                                    def env_values = readFile "$ENV_FILE"
+                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2 ${env_values}'
                                 }
                             }
                         }
@@ -42,10 +43,11 @@ pipeline {
                 }
                 stage('Prediction Worker') {
                     steps {
-                        withCredentials([[$class: "StringBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_VALUES"]]) {
+                        withCredentials([[$class: "StringBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
                             script {
                                 if (env.BRANCH_NAME == "master") {
-                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-predictions-service $ENV_VALUES'
+                                    def env_values = readFile "$ENV_FILE"
+                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-predictions-service ${env_values}'
                                 }
                             }
                         }
@@ -53,10 +55,11 @@ pipeline {
                 }
                 stage('Playlist Worker') {
                     steps {
-                        withCredentials([[$class: "StringBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_VALUES"]]) {
+                        withCredentials([[$class: "StringBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
                             script {
                                 if (env.BRANCH_NAME == "master") {
-                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-playlist-service $ENV_VALUES'
+                                    def env_values = readFile "$ENV_FILE"
+                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-playlist-service ${env_values}'
                                 }
                             }
                         }
