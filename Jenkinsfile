@@ -5,6 +5,7 @@ pipeline {
         dockerImage = "titomiguelcosta/fusebox"
         dockerImageTest = "${dockerImage}:build-${env.BUILD_NUMBER}"
         dockerHubAccountNameOnJenkins = "dockerhub-titomiguelcosta"
+        envVariablesOnJenkins = "fusebox-env-variables"
     }
 
     stages {
@@ -27,30 +28,32 @@ pipeline {
             }
         }
         stage("Deploy") {
-            parallel {
-                stage('Main Application') {
-                    steps {
-                        script {
-                            if (env.BRANCH_NAME == "master") {
-                                sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2'
+            withCredentials([[$class: "StringBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_VALUES"]]) {
+                parallel {
+                    stage('Main Application') {
+                        steps {
+                            script {
+                                if (env.BRANCH_NAME == "master") {
+                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2 $ENV_VALUES'
+                                }
                             }
                         }
                     }
-                }
-                stage('Prediction Worker') {
-                    steps {
-                        script {
-                            if (env.BRANCH_NAME == "master") {
-                                sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-predictions-service'
+                    stage('Prediction Worker') {
+                        steps {
+                            script {
+                                if (env.BRANCH_NAME == "master") {
+                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-predictions-service $ENV_VALUES'
+                                }
                             }
                         }
                     }
-                }
-                stage('Playlist Worker') {
-                    steps {
-                        script {
-                            if (env.BRANCH_NAME == "master") {
-                                sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-playlist-service'
+                    stage('Playlist Worker') {
+                        steps {
+                            script {
+                                if (env.BRANCH_NAME == "master") {
+                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-playlist-service $ENV_VALUES'
+                                }
                             }
                         }
                     }
