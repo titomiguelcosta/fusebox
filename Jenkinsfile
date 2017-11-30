@@ -19,7 +19,7 @@ pipeline {
                                     env_values = readFile "$ENV_FILE"
                                     echo "FILE: $ENV_FILE"
                                     echo "CONTENTS: $env_values"
-                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2 $env_values'
+                                    sh "ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2 $env_values"
                                 }
                             }
                         }
