@@ -6,11 +6,6 @@ pipeline {
         dockerImageTest = "${dockerImage}:build-${env.BUILD_NUMBER}"
         dockerHubAccountNameOnJenkins = "dockerhub-titomiguelcosta"
         envVariablesOnJenkins = "fusebox-env-variables-prod"
-        script {
-            withCredentials([[$class: "FileBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
-                envValues = readFile "$ENV_FILE"
-            }
-        }
     }
 
     stages {
