@@ -28,10 +28,10 @@ pipeline {
             }
         }
         stage("Deploy") {
-            withCredentials([[$class: "StringBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_VALUES"]]) {
-                parallel {
-                    stage('Main Application') {
-                        steps {
+            parallel {
+                stage('Main Application') {
+                    steps {
+                        withCredentials([[$class: "StringBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_VALUES"]]) {
                             script {
                                 if (env.BRANCH_NAME == "master") {
                                     sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2 $ENV_VALUES'
@@ -39,8 +39,10 @@ pipeline {
                             }
                         }
                     }
-                    stage('Prediction Worker') {
-                        steps {
+                }
+                stage('Prediction Worker') {
+                    steps {
+                        withCredentials([[$class: "StringBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_VALUES"]]) {
                             script {
                                 if (env.BRANCH_NAME == "master") {
                                     sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-predictions-service $ENV_VALUES'
@@ -48,8 +50,10 @@ pipeline {
                             }
                         }
                     }
-                    stage('Playlist Worker') {
-                        steps {
+                }
+                stage('Playlist Worker') {
+                    steps {
+                        withCredentials([[$class: "StringBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_VALUES"]]) {
                             script {
                                 if (env.BRANCH_NAME == "master") {
                                     sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-playlist-service $ENV_VALUES'
