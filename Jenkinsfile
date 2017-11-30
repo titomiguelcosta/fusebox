@@ -17,9 +17,8 @@ pipeline {
                 stage('Main Application') {
                     steps {
                         script {
-                                if (env.BRANCH_NAME == "master") {
-                                    sh "ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2 ${envValues}"
-                                }
+                            if (env.BRANCH_NAME == "master") {
+                                sh "ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2 ${envValues}"
                             }
                         }
                     }
