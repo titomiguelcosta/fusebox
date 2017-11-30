@@ -35,7 +35,7 @@ pipeline {
                             script {
                                 if (env.BRANCH_NAME == "master") {
                                     env_values = readFile "$ENV_FILE"
-                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2 ${env_values}'
+                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2 $env_values'
                                 }
                             }
                         }
@@ -47,10 +47,7 @@ pipeline {
                             script {
                                 if (env.BRANCH_NAME == "master") {
                                     env_values = readFile "$ENV_FILE"
-                                    echo "$ENV_FILE"
-                                    echo "$env_values"
-                                    echo "${env_values}"
-                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-predictions-service ${env_values}'
+                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-predictions-service $env_values'
                                 }
                             }
                         }
@@ -62,7 +59,7 @@ pipeline {
                             script {
                                 if (env.BRANCH_NAME == "master") {
                                     env_values = readFile "$ENV_FILE"
-                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-playlist-service ${env_values}'
+                                    sh 'ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-playlist-service $env_values'
                                 }
                             }
                         }
