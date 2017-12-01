@@ -1,4 +1,6 @@
 import os
+import random
+import string
 from django.http import JsonResponse, HttpRequest
 from api.models import UserProfile, User
 from slackclient import SlackClient
@@ -21,11 +23,11 @@ def populate(request: HttpRequest) -> JsonResponse:
             except UserProfile.DoesNotExist:
                 user_profile = UserProfile()
                 user = User()
+                user.set_password(''.join(random.choices(string.ascii_uppercase + string.digits, k=8)))
 
             user.username = slack_user["id"]
             user.email = slack_user["profile"]["email"]
             user.first_name = slack_user["profile"]["real_name"]
-            user.set_password("Q12w3esw1ddn")
             user.is_active = not slack_user["deleted"]
             user.is_superuser = slack_user["is_admin"] if "is_admin" in slack_user else False
             user.save()

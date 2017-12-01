@@ -6,7 +6,7 @@ ADD . /app
 
 RUN pip install -r /app/requirements.txt
 RUN pip install -e .
-RUN python /app/fusebox/manage.py collectstatic -c --noinput
+RUN python /app/fusebox/manage.py collectstatic --noinput
 
 EXPOSE 4000
 
