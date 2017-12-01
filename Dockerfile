@@ -7,6 +7,7 @@ ADD . /app
 RUN pip install -r /app/requirements.txt
 RUN pip install -e .
 RUN python /app/fusebox/manage.py collectstatic --noinput
+RUN python -m whitenoise.compress /app/fusebox/public
 
 EXPOSE 4000
 
