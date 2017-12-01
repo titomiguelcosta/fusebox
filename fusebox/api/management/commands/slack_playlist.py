@@ -6,6 +6,7 @@ import logging
 from slackclient import SlackClient
 import signal
 import json
+import requests
 
 
 class Command(BaseCommand):
@@ -87,6 +88,12 @@ class Command(BaseCommand):
                             username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
                             as_user=True
                         )
+
+                        requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={
+                            "text": "@%s just %sd *%s* by *%s*" % (
+                                body["user"]["name"], action, track["name"], track["artists"][0]["name"]
+                            )
+                        })
                     except Exception as e:
                         logging.getLogger(__name__).error("Something failed: " + str(e))
                 else:

@@ -168,7 +168,8 @@ def prediction(data) -> HttpResponse:
                     "q": title,
                 },
                 "user": {
-                    "slack_id": data["user"]["id"]
+                    "slack_id": data["user"]["id"],
+                    "name": data["user"]["name"]
                 }
             })
         )
@@ -200,7 +201,8 @@ def queueing(data) -> HttpResponse:
                     "q": title,
                 },
                 "user": {
-                    "slack_id": data["user"]["id"]
+                    "slack_id": data["user"]["id"],
+                    "name": data["user"]["name"]
                 }
             })
         )
@@ -233,7 +235,8 @@ def dequeueing(data) -> HttpResponse:
                     "q": title,
                 },
                 "user": {
-                    "slack_id": data["user"]["id"]
+                    "slack_id": data["user"]["id"],
+                    "name": data["user"]["name"]
                 }
             })
         )
