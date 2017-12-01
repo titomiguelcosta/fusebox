@@ -58,7 +58,6 @@ class Command(BaseCommand):
                 title = body["search"]["q"]
                 slack_id = body["user"]["slack_id"]
 
-
                 tracks = spotify_client.search(title, limit=1)
                 if 1 == len(tracks["tracks"]["items"]):
                     try:
