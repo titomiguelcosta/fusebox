@@ -32,9 +32,9 @@ pipeline {
                 stage('Main Application') {
                     steps {
                         script {
-                            withCredentials([[$class: "FileBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
-                                envValues = readFile "$ENV_FILE"
-                                if (env.BRANCH_NAME == "master") {
+                            if (env.BRANCH_NAME == "master") {
+                                withCredentials([[$class: "FileBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
+                                    envValues = readFile "$ENV_FILE"
                                     sh "ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox2 $envValues"
                                 }
                             }
@@ -44,8 +44,8 @@ pipeline {
                 stage('Prediction Worker') {
                     steps {
                         script {
-                            withCredentials([[$class: "FileBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
-                                if (env.BRANCH_NAME == "master") {
+                            if (env.BRANCH_NAME == "master") {
+                                withCredentials([[$class: "FileBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
                                     envValues = readFile "$ENV_FILE"
                                     sh "ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-predictions-service $envValues"
                                 }
@@ -56,8 +56,8 @@ pipeline {
                 stage('Playlist Worker') {
                     steps {
                         script {
-                            withCredentials([[$class: "FileBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
-                                if (env.BRANCH_NAME == "master") {
+                            if (env.BRANCH_NAME == "master") {
+                                withCredentials([[$class: "FileBinding", credentialsId: "${envVariablesOnJenkins}", variable: "ENV_FILE"]]) {
                                     envValues = readFile "$ENV_FILE"
                                     sh "ecs deploy --timeout 6000 --ignore-warnings --profile pixelfusion pixelfusion-dev fusebox-playlist-service $envValues"
                                 }
