@@ -28,7 +28,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
-        spotify_client = get_spotify()
         sqs = boto3.client('sqs', region_name=os.getenv('AWS_REGION', 'ap-southeast-2'))
 
         while True:
@@ -45,6 +44,9 @@ class Command(BaseCommand):
 
             if 'Messages' not in response:
                 continue
+
+            # in the loop so we can refresh the token if needed
+            spotify_client = get_spotify()
 
             for sqs_msg in response['Messages']:
                 try:

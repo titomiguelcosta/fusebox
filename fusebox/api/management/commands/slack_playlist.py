@@ -27,12 +27,14 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
-        spotify_client = get_spotify()
         sqs = boto3.client('sqs', region_name=os.getenv('AWS_REGION', 'ap-southeast-2'))
 
         while True:
             if self.kill_now:
                 break
+
+            # in the loop so we can refresh the token if needed
+            spotify_client = get_spotify()
 
             response = sqs.receive_message(
                 QueueUrl=os.getenv('SLACK_PLAYLIST_QUEUE'),
@@ -55,6 +57,7 @@ class Command(BaseCommand):
                 action = body["action"]
                 title = body["search"]["q"]
                 slack_id = body["user"]["slack_id"]
+
 
                 tracks = spotify_client.search(title, limit=1)
                 if 1 == len(tracks["tracks"]["items"]):

@@ -17,7 +17,12 @@ def get_spotify(scope=None):
         cache_path=None,
         scope=SPOTIFY_SCOPE_DEFAULT if scope is None else scope
     )
-    access_token = str(oauth.get_cached_token()["access_token"])
+
+    access_token = ""
+    cached_token = oauth.get_cached_token()
+    if cached_token and "access_token" in cached_token:
+        access_token = str(cached_token["access_token"])
+
     client = spotipy.Spotify(auth=access_token)
 
     return client
