@@ -149,5 +149,3 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR + "/public" + STATIC_URL
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR + "/public" + MEDIA_URL
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
