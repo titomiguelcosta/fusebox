@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from api.services import get_spotify
-from api.models import Track, Playlist, PlaylistTracks, UserProfile
+from api.models import Track, Playlist, PlaylistTracks, UserProfile, Artist
 import boto3
 import os
 import logging
@@ -9,6 +9,8 @@ import signal
 import json
 import requests
 from django.utils import timezone
+from spotipy.client import SpotifyException
+from json.decoder import JSONDecodeError
 
 
 class Command(BaseCommand):
@@ -25,7 +27,7 @@ class Command(BaseCommand):
         pass
 
     def exit_gracefully(self, signum, frame):
-        logging.getLogger(__name__).warning("About to terminate")
+        logging.getLogger(__name__).warning("About to terminate playlist command")
         self.kill_now = True
 
     def handle(self, *args, **options):
@@ -53,22 +55,15 @@ class Command(BaseCommand):
             for sqs_msg in response['Messages']:
                 try:
                     body = json.loads(sqs_msg['Body'])
-                except json.decoder.JSONDecodeError as e:
-                    logging.getLogger(__name__).error("Invalid json: " + str(e))
-                    continue
+                    action = body["action"]
+                    title = body["search"]["q"]
+                    user_slack_id = body["user"]["slack_id"]
+                    tracks = spotify_client.search(title, limit=1)
 
-                action = body["action"]
-                title = body["search"]["q"]
-                user_slack_id = body["user"]["slack_id"]
-
-                tracks = spotify_client.search(title, limit=1)
-                if 1 == len(tracks["tracks"]["items"]):
-                    try:
+                    if 1 == len(tracks["tracks"]["items"]) and action in ["queue", "dequeue"]:
                         track_details = tracks["tracks"]["items"][0]
 
-                        self.update_models(
-                            track_details, action, user_slack_id, spotify_client._get_uri('track', track_details['id'])
-                        )
+                        self._update_models(track_details, action, user_slack_id)
 
                         if "queue" == action:
                             spotify_client.user_playlist_add_tracks(
@@ -76,21 +71,25 @@ class Command(BaseCommand):
                                 os.getenv("SPOTIFY_PLAYLIST_ID"),
                                 [track_details["id"]]
                             )
-                        elif "dequeue" == action:
+                            notification = "The song *%s* by *%s* was queued to the playlist" % (
+                                track_details["name"],
+                                track_details["artists"][0]["name"]
+                            )
+                        else:
                             spotify_client.user_playlist_remove_all_occurrences_of_tracks(
                                 os.getenv("SPOTIPY_USERNAME"),
                                 os.getenv("SPOTIFY_PLAYLIST_ID"),
                                 [track_details["id"]]
                             )
+                            notification = "The song *%s* by *%s* was dequeued from the playlist" % (
+                                track_details["name"],
+                                track_details["artists"][0]["name"]
+                            )
 
                         sc.api_call(
                             "chat.postMessage",
                             channel=user_slack_id,
-                            text="The song *%s* by *%s* was %sd from the Fusebox playlist" % (
-                                track_details["name"],
-                                track_details["artists"][0]["name"],
-                                action
-                            ),
+                            text=notification,
                             markdown=True,
                             username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
                             as_user=True
@@ -101,36 +100,60 @@ class Command(BaseCommand):
                                 body["user"]["name"], action, track_details["name"], track_details["artists"][0]["name"]
                             )
                         })
-                    except Exception as e:
-                        logging.getLogger(__name__).error("Something failed: " + str(e))
-                else:
-                    sc.api_call(
-                        "chat.postMessage",
-                        channel=user_slack_id,
-                        text="No results for the song *%s*" % title,
-                        markdown=True,
-                        username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
-                        as_user=True
-                    )
+                    else:
+                        sc.api_call(
+                            "chat.postMessage",
+                            channel=user_slack_id,
+                            text="No results for the song *%s*" % title,
+                            markdown=True,
+                            username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
+                            as_user=True
+                        )
+                except JSONDecodeError as e:
+                    logging.getLogger(__name__).error("Invalid json: " + str(e))
+                except SpotifyException as e:
+                    logging.getLogger(__name__).error("Spotify failed: " + str(e))
+                    if 'user_slack_id' in locals():
+                        sc.api_call(
+                            "chat.postMessage",
+                            channel=user_slack_id,
+                            text="Spotify failed to handle request. Retry again.",
+                            markdown=True,
+                            username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
+                            as_user=True
+                        )
 
                 sqs.delete_message(
                     QueueUrl=os.getenv('SLACK_PLAYLIST_QUEUE'),
                     ReceiptHandle=sqs_msg['ReceiptHandle']
                 )
 
-    def update_models(self, track_details, action, user_slack_id, track_uri):
+    def _update_models(self, track_details, action, user_slack_id):
         try:
             user_profile = UserProfile.objects.get(slack_username=user_slack_id)
         except UserProfile.DoesNotExist:
             return None
 
         try:
-            track = Track.objects.get(spotify_id=track_uri)
+            track = Track.objects.get(spotify_id=track_details['uri'])
         except Track.DoesNotExist:
             track = Track()
             track.title = track_details['name']
-            track.spotify_id = track_uri
+            track.spotify_id = track_details['uri']
             track.album = track_details['album']['name']
+            track.url = track_details["preview_url"] if "preview_url" in track_details else ""
+            track.save()
+
+        for artist_details in track_details["artists"]:
+            try:
+                artist = Artist.objects.get(spotify_id=artist_details["uri"])
+            except Artist.DoesNotExist:
+                artist = Artist()
+            artist.spotify_id = artist_details["uri"]
+            artist.name = artist_details["name"]
+            artist.save()
+
+            track.artists.add(artist)
             track.save()
 
         try:
