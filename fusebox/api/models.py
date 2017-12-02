@@ -82,7 +82,7 @@ class PlaylistTracks(models.Model):
         user_name = self.user().first_name if self.user() else "Unknown"
 
         return "%s %s on playlist %s by %s" % (
-            self.track.name, self.action(), self.playlist.name, user_name
+            self.track, self.action(), self.playlist, user_name
         )
 
     def action(self):
