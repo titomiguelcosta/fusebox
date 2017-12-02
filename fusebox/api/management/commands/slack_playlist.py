@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from api.services import get_spotify
+from api.models import Track, Playlist, PlaylistTracks, UserProfile
 import boto3
 import os
 import logging
@@ -7,6 +8,7 @@ from slackclient import SlackClient
 import signal
 import json
 import requests
+from django.utils import timezone
 
 
 class Command(BaseCommand):
@@ -57,31 +59,36 @@ class Command(BaseCommand):
 
                 action = body["action"]
                 title = body["search"]["q"]
-                slack_id = body["user"]["slack_id"]
+                user_slack_id = body["user"]["slack_id"]
 
                 tracks = spotify_client.search(title, limit=1)
                 if 1 == len(tracks["tracks"]["items"]):
                     try:
-                        track = tracks["tracks"]["items"][0]
+                        track_details = tracks["tracks"]["items"][0]
+
+                        self.update_models(
+                            track_details, action, user_slack_id, spotify_client._get_uri('track', track_details['id'])
+                        )
+
                         if "queue" == action:
                             spotify_client.user_playlist_add_tracks(
                                 os.getenv("SPOTIPY_USERNAME"),
                                 os.getenv("SPOTIFY_PLAYLIST_ID"),
-                                [track["id"]]
+                                [track_details["id"]]
                             )
                         elif "dequeue" == action:
                             spotify_client.user_playlist_remove_all_occurrences_of_tracks(
                                 os.getenv("SPOTIPY_USERNAME"),
                                 os.getenv("SPOTIFY_PLAYLIST_ID"),
-                                [track["id"]]
+                                [track_details["id"]]
                             )
 
                         sc.api_call(
                             "chat.postMessage",
-                            channel=slack_id,
+                            channel=user_slack_id,
                             text="The song *%s* by *%s* was %sd from the Fusebox playlist" % (
-                                track["name"],
-                                track["artists"][0]["name"],
+                                track_details["name"],
+                                track_details["artists"][0]["name"],
                                 action
                             ),
                             markdown=True,
@@ -91,7 +98,7 @@ class Command(BaseCommand):
 
                         requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={
                             "text": "@%s just %sd *%s* by *%s*" % (
-                                body["user"]["name"], action, track["name"], track["artists"][0]["name"]
+                                body["user"]["name"], action, track_details["name"], track_details["artists"][0]["name"]
                             )
                         })
                     except Exception as e:
@@ -99,7 +106,7 @@ class Command(BaseCommand):
                 else:
                     sc.api_call(
                         "chat.postMessage",
-                        channel=slack_id,
+                        channel=user_slack_id,
                         text="No results for the song *%s*" % title,
                         markdown=True,
                         username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
@@ -110,3 +117,44 @@ class Command(BaseCommand):
                     QueueUrl=os.getenv('SLACK_PLAYLIST_QUEUE'),
                     ReceiptHandle=sqs_msg['ReceiptHandle']
                 )
+
+    def update_models(self, track_details, action, user_slack_id, track_uri):
+        try:
+            user_profile = UserProfile.objects.get(slack_username=user_slack_id)
+        except UserProfile.DoesNotExist:
+            return None
+
+        try:
+            track = Track.objects.get(spotify_id=track_uri)
+        except Track.DoesNotExist:
+            track = Track()
+            track.title = track_details['name']
+            track.spotify_id = track_uri
+            track.album = track_details['album']['name']
+            track.save()
+
+        try:
+            playlist = Playlist.objects.get(name="Fusebox")
+        except Playlist.DoesNotExist:
+            playlist = Playlist()
+            playlist.name = "Fusebox"
+            playlist.spotify_id = os.getenv("SPOTIFY_PLAYLIST_ID")
+            playlist.save()
+
+        try:
+            playlist_tracks = PlaylistTracks.objects.get(
+                track=track, playlist=playlist
+            )
+        except PlaylistTracks.DoesNotExist:
+            playlist_tracks = PlaylistTracks()
+            playlist_tracks.track = track
+            playlist_tracks.playlist = playlist
+
+        if "queue" == action:
+            playlist_tracks.queued_by = user_profile.user
+            playlist_tracks.queued_on = timezone.now()
+        elif "dequeue" == action:
+            playlist_tracks.dequeued_by = user_profile.user
+            playlist_tracks.dequeued_on = timezone.now()
+
+        playlist_tracks.save()

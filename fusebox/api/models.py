@@ -59,10 +59,21 @@ class Playlist(models.Model):
     name = models.CharField(max_length=250)
     description = models.CharField(max_length=250, blank=True)
     spotify_id = models.CharField(max_length=250, blank=True)
-    tracks = models.ManyToManyField(Track)
+    tracks = models.ManyToManyField(Track, through='PlaylistTracks')
 
     def __str__(self):
         return self.name
+
+
+class PlaylistTracks(models.Model):
+    track = models.ForeignKey(Track, related_name='playlist_tracks_track', on_delete=models.CASCADE)
+    playlist = models.ForeignKey(Playlist, related_name='playlist_tracks_playlist', on_delete=models.CASCADE)
+    queued_by = models.ForeignKey(User, related_name='playlist_tracks_queued_by', null=True, on_delete=models.SET_NULL)
+    queued_on = models.DateTimeField()
+    dequeued_by = models.ForeignKey(
+        User, related_name='playlist_tracks_dequeued_by', null=True, on_delete=models.SET_NULL
+    )
+    dequeued_on = models.DateTimeField(null=True)
 
 
 class Rate(models.Model):
