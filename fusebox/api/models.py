@@ -88,13 +88,14 @@ class PlaylistTracks(models.Model):
     def action(self):
         default = "dequeued"
         if (self.queued_on and not self.dequeued_on) \
-            or (self.queued_on and self.dequeued_on and self.queued_on > self.dequeued_on):
+                or (self.queued_on and self.dequeued_on and self.queued_on > self.dequeued_on):
             default = "queued"
 
         return default
 
     def user(self):
         return self.queued_by if self.action() == "queued" else self.dequeued_by
+
 
 class Rate(models.Model):
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
