@@ -75,14 +75,26 @@ class PlaylistTracks(models.Model):
     )
     dequeued_on = models.DateTimeField(null=True)
 
+    class Meta:
+        verbose_name_plural = "Playlist tracks"
+
     def __str__(self):
-        action = "queued" if not self.dequeued_on or self.queued_on > self.dequeued_on else "dequeued"
-        user = self.queued_by if action == "queued" else self.dequeued_by
+        user_name = self.user().first_name if self.user() else "Unknown"
 
         return "%s %s on playlist %s by %s" % (
-            self.track.name, action, self.playlist.name, user.first_name
+            self.track.name, self.action(), self.playlist.name, user_name
         )
 
+    def action(self):
+        default = "dequeued"
+        if (self.queued_on and not self.dequeued_on) \
+            or (self.queued_on and self.dequeued_on and self.queued_on > self.dequeued_on):
+            default = "queued"
+
+        return default
+
+    def user(self):
+        return self.queued_by if self.action() == "queued" else self.dequeued_by
 
 class Rate(models.Model):
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
