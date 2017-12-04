@@ -1,4 +1,5 @@
 import numpy as np
+from numpy.random import seed
 
 
 class Perceptron(object):
@@ -33,7 +34,7 @@ class Perceptron(object):
         return np.dot(x, self._w[1:]) + self._w[0]
 
 
-class Adaline(object):
+class AdalineGD(object):
     def __init__(self, eta=0.1, epocs=10):
         """
         :param eta: learning rate
@@ -65,23 +66,66 @@ class Adaline(object):
         return np.dot(x, self._w[1:]) + self._w[0]
 
 
-if __name__ == "__main__":
-    import pandas as pd
-    df = pd.read_csv("https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data", header=None)
-    y = df.iloc[0:100, 4].values
-    y = np.where(y == 'Iris-setosa', -1, 1)
-    X = df.iloc[0:100, [0, 2]].values
+class AdalineSGD(object):
+    def __init__(self, eta=0.01, epocs=10, shuffle=True, random_state=None):
+        self.eta = eta
+        self.epocs = epocs
+        self.w_initialized = False
+        self.shuffle = shuffle
+        self._cost = []
+        if random_state:
+            seed(random_state)
 
-    ppn = Perceptron()
-    ppn.fit(X, y)
-    print(ppn.predict(np.array([5.0, 1.4])))
-    print(ppn.predict(np.array([7.0, 4.7])))
-    print(ppn._errors)
+    def fit(self, x, y):
+        self._initialize_weights(x.shape[1])
+        self._cost = []
+        for i in range(self.epocs):
+            if self.shuffle:
+                x, y = self._shuffle(x, y)
+            cost = []
+            for xi, target in zip(x, y):
+                cost.append(self._update_weights(xi, target))
+            avg_cost = sum(cost) / len(y)
+            self._cost.append(avg_cost)
 
-    adl = Adaline(eta=0.01, epocs=15)
-    X[:, 0] = (X[:, 0] - X[:, 0].mean()) / X[:, 0].std()
-    X[:, 1] = (X[:, 1] - X[:, 1].mean()) / X[:, 1].std()
-    adl.fit(X, y)
-    print(adl.predict(np.array([5.0, 1.4])))
-    print(adl.predict(np.array([7.0, 4.7])))
-    print(adl._cost)
+        return self
+
+    def partial_fit(self, x, y):
+        """Fit training data without reinitializing the weights"""
+        if not self.w_initialized:
+            self._initialize_weights(x.shape[1])
+        if y.ravel().shape[0] > 1:
+            for xi, target in zip(x, y):
+                self._update_weights(xi, target)
+        else:
+            self._update_weights(x, y)
+
+        return self
+
+    def net_input(self, x):
+        """Calculate net input"""
+        return np.dot(x, self.w_[1:]) + self.w_[0]
+
+    def predict(self, x):
+        """Return class label after unit step"""
+        return np.where(self.net_input(x) >= 0.0, 1, -1)
+
+    def _shuffle(self, x, y):
+        """Shuffle training data"""
+        r = np.random.permutation(len(y))
+        return x[r], y[r]
+
+    def _initialize_weights(self, m):
+        """Initialize weights to zeros"""
+        self.w_ = np.zeros(1 + m)
+        self.w_initialized = True
+
+    def _update_weights(self, xi, target):
+        """Apply Adaline learning rule to update the weights"""
+        output = self.net_input(xi)
+        error = (target - output)
+        self.w_[1:] += self.eta * xi.dot(error)
+        self.w_[0] += self.eta * error
+        cost = 0.5 * error ** 2
+
+        return cost
