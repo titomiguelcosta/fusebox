@@ -8,20 +8,22 @@ pipeline {
         envVariablesOnJenkins = "fusebox-env-variables-prod"
     }
 
-    def getLastSuccessfulCommit() {
-        def lastSuccessfulHash = null
-        def lastSuccessfulBuild = currentBuild.rawBuild.getPreviousSuccessfulBuild()
-        if ( lastSuccessfulBuild ) {
-            lastSuccessfulHash = commitHashForBuild( lastSuccessfulBuild )
+    define {
+        def getLastSuccessfulCommit() {
+            def lastSuccessfulHash = null
+            def lastSuccessfulBuild = currentBuild.rawBuild.getPreviousSuccessfulBuild()
+            if (lastSuccessfulBuild) {
+                lastSuccessfulHash = commitHashForBuild(lastSuccessfulBuild)
+            }
+
+            return lastSuccessfulHash
         }
 
-        return lastSuccessfulHash
-    }
+        def commitHashForBuild(build) {
+            def scmAction = build?.actions.find { action -> action instanceof jenkins.scm.api.SCMRevisionAction }
 
-    def commitHashForBuild(build) {
-        def scmAction = build?.actions.find { action -> action instanceof jenkins.scm.api.SCMRevisionAction }
-
-        return scmAction?.revision?.hash
+            return scmAction?.revision?.hash
+        }
     }
 
     stages {
