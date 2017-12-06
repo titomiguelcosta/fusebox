@@ -28,13 +28,18 @@ pipeline {
         stage("Pre Build") {
             steps {
                 script {
-                    def lastSuccessfulCommit = getLastSuccessfulCommit()
-                    def currentCommit = commitHashForBuild(currentBuild.rawBuild)
-                    if (lastSuccessfulCommit) {
+                    lastSuccessfulCommit = getLastSuccessfulCommit()
+                    currentCommit = commitHashForBuild(currentBuild.rawBuild)
+
+                    echo "$lastSuccessfulCommit"
+                    echo "$currentCommit"
+
+                    if ($lastSuccessfulCommit) {
                         commits = sh(
                             script: "git rev-list $currentCommit \"^$lastSuccessfulCommit\"",
                             returnStdout: true
                         ).split('\n')
+
                         println "Commits are: $commits"
                     }
                 }
