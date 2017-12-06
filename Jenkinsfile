@@ -27,13 +27,11 @@ pipeline {
     stages {
         stage("Pre Build") {
             steps {
+                lastSuccessfulCommit = getLastSuccessfulCommit()
                 script {
                     echo "last build"
-                    lastSuccessfulCommit = getLastSuccessfulCommit()
 
                     echo "$lastSuccessfulCommit"
-
-
                 }
             }
         }
