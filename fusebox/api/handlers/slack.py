@@ -93,27 +93,48 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
 
 
 def queue(request: HttpRequest) -> HttpResponse:
-    sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
-    sc.api_call(
-        "dialog.open",
-        channel=request.POST.get("channel_id"),
-        token=request.POST.get("token"),
-        trigger_id=request.POST.get("trigger_id"),
-        dialog={
-            "callback_id": "queueing",
-            "title": "Fusebox",
-            "submit_label": "Queue",
-            "elements": [
-                {
-                    "type": "text",
-                    "label": "Title of the song",
-                    "name": "title",
-                }
-            ]
-        },
-        username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
-        as_user=True
-    )
+    """
+    Two ways of running the command:
+        /fusebox queue
+        /fusebox queue title of the song
+    :param request:
+    :return: HttpResponse
+    """
+    text = request.POST.get("text", "help").split(" ")
+    title = " ".join(text[1:])
+
+    if bool(title):
+        queueing({
+            "submission": {
+                "title": title,
+            },
+            "user": {
+                "id": request.POST.get("user_id"),
+                "name": request.POST.get("user_name")
+            }
+        })
+    else:
+        sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+        sc.api_call(
+            "dialog.open",
+            channel=request.POST.get("channel_id"),
+            token=request.POST.get("token"),
+            trigger_id=request.POST.get("trigger_id"),
+            dialog={
+                "callback_id": "queueing",
+                "title": "Fusebox",
+                "submit_label": "Queue",
+                "elements": [
+                    {
+                        "type": "text",
+                        "label": "Title of the song",
+                        "name": "title",
+                    }
+                ]
+            },
+            username="@%s" % os.getenv("SLACK_USERNAME", "Fusebox"),
+            as_user=True
+        )
 
     return HttpResponse("")
 

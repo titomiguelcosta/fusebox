@@ -18,3 +18,7 @@ tests:
 .PHONY: predictions
 predictions:
 	cd fusebox && python manage.py slack_predict
+
+.PHONY: jupyter
+jupyter:
+	jupyter notebook fusebox/api/machinelearning/fusebox.ipynb

@@ -73,7 +73,8 @@ def proxy(request: HttpRequest) -> JsonResponse:
     valid_commands = [
         "ratesong", "lastsongs", "subscribe", "unsubscribe", "predict", "help", "queue", "dequeue", "playlist"
     ]
-    command = request.POST.get("text", "help") if request.POST.get("text", "help") in valid_commands else "help"
+    text = request.POST.get("text", "help").split(" ")
+    command = text[0] if text[0] in valid_commands else "help"
 
     handler = import_string("api.handlers.slack.%s" % command)
 

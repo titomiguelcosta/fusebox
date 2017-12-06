@@ -18,10 +18,12 @@ def dump(request: HttpRequest) -> HttpResponse:
     fieldnames = [
         "id", "artist", "album", "title", "danceability", "energy", "loudness",
         "speechiness", "acousticness", "instrumentalness", "liveness",
-        "valence", "tempo", "duration_ms", "num_played", "rate"
+        "valence", "tempo", "duration_ms", "num_played", "num_rates", "rate"
     ]
     tracks = Track.objects.raw(
-        '''select t.*, avg(r.score) as rate, count(distinct p.id) as num_played from api_track t
+        '''select
+                t.*, avg(r.score) as rate, count(distinct p.id) as num_played, count(distinct r.id) as num_rates
+            from api_track t
             inner join api_played p on t.id = p.track_id
             inner join api_rate r on r.track_id = t.id
             group by t.id'''
@@ -47,6 +49,7 @@ def dump(request: HttpRequest) -> HttpResponse:
             track.tempo,
             track.duration_ms,
             track.num_played,
+            track.num_rates,
             track.rate
         ])
 
