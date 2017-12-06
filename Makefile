@@ -22,3 +22,8 @@ predictions:
 .PHONY: jupyter
 jupyter:
 	jupyter notebook fusebox/api/machinelearning/fusebox.ipynb
+
+.PHONY: build
+build:
+    docker build -t titomiguelcosta/fusebox:prod -f Dockerfile.prod .
+    docker build -t titomiguelcosta/fusebox:test -f Dockerfile.test .

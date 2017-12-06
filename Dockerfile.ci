@@ -1,12 +1,10 @@
-FROM python:3.6
+FROM titomiguelcosta/fusebox:test
 
 WORKDIR /app
 
 ADD . /app
 
-RUN pip install -r /app/requirements-dev.txt
 RUN pip install -e .
 RUN cp /app/.env.test /app/.env
 
-ENV PYTHONUNBUFFERED 1
 ENV PYTHONPATH $PYTHONPATH:/app/fusebox

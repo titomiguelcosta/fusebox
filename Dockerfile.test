@@ -1,0 +1,9 @@
+FROM python:3.6
+
+WORKDIR /app
+
+COPY requirements* /app/
+
+RUN pip install -r /app/requirements-dev.txt
+
+ENV PYTHONUNBUFFERED 1
