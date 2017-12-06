@@ -5,7 +5,7 @@ from django.conf import settings
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     slack_username = models.CharField(max_length=200)
     notifications = models.BooleanField(default=True)
 
