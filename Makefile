@@ -27,3 +27,5 @@ jupyter:
 build:
     docker build -t titomiguelcosta/fusebox:prod -f Dockerfile.prod .
     docker build -t titomiguelcosta/fusebox:test -f Dockerfile.test .
+    docker push titomiguelcosta/fusebox:test
+    docker push titomiguelcosta/fusebox:prod
