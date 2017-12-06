@@ -1,19 +1,3 @@
-def getLastSuccessfulCommit() {
-    def lastSuccessfulHash = null
-    def lastSuccessfulBuild = currentBuild.rawBuild.getPreviousSuccessfulBuild()
-    if (lastSuccessfulBuild) {
-        lastSuccessfulHash = commitHashForBuild(lastSuccessfulBuild)
-    }
-
-    return lastSuccessfulHash
-}
-
-def commitHashForBuild(build) {
-    def scmAction = build?.actions.find { action -> action instanceof jenkins.scm.api.SCMRevisionAction }
-
-    return scmAction?.revision?.hash
-}
-
 pipeline {
     agent any
     
@@ -25,17 +9,6 @@ pipeline {
     }
 
     stages {
-        stage("Pre Build") {
-            steps {
-                lastSuccessfulCommit = getLastSuccessfulCommit()
-                script {
-                    echo "last build"
-
-                    echo "$lastSuccessfulCommit"
-                }
-            }
-        }
-
         stage("Validate") {
             steps {
                 sh 'docker build -t ${dockerImageTest} -f Dockerfile.ci .'
