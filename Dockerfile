@@ -6,9 +6,11 @@ ADD . /app
 
 RUN apt update && apt upgrade -y
 RUN pip install --upgrade pip
+RUN pip install virtualenv
 RUN pip install -r requirements.txt
 RUN pip install -e .
 RUN python /app/fusebox/manage.py collectstatic --noinput
+RUN cp .env.dist .env
 
 EXPOSE 4000
 

@@ -1,0 +1,9 @@
+{
+    "production": {
+        "django_settings": "fusebox.fusebox.settings",
+        "profile_name": "fusebox",
+        "project_name": "fusebox",
+        "runtime": "python3.7",
+        "s3_bucket": "fusebox-production"
+    }
+}
