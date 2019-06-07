@@ -9,7 +9,7 @@ from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
 from api.models import UserProfile
 from api.handlers.slack import RATE_CATEGORY_LIKE
-from slackclient import SlackClient
+from slack import WebClient
 from api.helpers.auth import protected
 
 
@@ -50,7 +50,7 @@ def notify(request: HttpRequest) -> HttpResponse:
         track_url = ": %s" % track.spotify_id if bool(request.GET.get("embed", 0)) else ""
         logging.getLogger(__name__).debug("About to notify %d users." % len(user_profiles))
 
-        sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+        sc = WebClient(os.getenv("SLACK_API_TOKEN"))
         for user_profile in user_profiles:
             logging.getLogger(__name__).debug("Notifying user %s" % user_profile.user.first_name)
             sc.api_call(

@@ -3,13 +3,13 @@ import random
 import string
 from django.http import JsonResponse, HttpRequest
 from api.models import UserProfile, User
-from slackclient import SlackClient
+from slack import WebClient
 from api.helpers.auth import protected
 
 
 @protected
 def populate(request: HttpRequest) -> JsonResponse:
-    sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+    sc = WebClient(os.getenv("SLACK_API_TOKEN"))
     response = sc.api_call("users.list")
     data = []
 

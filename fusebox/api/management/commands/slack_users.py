@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 import os
-from slackclient import SlackClient
+from client import WebClient
 from django.contrib.auth.models import User
 from api.models import UserProfile
 
@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = "Gets a list of all the users on slack and updates database"
 
     def handle(self, *args, **options):
-        sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+        sc = WebClient(os.getenv("SLACK_API_TOKEN"))
         response = sc.api_call("users.list")
 
         for slack_user in response["members"]:

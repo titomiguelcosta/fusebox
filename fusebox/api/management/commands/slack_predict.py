@@ -3,7 +3,7 @@ from api.services import get_spotify
 import boto3
 import os
 import logging
-from slackclient import SlackClient
+from slack import WebClient
 from api.models import Played
 import signal
 import json
@@ -28,7 +28,7 @@ class Command(BaseCommand):
         self.kill_now = True
 
     def handle(self, *args, **options):
-        sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+        sc = WebClient(os.getenv("SLACK_API_TOKEN"))
         sqs = boto3.client('sqs', region_name=os.getenv('AWS_REGION', 'ap-southeast-2'))
 
         while True:

@@ -25,7 +25,5 @@ jupyter:
 
 .PHONY: build
 build:
-    docker build -t titomiguelcosta/fusebox:prod -f Dockerfile.prod .
-    docker build -t titomiguelcosta/fusebox:test -f Dockerfile.test .
-    docker push titomiguelcosta/fusebox:test
-    docker push titomiguelcosta/fusebox:prod
+	docker build -t titomiguelcosta/fusebox -f Dockerfile .
+	docker push titomiguelcosta/fusebox:latest

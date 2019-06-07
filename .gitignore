@@ -6,3 +6,4 @@ __pycache__
 .env.prod
 .cache-*
 /fusebox/public/static/admin
+/venv

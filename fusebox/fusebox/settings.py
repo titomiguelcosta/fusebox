@@ -29,7 +29,7 @@ SECRET_KEY = 'wrqfp6%v80-*bi$w!c9#a(*gb#o*_#dok)ej%=n*1=p#-vq_3i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool("True" == os.getenv("DEBUG", "False"))
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.amazonaws.com', '.ngrok.io', '.pxlfsn.co', '*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.amazonaws.com', '.ngrok.io', '*']
 
 # Application definition
 
@@ -44,8 +44,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -133,7 +133,7 @@ if os.getenv('AWS_ACCESS_KEY_ID', False) and os.getenv('AWS_SECRET_ACCESS_KEY', 
     }
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
+# https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-nz'
 TIME_ZONE = 'Pacific/Auckland'
@@ -143,7 +143,7 @@ USE_TZ = True
 DATETIME_FORMAT = '%b %-d, %Y, %-I:%-M%P'
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
+# https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR + "/public" + STATIC_URL

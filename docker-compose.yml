@@ -1,4 +1,4 @@
-version: "2.0"
+version: "3.0"
 services:
   mysql:
     image: mysql:5.7
@@ -6,11 +6,13 @@ services:
     volumes:
       - ./database:/var/lib/mysql
     ports:
-      - "3306:3306"
-    networks:
-      - webnet
+      - "9306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: fusebox
+      MYSQL_DATABASE: fusebox
+      MYSQL_USER: fusebox
+      MYSQL_PASSWORD: fusebox
   fusebox:
-    image: titomiguelcosta/fusebox:latest
     build: .
     working_dir: /app/fusebox/fusebox
     volumes:
@@ -18,8 +20,4 @@ services:
     depends_on:
       - mysql
     ports:
-      - "5000:4000"
-    networks:
-      - webnet
-networks:
-  webnet:
+      - "9004:4000"

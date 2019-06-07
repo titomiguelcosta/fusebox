@@ -4,7 +4,7 @@ import requests
 import os
 import random
 import boto3
-from slackclient import SlackClient
+from slack import WebClient
 from api.models import Track, UserProfile, Rate, Played
 from api.formatter import SlackFormatter
 from api.helpers.spotify import SpotifyHelper
@@ -35,7 +35,7 @@ def lastsongs(request: HttpRequest) -> JsonResponse:
 
 
 def predict(request: HttpRequest) -> HttpResponse:
-    sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+    sc = WebClient(os.getenv("SLACK_API_TOKEN"))
     sc.api_call(
         "dialog.open",
         channel=request.POST.get("channel_id"),
@@ -114,7 +114,7 @@ def queue(request: HttpRequest) -> HttpResponse:
             }
         })
     else:
-        sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+        sc = WebClient(os.getenv("SLACK_API_TOKEN"))
         sc.api_call(
             "dialog.open",
             channel=request.POST.get("channel_id"),
@@ -140,7 +140,7 @@ def queue(request: HttpRequest) -> HttpResponse:
 
 
 def dequeue(request: HttpRequest) -> HttpResponse:
-    sc = SlackClient(os.getenv("SLACK_API_TOKEN"))
+    sc = WebClient(os.getenv("SLACK_API_TOKEN"))
     sc.api_call(
         "dialog.open",
         channel=request.POST.get("channel_id"),
