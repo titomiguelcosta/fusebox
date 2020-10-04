@@ -26,4 +26,7 @@ jupyter:
 .PHONY: build
 build:
 	docker build -t titomiguelcosta/fusebox -f Dockerfile .
+
+.PHONY: push
+push:
 	docker push titomiguelcosta/fusebox:latest

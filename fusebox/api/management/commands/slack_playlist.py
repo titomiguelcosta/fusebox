@@ -95,7 +95,7 @@ class Command(BaseCommand):
                             as_user=True
                         )
 
-                        requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={
+                        requests.post(os.getenv("SPOTIPY_SLACK_CHANNEL_URL"), json={
                             "text": "@%s just %sd *%s* by *%s*" % (
                                 body["user"]["name"], action, track_details["name"], track_details["artists"][0]["name"]
                             )

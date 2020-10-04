@@ -303,7 +303,7 @@ def rate_track(data):
             user_profile = UserProfile.objects.get(slack_username=data["user"]["id"])
 
             if user_profile and track:
-                requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={
+                requests.post(os.getenv("SPOTIPY_SLACK_CHANNEL_URL"), json={
                     "text": "@%s just rated *%s* by *%s*" % (data["user"]["name"], track.title, track.artists_to_str)
                 })
 

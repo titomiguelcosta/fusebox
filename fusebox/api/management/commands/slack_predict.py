@@ -97,7 +97,7 @@ class Command(BaseCommand):
                             as_user=True
                         )
 
-                        requests.post(os.getenv("SPOTIPY_CHANNEL_URL"), json={
+                        requests.post(os.getenv("SPOTIPY_SLACK_CHANNEL_URL"), json={
                             "text": "@%s checked prediction for *%s* by *%s*" % (
                                 body["user"]["name"], track["name"], track["artists"][0]["name"]
                             )

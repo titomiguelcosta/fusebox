@@ -1,16 +1,17 @@
-FROM python:3.7
+FROM python:3.8
 
 WORKDIR /app
 
 ADD . /app
 
 RUN apt update && apt upgrade -y
+RUN apt install libffi-dev liblzma-dev
 RUN pip install --upgrade pip
 RUN pip install virtualenv
 RUN pip install -r requirements.txt
 RUN pip install -e .
 RUN python /app/fusebox/manage.py collectstatic --noinput
-RUN cp .env.dist .env
+RUN python /app/fusebox/manage.py migrate
 
 EXPOSE 4000
 

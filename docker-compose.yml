@@ -1,6 +1,6 @@
 version: "3.0"
 services:
-  mysql:
+  fusebox-mysql:
     image: mysql:5.7
     restart: always
     volumes:
@@ -8,16 +8,16 @@ services:
     ports:
       - "9306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: fusebox
+      MYSQL_ROOT_PASSWORD: 1234567
       MYSQL_DATABASE: fusebox
       MYSQL_USER: fusebox
-      MYSQL_PASSWORD: fusebox
-  fusebox:
+      MYSQL_PASSWORD: 1234567
+  fusebox-gunicorn:
     build: .
     working_dir: /app/fusebox/fusebox
     volumes:
       - .:/app
     depends_on:
-      - mysql
+      - fusebox-mysql
     ports:
       - "9004:4000"
