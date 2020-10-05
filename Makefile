@@ -30,3 +30,7 @@ build:
 .PHONY: push
 push:
 	docker push titomiguelcosta/fusebox:latest
+
+.PHONY: deploy
+deploy:
+	 php dep deploy dev
