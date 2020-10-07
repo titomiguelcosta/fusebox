@@ -29,7 +29,7 @@ class Artist(models.Model):
 class Track(models.Model):
     title = models.CharField(max_length=250)
     album = models.CharField(max_length=250, blank=True)
-    url = models.CharField(max_length=250, blank=True, null="")
+    url = models.CharField(max_length=250, blank=True, null=True)
     artists = models.ManyToManyField(Artist)
     spotify_id = models.CharField(max_length=250, blank=True)
     popularity = models.IntegerField(default=0.0)

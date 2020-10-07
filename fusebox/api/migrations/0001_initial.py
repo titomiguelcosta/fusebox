@@ -79,7 +79,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=250)),
                 ('album', models.CharField(blank=True, max_length=250)),
-                ('url', models.CharField(blank=True, max_length=250, null='')),
+                ('url', models.CharField(blank=True, max_length=250, null=True)),
                 ('spotify_id', models.CharField(blank=True, max_length=250)),
                 ('popularity', models.IntegerField(default=0.0)),
                 ('danceability', models.FloatField(default=0.0)),
