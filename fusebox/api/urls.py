@@ -1,12 +1,23 @@
 from django.conf.urls import url, include
 from django.urls import path
 from .views import generic, tracks, slack, users
-from .models import Track
+from .models import Track, Artist, Album
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
 from rest_framework import routers, serializers, viewsets
+
+
+class ArtistSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Artist
+        fields = ['name', 'genres']
+
+
+class ArtistViewSet(viewsets.ModelViewSet):
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer
 
 
 class TrackSerializer(serializers.HyperlinkedModelSerializer):
@@ -23,6 +34,7 @@ class TrackViewSet(viewsets.ModelViewSet):
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'tracks', TrackViewSet)
+router.register(r'artists', ArtistViewSet)
 
 urlpatterns = [
     url(r'^$', generic.index, name='index'),
