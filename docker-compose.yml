@@ -14,6 +14,16 @@ services:
       MYSQL_DATABASE: fusebox
       MYSQL_USER: fusebox
       MYSQL_PASSWORD: 1234567
+  fusebox-web:
+    container_name: fusebox-web
+    build: .
+    working_dir: /app/fusebox
+    volumes:
+      - .:/app
+    depends_on:
+      - fusebox-mysql
+    ports:
+      - "9004:4000"
   fusebox-gunicorn:
     container_name: fusebox-gunicorn
     build: .

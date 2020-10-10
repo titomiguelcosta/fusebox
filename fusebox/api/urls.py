@@ -12,7 +12,7 @@ from rest_framework import routers, serializers, viewsets
 class TrackSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Track
-        fields = ['title', 'artist', 'album', 'populater', 'populated']
+        fields = ['title', 'artists', 'album', 'popularity', 'populated']
 
 
 class TrackViewSet(viewsets.ModelViewSet):
@@ -23,7 +23,6 @@ class TrackViewSet(viewsets.ModelViewSet):
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'tracks', TrackViewSet)
-
 
 urlpatterns = [
     url(r'^$', generic.index, name='index'),
