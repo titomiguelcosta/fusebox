@@ -16,14 +16,17 @@ services:
       MYSQL_PASSWORD: 1234567
   fusebox-web:
     container_name: fusebox-web
-    build: .
-    working_dir: /app/fusebox
+    image: "node:12"
+    user: "node"
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
     volumes:
-      - .:/app
-    depends_on:
-      - fusebox-mysql
+      - ./web:/home/node/app
+    stdin_open: true
+    command: bash -c "npm install && yarn build && yarn start"
     ports:
-      - "9004:4000"
+      - "9003:3000"
   fusebox-gunicorn:
     container_name: fusebox-gunicorn
     build: .
