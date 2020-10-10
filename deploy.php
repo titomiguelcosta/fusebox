@@ -40,7 +40,7 @@ task('update:dependencies', function () {
 });
 
 task('frontend:build', function () {
-    run('cd {{release_path}}/web && yarn build');
+    run('cd {{release_path}}/web && yarn install && yarn build');
 });
 
 desc('Deploy project');

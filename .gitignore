@@ -7,7 +7,7 @@ __pycache__
 .cache-*
 /fusebox/public/static/admin
 /venv
-
+/.vscode
 
 # react
 /web/node_modules
