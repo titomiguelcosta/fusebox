@@ -21,7 +21,7 @@ host('fusebox.titomiguelcosta.com')
     ->set('deploy_path', '/mnt/websites/fusebox')
     ->set('shared_files', ['.env'])
     ->set('branch', 'master')
-    ->set('env', ['PATH' => '/home/ubuntu/.pyenv/plugins/pyenv-virtualenv/shims:/home/ubuntu/.pyenv/shims:/home/ubuntu/.pyenv/bin:/home/ubuntu/.nvm/versions/node/v12.18.4/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin']);
+    ->set('env', ['PATH' => '/mnt/websites/.pyenv/plugins/pyenv-virtualenv/shims:/mnt/websites/.pyenv/shims:/mnt/websites/.pyenv/bin:/home/ubuntu/.nvm/versions/node/v12.18.4/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin']);
 
 task('workers:restart', function () {
     run('sudo supervisorctl reload');
@@ -39,6 +39,10 @@ task('update:dependencies', function () {
     run('pip install -r {{release_path}}/requirements.txt');
 });
 
+task('frontend:build', function () {
+    run('cd {{release_path}}/web && yarn build');
+});
+
 desc('Deploy project');
 task('deploy', [
     'deploy:info',
@@ -51,6 +55,7 @@ task('deploy', [
     'deploy:writable',
     'database:migrate',
     'publish:assets',
+    'frontend:build',
     'deploy:symlink',
     'workers:restart',
     'deploy:unlock',
