@@ -1,9 +1,11 @@
-version: "3.0"
+version: "3.1"
 services:
   fusebox-mysql:
     image: mysql:5.7
+    container_name: fusebox-mysql
     restart: always
     volumes:
+      - .:/app
       - ./database:/var/lib/mysql
     ports:
       - "9306:3306"
@@ -13,11 +15,13 @@ services:
       MYSQL_USER: fusebox
       MYSQL_PASSWORD: 1234567
   fusebox-gunicorn:
+    container_name: fusebox-gunicorn
     build: .
-    working_dir: /app/fusebox/fusebox
+    working_dir: /app/fusebox
     volumes:
       - .:/app
     depends_on:
       - fusebox-mysql
     ports:
       - "9004:4000"
+

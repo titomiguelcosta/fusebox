@@ -7,3 +7,18 @@ __pycache__
 .cache-*
 /fusebox/public/static/admin
 /venv
+
+
+# react
+/web/node_modules
+/web/coverage
+/web/.pnp
+/web/build
+/web/.env.local
+/web/.env.development.local
+/web/.env.test.local
+/web/.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp.js

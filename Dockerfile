@@ -11,7 +11,6 @@ RUN pip install virtualenv
 RUN pip install -r requirements.txt
 RUN pip install -e .
 RUN python /app/fusebox/manage.py collectstatic --noinput
-RUN python /app/fusebox/manage.py migrate
 
 EXPOSE 4000
 

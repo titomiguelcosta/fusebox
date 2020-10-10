@@ -1,6 +1,29 @@
-from django.conf.urls import url
-
+from django.conf.urls import url, include
+from django.urls import path
 from .views import generic, tracks, slack, users
+from .models import Track
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from rest_framework import routers, serializers, viewsets
+
+
+class TrackSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Track
+        fields = ['title', 'artist', 'album', 'populater', 'populated']
+
+
+class TrackViewSet(viewsets.ModelViewSet):
+    queryset = Track.objects.all()
+    serializer_class = TrackSerializer
+
+
+# Routers provide an easy way of automatically determining the URL conf.
+router = routers.DefaultRouter()
+router.register(r'tracks', TrackViewSet)
+
 
 urlpatterns = [
     url(r'^$', generic.index, name='index'),
@@ -17,4 +40,8 @@ urlpatterns = [
     url(r'^slack/notify', slack.notify, name='slack_notify'),
     url(r'^slack/proxy$', slack.proxy, name='slack_proxy'),
     url(r'^users/populate', users.populate, name='users_populate'),
+    path('auth/', include('rest_framework.urls')),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('', include(router.urls)),
 ]
