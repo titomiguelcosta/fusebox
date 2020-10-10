@@ -44,7 +44,6 @@ google-auth==1.22.1
 google-auth-oauthlib==0.4.1
 google-pasta==0.2.0
 googleapis-common-protos==1.52.0
-gpt-2-simple==0.7.1
 grpcio==1.32.0
 gunicorn==20.0.4
 h5py==2.10.0
@@ -62,13 +61,6 @@ jmespath==0.9.3
 joblib==0.17.0
 json5==0.9.5
 jsonschema==3.2.0
-jupyter==1.0.0
-jupyter-client==6.1.7
-jupyter-console==6.2.0
-jupyter-core==4.6.3
-jupyterlab==2.2.8
-jupyterlab-pygments==0.1.2
-jupyterlab-server==1.2.0
 kappa==0.6.0
 Keras==2.4.3
 Keras-Preprocessing==1.1.2
@@ -138,11 +130,6 @@ six==1.12.0
 slackclient==2.0.1
 spotipy==2.4.4
 sqlparse==0.3.0
-tensorboard==2.3.0
-tensorboard-plugin-wit==1.7.0
-tensorflow==2.3.1
-tensorflow-estimator==2.3.0
-tensorflow-metadata==0.24.0
 termcolor==1.1.0
 terminado==0.9.1
 testpath==0.4.4
@@ -152,7 +139,6 @@ threadpoolctl==2.1.0
 tokenizers==0.8.1rc2
 toml==0.10.0
 toposort==1.5
-torch==1.6.0
 tornado==6.0.4
 tqdm==4.50.2
 traitlets==5.0.4
