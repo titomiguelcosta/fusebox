@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from django.urls import path
 from .views import generic, tracks, slack, users
-from .models import Track, Artist, Album
+from .models import Track, Artist
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
