@@ -1,15 +1,12 @@
 --- Total Played Songs
-select count(p.id) from api_played p
-	where p.on >= '2017-11-20';
+select count(p.id) from api_played p;
 
 --- Total Rates
-select count(r.id) from api_rate r
-	where r.on >= '2017-11-20';
+select count(r.id) from api_rate r;
 
 --- Top Rating Users
 select u.first_name, count(r.user_id) as votes from auth_user u
 	inner join api_rate r on u.id = r.user_id
-	where r.on >= '2017-11-20'
 	group by r.user_id
 	order by votes desc;
 
@@ -19,7 +16,6 @@ select t.title as song, t.album, a.name as artist, count(distinct p.id) as playe
 	inner join api_artist a on a.id = ta.artist_id
 	inner join api_played p on p.track_id = t.id
 	inner join api_rate r on r.track_id = t.id
-	where p.on >= '2017-11-20'
 	group by p.track_id
 	order by played desc;
 
@@ -29,7 +25,6 @@ select t.title as song, t.album, a.name as artist, count(distinct p.id) as playe
 	inner join api_artist a on a.id = ta.artist_id
 	inner join api_played p on p.track_id = t.id
 	inner join api_rate r on r.track_id = t.id
-	where p.on >= '2017-11-20'
 	group by p.track_id
 	order by votes desc;
 
@@ -39,7 +34,6 @@ select t.title as song, t.album, a.name as artist, count(distinct p.id) as playe
 	inner join api_artist a on a.id = ta.artist_id
 	inner join api_played p on p.track_id = t.id
 	inner join api_rate r on r.track_id = t.id
-	where p.on >= '2017-11-20'
 	group by p.track_id
 	order by score desc;
 
@@ -48,5 +42,4 @@ select u.first_name from auth_user u
     inner join api_userprofile up on up.user_id = u.id
     where
         up.notifications = 0
-        and u.email like "%pixelfu%"
         and u.is_active = 1;
