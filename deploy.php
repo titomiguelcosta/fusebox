@@ -55,7 +55,7 @@ task('deploy', [
     'deploy:writable',
     'database:migrate',
     'publish:assets',
-    'frontend:build',
+    //'frontend:build',
     'deploy:symlink',
     'workers:restart',
     'deploy:unlock',

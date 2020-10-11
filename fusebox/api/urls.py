@@ -46,7 +46,7 @@ class TrackViewSet(viewsets.ModelViewSet):
             ~Exists(
                 Rate.objects.filter(
                     track=OuterRef('pk'),
-                    user__eq=user
+                    user=user
                 )
             )
         )
