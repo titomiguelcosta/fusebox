@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from rest_framework import routers, serializers, viewsets, generics
+from rest_framework import routers, serializers, viewsets
 
 
 class ArtistSerializer(serializers.HyperlinkedModelSerializer):
@@ -32,7 +32,7 @@ class TrackViewSet(viewsets.ModelViewSet):
     serializer_class = TrackSerializer
 
 
-class UnratedTracksViewSet(generics.ListAPIView):
+class UnratedTracksViewSet(viewsets.ModelViewSet):
     serializer_class = TrackSerializer
 
     def get_queryset(self):
@@ -55,7 +55,7 @@ class UnratedTracksViewSet(generics.ListAPIView):
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'tracks', TrackViewSet)
-router.register(r'tracks/unrated', UnratedTracksViewSet)
+router.register(r'tracks/unrated', UnratedTracksViewSet, basename=Track)
 router.register(r'artists', ArtistViewSet)
 
 urlpatterns = [
