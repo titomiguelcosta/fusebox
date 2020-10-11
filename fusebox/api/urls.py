@@ -1,7 +1,8 @@
 from django.conf.urls import url, include
 from django.urls import path
+from django.db.models import Exists, OuterRef
 from .views import generic, tracks, slack, users
-from .models import Track, Artist
+from .models import Track, Artist, Rate
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -31,9 +32,30 @@ class TrackViewSet(viewsets.ModelViewSet):
     serializer_class = TrackSerializer
 
 
+class UnratedTracksViewSet(viewsets.ModelViewSet):
+    serializer_class = TrackSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        user = self.request.user
+
+        return [] if not user else Track.objects.filter(
+            ~Exists(
+                Rate.objects.filter(
+                    track=OuterRef('pk'),
+                    user__eq=user
+                )
+            )
+        )
+
+
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'tracks', TrackViewSet)
+router.register(r'tracks/unrated', UnratedTracksViewSet)
 router.register(r'artists', ArtistViewSet)
 
 urlpatterns = [
