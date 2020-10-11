@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-from rest_framework import routers, serializers, viewsets
+from rest_framework import routers, serializers, viewsets, generics
 
 
 class ArtistSerializer(serializers.HyperlinkedModelSerializer):
@@ -32,7 +32,7 @@ class TrackViewSet(viewsets.ModelViewSet):
     serializer_class = TrackSerializer
 
 
-class UnratedTracksViewSet(viewsets.ModelViewSet):
+class UnratedTracksViewSet(generics.ListAPIView):
     serializer_class = TrackSerializer
 
     def get_queryset(self):
