@@ -46,10 +46,10 @@ class TrackViewSet(viewsets.ModelViewSet):
             ~Exists(
                 Rate.objects.filter(
                     track=OuterRef('pk'),
-                    user=user
+                    user=user.id
                 )
             )
-        )
+        ) if user.id else []
 
         serializer = TrackSerializer(tracks, many=True, context={'request': request})
 
