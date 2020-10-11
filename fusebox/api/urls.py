@@ -8,6 +8,8 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from rest_framework import routers, serializers, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 
 class ArtistSerializer(serializers.HyperlinkedModelSerializer):
@@ -31,18 +33,16 @@ class TrackViewSet(viewsets.ModelViewSet):
     queryset = Track.objects.all()
     serializer_class = TrackSerializer
 
+    @action(
+        methods=['get'],
+        detail=False,
+        url_path='unrated',
+        url_name='unrated_tracks'
+    )
+    def get_unrated(self, request):
+        user = request.user
 
-class UnratedTracksViewSet(viewsets.ModelViewSet):
-    serializer_class = TrackSerializer
-
-    def get_queryset(self):
-        """
-        This view should return a list of all the purchases
-        for the currently authenticated user.
-        """
-        user = self.request.user
-
-        return [] if not user else Track.objects.filter(
+        tracks = Track.objects.filter(
             ~Exists(
                 Rate.objects.filter(
                     track=OuterRef('pk'),
@@ -51,11 +51,14 @@ class UnratedTracksViewSet(viewsets.ModelViewSet):
             )
         )
 
+        serializer = TrackSerializer(tracks, many=True, context={'request': request})
+
+        return Response(serializer.data)
+
 
 # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
 router.register(r'tracks', TrackViewSet)
-router.register(r'tracks/unrated', UnratedTracksViewSet, basename=Track)
 router.register(r'artists', ArtistViewSet)
 
 urlpatterns = [
