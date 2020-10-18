@@ -27,8 +27,8 @@ services:
     command: bash -c "npm install && yarn build && yarn start"
     ports:
       - "9003:3000"
-  fusebox-gunicorn:
-    container_name: fusebox-gunicorn
+  fusebox-api:
+    container_name: fusebox-api
     build: .
     working_dir: /app/fusebox
     volumes:

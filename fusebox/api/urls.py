@@ -46,6 +46,17 @@ class TrackViewSet(viewsets.ModelViewSet):
     )
     def get_unrated(self, request):
         user = request.user
+        try:
+            limit = int(request.GET.get('limit', 10))
+        except:
+            limit = 10
+
+        try:
+            offset = int(request.GET.get('offset', 0))
+        except:
+            offset = 0
+
+        max = offset + limit
 
         tracks = Track.objects.filter(
             ~Exists(
@@ -54,7 +65,7 @@ class TrackViewSet(viewsets.ModelViewSet):
                     user=user.id
                 )
             )
-        ) if user.id else []
+        )[offset:max] if user.id else []
 
         serializer = TrackSerializer(tracks, many=True, context={'request': request})
 
