@@ -10,28 +10,33 @@ from rest_framework_simplejwt.views import (
 from rest_framework import routers, serializers, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.pagination import LimitOffsetPagination
 
 
 class ArtistSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Artist
-        fields = ['name', 'genres']
+        fields = ['id', 'name', 'genres']
 
 
 class ArtistViewSet(viewsets.ModelViewSet):
     queryset = Artist.objects.all()
     serializer_class = ArtistSerializer
+    pagination_class = LimitOffsetPagination
 
 
 class TrackSerializer(serializers.HyperlinkedModelSerializer):
+    artists = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = Track
-        fields = ['title', 'artists', 'album', 'popularity', 'populated']
+        fields = ['id', 'title', 'artists', 'album', 'popularity', 'populated']
 
 
 class TrackViewSet(viewsets.ModelViewSet):
     queryset = Track.objects.all()
     serializer_class = TrackSerializer
+    pagination_class = LimitOffsetPagination
 
     @action(
         methods=['get'],
