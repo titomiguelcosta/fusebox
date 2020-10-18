@@ -19,7 +19,7 @@ host('fusebox.titomiguelcosta.com')
     ->user('ubuntu')
     ->stage('dev')
     ->set('deploy_path', '/mnt/websites/fusebox')
-    ->set('shared_files', ['.env'])
+    ->set('shared_files', ['.env', 'web/.env'])
     ->set('branch', 'master')
     ->set('env', ['PATH' => '/mnt/websites/.pyenv/plugins/pyenv-virtualenv/shims:/mnt/websites/.pyenv/shims:/mnt/websites/.pyenv/bin:/home/ubuntu/.nvm/versions/node/v12.18.4/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin']);
 
@@ -40,7 +40,7 @@ task('update:dependencies', function () {
 });
 
 task('frontend:build', function () {
-    run('cd {{release_path}}/web && yarn install && yarn build');
+    run('cd {{release_path}}/web && yarn build');
 });
 
 desc('Deploy project');
@@ -55,7 +55,7 @@ task('deploy', [
     'deploy:writable',
     'database:migrate',
     'publish:assets',
-    //'frontend:build',
+    'frontend:build',
     'deploy:symlink',
     'workers:restart',
     'deploy:unlock',

@@ -1,6 +1,6 @@
 class FuseboxApi {
     constructor() {
-        this.baseUrl = 'https://api.fusebox.titomiguelcosta.com';
+        this.baseUrl = process.env.REACT_APP_FUSEBOX_API_URL;
 
         this.headers = {
             'user-agent': 'Fusebox Website',
