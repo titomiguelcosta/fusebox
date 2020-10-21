@@ -84,18 +84,18 @@ class SpotifyHelper(object):
             track.populated = True
             track.save()
 
-            video_results = YouTubeHelper().search("%s" % track)
+            youtube_videos = YouTubeHelper().search("%s - %s" % (track.artists_to_str, track.title))
 
-            for video_result in video_results:
+            for youtube_video in youtube_videos:
                 try:
                     video = Video()
                     video.track = track
-                    video.source = 'youtube'
-                    video.description = video_result.snippet.description
-                    video.title = video_result.snippet.title
-                    video.channel_id = video_result.snippet.channelId
-                    video.url = 'https://www.youtube.com/watch?v=%s' % video_result.id.videoId
-                    video.video_id = video_result.id.videoId
+                    video.source = "youtube"
+                    video.description = youtube_video.snippet.description
+                    video.title = youtube_video.snippet.title
+                    video.channel_id = youtube_video.snippet.channelId
+                    video.url = "https://www.youtube.com/watch?v=%s" % youtube_video.id.videoId
+                    video.video_id = youtube_video.id.videoId
                     video.save()
                 except Exception as e:
                     errors.append(str(e))
