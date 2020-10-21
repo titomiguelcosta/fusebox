@@ -97,6 +97,20 @@ class PlaylistTracks(models.Model):
         return self.queued_by if self.action() == "queued" else self.dequeued_by
 
 
+class Video(models.Model):
+    track = models.ForeignKey(Track, related_name='video_tracks_track', on_delete=models.CASCADE)
+    source = models.CharField(max_length=255, default='youtube')
+    title = models.TextField()
+    description = models.TextField(blank=True)
+    url = models.CharField(max_length=255, blank=True)
+    video_id = models.CharField(max_length=255)
+    channel_id = models.CharField(max_length=255, blank=True)
+    published_on = models.DateTimeField(blank=True)
+
+    def __str__(self):
+        return "%s: %s" % (self.title, self.url)
+
+
 class Rate(models.Model):
     track = models.ForeignKey(Track, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

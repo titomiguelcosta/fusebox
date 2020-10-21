@@ -1,8 +1,9 @@
-from api.models import Track, Artist, Played
+from api.models import Track, Artist, Played, Video
 from api.services import get_spotify
 import logging
 from datetime import timedelta
 from django.utils import timezone
+from api.helpers.youtube import YouTubeHelper
 
 
 class SpotifyHelper(object):
@@ -82,5 +83,22 @@ class SpotifyHelper(object):
             track.duration_ms = data["duration_ms"]
             track.populated = True
             track.save()
+
+            video_results = YouTubeHelper().search("%s" % track)
+
+            for video_result in video_results:
+                try:
+                    video = Video()
+                    video.track = track
+                    video.source = 'youtube'
+                    video.description = video_result.snippet.description
+                    video.title = video_result.snippet.title
+                    video.channel_id = video_result.snippet.channelId
+                    video.url = 'https://www.youtube.com/watch?v=%s' % video_result.id.videoId
+                    video.video_id = video_result.id.videoId
+                    video.save()
+                except Exception as e:
+                    errors.append(str(e))
+                    continue
 
         return [tracks, errors]

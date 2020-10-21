@@ -23,12 +23,16 @@ predictions:
 jupyter:
 	jupyter notebook fusebox/api/machinelearning/fusebox.ipynb
 
-.PHONY: build
-build:
+.PHONY: docker-build
+docker-build:
 	docker build -t titomiguelcosta/fusebox -f Dockerfile .
 
+.PHONY: docker-run
+docker-run:
+	docker-compose up
+
 .PHONY: push
-push:
+docker-push:
 	docker push titomiguelcosta/fusebox:latest
 
 .PHONY: deploy
