@@ -99,6 +99,7 @@ class SpotifyHelper(object):
                     video.save()
                 except Exception as e:
                     errors.append(str(e))
+                    errors.append(str(youtube_videos))
                     continue
 
         return [tracks, errors]
