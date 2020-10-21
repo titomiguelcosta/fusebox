@@ -1,104 +1,314 @@
 [
     {
         "kind": "youtube#searchResult",
-        "etag": "bAroUJb5wHlP9IwH4KYngbjFDHk",
+        "etag": "Jwf0Tx7XtnljgF9c9weuVXG7_F0",
         "id": {
             "kind": "youtube#video",
-            "videoId": "TpeK3zvmx2c"
+            "videoId": "Do3tSdZucyA"
         },
         "snippet": {
-            "publishedAt": "2014-11-18T08: 00: 00Z",
-            "channelId": "UCFS0CJgXUt7NjwrUN--vFRg",
-            "title": "Ben Howard - I Forget Where We Were (Official Video)",
-            "description": "Tour Dates: http://benhowardmusic.co.uk/live/ Get the new album here: https://ert.lnk.to/NoondayDreamAlbum Get the debut album "Every Kingdom" now: ...",
+            "publishedAt": "2018-06-28T15: 58: 20Z",
+            "channelId": "UCnGcjQlLO8x7jsfw3r6U9ww",
+            "title": "The Smashing Pumpkins - Solara",
+            "description": "Solara available everywhere: http: //smarturl.it/solara instagram.com/smashingpumpkins/ facebook.com/smashingpumpkins/ twitter.com/SmashingPumpkin/ ...",
             "thumbnails": {
                 "default": {
-                    "url": "https: //i.ytimg.com/vi/TpeK3zvmx2c/default.jpg",
+                    "url": "https://i.ytimg.com/vi/Do3tSdZucyA/default.jpg",
                     "width": 120,
                     "height": 90
                 },
                 "medium": {
-                    "url": "https://i.ytimg.com/vi/TpeK3zvmx2c/mqdefault.jpg",
+                    "url": "https://i.ytimg.com/vi/Do3tSdZucyA/mqdefault.jpg",
                     "width": 320,
                     "height": 180
                 },
                 "high": {
-                    "url": "https://i.ytimg.com/vi/TpeK3zvmx2c/hqdefault.jpg",
+                    "url": "https://i.ytimg.com/vi/Do3tSdZucyA/hqdefault.jpg",
                     "width": 480,
                     "height": 360
                 }
             },
-            "channelTitle": "BenHowardVEVO",
+            "channelTitle": "Smashing Pumpkins",
             "liveBroadcastContent": "none",
-            "publishTime": "2014-11-18T08:00:00Z"
+            "publishTime": "2018-06-28T15:58:20Z"
         }
     },
     {
         "kind": "youtube#searchResult",
-        "etag": "hYxgyV6zfv_MVqOYDKQw-qG3TmY",
+        "etag": "y8uJwqPI1fhU2ESOqTiPeOZqGIw",
         "id": {
             "kind": "youtube#video",
-            "videoId": "ki5HBBEtfak"
+            "videoId": "rx9ya42QLXs"
         },
         "snippet": {
-            "publishedAt": "2014-08-18T18:35:44Z",
-            "channelId": "UC7P46taO0CdI8Gy44P1X2yA",
-            "title": "Ben Howard - I Forget Where We Were (Official Audio)",
-            "description": "New album I Forget Where We Were is out now: http://po.st/BHStore3 • iTunes: http://po.st/IFWWWA5 • Amazon: http://po.st/IFWWWAamz5 • Google Play: ...",
+            "publishedAt": "2018-06-08T04:00:06Z",
+            "channelId": "UCnGcjQlLO8x7jsfw3r6U9ww",
+            "title": "The Smashing Pumpkins - Solara",
+            "description": "The first recording in over 18 years to feature founding members Billy Corgan, James Iha, and Jimmy Chamberlin. Recorded in Malibu, CA at Shangri La Studios ...",
             "thumbnails": {
                 "default": {
-                    "url": "https://i.ytimg.com/vi/ki5HBBEtfak/default.jpg",
+                    "url": "https://i.ytimg.com/vi/rx9ya42QLXs/default.jpg",
                     "width": 120,
                     "height": 90
                 },
                 "medium": {
-                    "url": "https://i.ytimg.com/vi/ki5HBBEtfak/mqdefault.jpg",
+                    "url": "https://i.ytimg.com/vi/rx9ya42QLXs/mqdefault.jpg",
                     "width": 320,
                     "height": 180
                 },
                 "high": {
-                    "url": "https://i.ytimg.com/vi/ki5HBBEtfak/hqdefault.jpg",
+                    "url": "https://i.ytimg.com/vi/rx9ya42QLXs/hqdefault.jpg",
                     "width": 480,
                     "height": 360
                 }
             },
-            "channelTitle": "Ben Howard",
+            "channelTitle": "Smashing Pumpkins",
             "liveBroadcastContent": "none",
-            "publishTime": "2014-08-18T18:35:44Z"
+            "publishTime": "2018-06-08T04:00:06Z"
         }
     },
     {
         "kind": "youtube#searchResult",
-        "etag": "wnh7VR3IATX43QGAsJymrWU7nSc",
+        "etag": "xRqzGqpw25SBhTEKxVHJ2hmJYKY",
         "id": {
             "kind": "youtube#video",
-            "videoId": "ks1a_8aNLLo"
+            "videoId": "7ckxo9rT3oI"
         },
         "snippet": {
-            "publishedAt": "2014-10-19T23:00:01Z",
-            "channelId": "UCFS0CJgXUt7NjwrUN--vFRg",
-            "title": "Ben Howard - I Forget Where We Were (Solo Session)",
-            "description": "Tour Dates: http://benhowardmusic.co.uk/live/ Get the new album here: https://ert.lnk.to/NoondayDreamAlbum Get the debut album "Every Kingdom" now: ...",
+            "publishedAt": "2018-08-09T20:18:42Z",
+            "channelId": "UCnGcjQlLO8x7jsfw3r6U9ww",
+            "title": "The Smashing Pumpkins - Solara (Live from the Troubadour)",
+            "description": "Solara (Live) from the legendary Troubadour in Los Angeles on June 27, 2018.",
             "thumbnails": {
                 "default": {
-                    "url": "https://i.ytimg.com/vi/ks1a_8aNLLo/default.jpg",
+                    "url": "https://i.ytimg.com/vi/7ckxo9rT3oI/default.jpg",
                     "width": 120,
                     "height": 90
                 },
                 "medium": {
-                    "url": "https://i.ytimg.com/vi/ks1a_8aNLLo/mqdefault.jpg",
+                    "url": "https://i.ytimg.com/vi/7ckxo9rT3oI/mqdefault.jpg",
                     "width": 320,
                     "height": 180
                 },
                 "high": {
-                    "url": "https://i.ytimg.com/vi/ks1a_8aNLLo/hqdefault.jpg",
+                    "url": "https://i.ytimg.com/vi/7ckxo9rT3oI/hqdefault.jpg",
                     "width": 480,
                     "height": 360
                 }
             },
-            "channelTitle": "BenHowardVEVO",
+            "channelTitle": "Smashing Pumpkins",
             "liveBroadcastContent": "none",
-            "publishTime": "2014-10-19T23:00:01Z"
+            "publishTime": "2018-08-09T20:18:42Z"
+        }
+    }
+],
+"dict" object has no attribute "snippet",
+[
+    {
+        "kind": "youtube#searchResult",
+        "etag": "Jwf0Tx7XtnljgF9c9weuVXG7_F0",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "Do3tSdZucyA"
+        },
+        "snippet": {
+            "publishedAt": "2018-06-28T15:58:20Z",
+            "channelId": "UCnGcjQlLO8x7jsfw3r6U9ww",
+            "title": "The Smashing Pumpkins - Solara",
+            "description": "Solara available everywhere: http://smarturl.it/solara instagram.com/smashingpumpkins/ facebook.com/smashingpumpkins/ twitter.com/SmashingPumpkin/ ...",
+            "thumbnails": {
+                "default": {
+                    "url": "https://i.ytimg.com/vi/Do3tSdZucyA/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https://i.ytimg.com/vi/Do3tSdZucyA/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https://i.ytimg.com/vi/Do3tSdZucyA/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Smashing Pumpkins",
+            "liveBroadcastContent": "none",
+            "publishTime": "2018-06-28T15:58:20Z"
+        }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "y8uJwqPI1fhU2ESOqTiPeOZqGIw",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "rx9ya42QLXs"
+        },
+        "snippet": {
+            "publishedAt": "2018-06-08T04:00:06Z",
+            "channelId": "UCnGcjQlLO8x7jsfw3r6U9ww",
+            "title": "The Smashing Pumpkins - Solara",
+            "description": "The first recording in over 18 years to feature founding members Billy Corgan, James Iha, and Jimmy Chamberlin. Recorded in Malibu, CA at Shangri La Studios ...",
+            "thumbnails": {
+                "default": {
+                    "url": "https://i.ytimg.com/vi/rx9ya42QLXs/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https://i.ytimg.com/vi/rx9ya42QLXs/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https://i.ytimg.com/vi/rx9ya42QLXs/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Smashing Pumpkins",
+            "liveBroadcastContent": "none",
+            "publishTime": "2018-06-08T04:00:06Z"
+        }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "xRqzGqpw25SBhTEKxVHJ2hmJYKY",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "7ckxo9rT3oI"
+        },
+        "snippet": {
+            "publishedAt": "2018-08-09T20:18:42Z",
+            "channelId": "UCnGcjQlLO8x7jsfw3r6U9ww",
+            "title": "The Smashing Pumpkins - Solara (Live from the Troubadour)",
+            "description": "Solara (Live) from the legendary Troubadour in Los Angeles on June 27, 2018.",
+            "thumbnails": {
+                "default": {
+                    "url": "https://i.ytimg.com/vi/7ckxo9rT3oI/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https://i.ytimg.com/vi/7ckxo9rT3oI/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https://i.ytimg.com/vi/7ckxo9rT3oI/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Smashing Pumpkins",
+            "liveBroadcastContent": "none",
+            "publishTime": "2018-08-09T20:18:42Z"
+        }
+    }
+],
+"dict" object has no attribute "snippet",
+[
+    {
+        "kind": "youtube#searchResult",
+        "etag": "Jwf0Tx7XtnljgF9c9weuVXG7_F0",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "Do3tSdZucyA"
+        },
+        "snippet": {
+            "publishedAt": "2018-06-28T15:58:20Z",
+            "channelId": "UCnGcjQlLO8x7jsfw3r6U9ww",
+            "title": "The Smashing Pumpkins - Solara",
+            "description": "Solara available everywhere: http://smarturl.it/solara instagram.com/smashingpumpkins/ facebook.com/smashingpumpkins/ twitter.com/SmashingPumpkin/ ...",
+            "thumbnails": {
+                "default": {
+                    "url": "https://i.ytimg.com/vi/Do3tSdZucyA/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https://i.ytimg.com/vi/Do3tSdZucyA/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https://i.ytimg.com/vi/Do3tSdZucyA/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Smashing Pumpkins",
+            "liveBroadcastContent": "none",
+            "publishTime": "2018-06-28T15:58:20Z"
+        }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "y8uJwqPI1fhU2ESOqTiPeOZqGIw",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "rx9ya42QLXs"
+        },
+        "snippet": {
+            "publishedAt": "2018-06-08T04:00:06Z",
+            "channelId": "UCnGcjQlLO8x7jsfw3r6U9ww",
+            "title": "The Smashing Pumpkins - Solara",
+            "description": "The first recording in over 18 years to feature founding members Billy Corgan, James Iha, and Jimmy Chamberlin. Recorded in Malibu, CA at Shangri La Studios ...",
+            "thumbnails": {
+                "default": {
+                    "url": "https://i.ytimg.com/vi/rx9ya42QLXs/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https://i.ytimg.com/vi/rx9ya42QLXs/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https://i.ytimg.com/vi/rx9ya42QLXs/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Smashing Pumpkins",
+            "liveBroadcastContent": "none",
+            "publishTime": "2018-06-08T04:00:06Z"
+        }
+    },
+    {
+        "kind": "youtube#searchResult",
+        "etag": "xRqzGqpw25SBhTEKxVHJ2hmJYKY",
+        "id": {
+            "kind": "youtube#video",
+            "videoId": "7ckxo9rT3oI"
+        },
+        "snippet": {
+            "publishedAt": "2018-08-09T20:18:42Z",
+            "channelId": "UCnGcjQlLO8x7jsfw3r6U9ww",
+            "title": "The Smashing Pumpkins - Solara (Live from the Troubadour)",
+            "description": "Solara (Live) from the legendary Troubadour in Los Angeles on June 27, 2018.",
+            "thumbnails": {
+                "default": {
+                    "url": "https://i.ytimg.com/vi/7ckxo9rT3oI/default.jpg",
+                    "width": 120,
+                    "height": 90
+                },
+                "medium": {
+                    "url": "https://i.ytimg.com/vi/7ckxo9rT3oI/mqdefault.jpg",
+                    "width": 320,
+                    "height": 180
+                },
+                "high": {
+                    "url": "https://i.ytimg.com/vi/7ckxo9rT3oI/hqdefault.jpg",
+                    "width": 480,
+                    "height": 360
+                }
+            },
+            "channelTitle": "Smashing Pumpkins",
+            "liveBroadcastContent": "none",
+            "publishTime": "2018-08-09T20:18:42Z"
         }
     }
 ]
