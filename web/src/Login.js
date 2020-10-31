@@ -65,8 +65,8 @@ class Login extends React.Component {
     render() {
         const authenticationButton = this.state.authenticating ? (
             <button className="btn btn-primary" type="button" disabled>
-                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                <span class="sr-only">Authenticating...</span>
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span> Authenticating...</span>
             </button>
         ) : (
                 <button onClick={(e) => this.handleSubmit(e)} className="btn btn-primary my-2 my-sm-0" type="submit">Login</button>

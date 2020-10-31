@@ -7,6 +7,7 @@ import {
 import Nav from './Nav';
 import Home from './Home';
 import Rate from './Rate';
+import Search from './Search';
 import './App.css';
 
 function App() {
@@ -18,6 +19,9 @@ function App() {
         <Switch>
           <Route path="/rate">
             <Rate />
+          </Route>
+          <Route path="/search">
+            <Search />
           </Route>
           <Route path="/">
             <Home />

@@ -1,5 +1,5 @@
 body {
-  padding-top: 3.5rem;
+  margin-top: 4.5rem !important;
   font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

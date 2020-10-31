@@ -44,7 +44,7 @@ class FuseboxApi {
     };
 
     async unratedTracks(offset = 0, limit = 10) {
-        const response = await fetch(this.baseUrl + '/v1/tracks/unrated?limit=10&offset=0', {
+        const response = await fetch(this.baseUrl + '/v1/tracks/unrated?limit=' + limit + '&offset=' + offset, {
             cache: 'no-cache',
             headers: this.headers,
             method: 'GET',
@@ -53,6 +53,12 @@ class FuseboxApi {
         });
 
         const json = await response.json();
+
+        return json;
+    };
+
+    async searchTracks(q, offset = 0, limit = 10) {
+        const json = [];
 
         return json;
     };
