@@ -8,3 +8,25 @@
   margin: -1px 0 0 !important;
   padding: 10px !important;
 }
+
+.jumbotron {
+  padding: 2.5vw 3.5vw !important;
+  margin-top: 1.5vw;
+  background-color: #373232 !important;
+  font-family: 'Risque', serif;
+  color: #007bff;
+}
+
+.jumbotron .media-body {
+  margin-left: 4vw;
+}
+
+.jumbotron h1 {
+  font-size: 10vw;
+  margin-bottom: 0;
+}
+
+.jumbotron p {
+  font-size: 1.5em;
+  margin: 0 0 0 6vw;
+}

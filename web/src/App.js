@@ -14,14 +14,20 @@ function App() {
     <Router>
       <Nav />
 
-      <Switch>
-        <Route path="/rate">
-          <Rate />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
+      <div class="container">
+        <Switch>
+          <Route path="/rate">
+            <Rate />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+
+        <footer>
+          <p>© Fusebox 2020</p>
+        </footer>
+      </div>
     </Router>
   );
 }
