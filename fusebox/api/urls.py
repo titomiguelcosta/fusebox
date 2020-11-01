@@ -78,7 +78,7 @@ class TrackViewSet(viewsets.ModelViewSet):
         url_name='search_tracks'
     )
     def search(self, request):
-        q = request.GET.get("q", default="").replace(" ", "%")
+        q = request.GET.get("q", default="")
 
         try:
             limit = int(request.GET.get('limit', 10))
@@ -93,8 +93,8 @@ class TrackViewSet(viewsets.ModelViewSet):
         max = offset + limit
 
         tracks = Track.objects.filter(
-            Q(title__icontains=f"%{q}%")
-            | Q(artists__name__icontains=f"%{q}%")
+            Q(title__icontains=q)
+            | Q(artists__name__icontains=q)
         )[offset:max]
 
         serializer = TrackSerializer(tracks, many=True, context={'request': request})

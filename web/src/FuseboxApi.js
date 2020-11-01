@@ -44,7 +44,7 @@ class FuseboxApi {
     };
 
     async unratedTracks(offset = 0, limit = 10) {
-        const response = await fetch(this.baseUrl + '/v1/tracks/unrated?limit=' + limit + '&offset=' + offset, {
+        const response = await fetch(this.baseUrl + '/v1/tracks/unrated/?limit=' + limit + '&offset=' + offset, {
             cache: 'no-cache',
             headers: this.headers,
             method: 'GET',
@@ -58,7 +58,7 @@ class FuseboxApi {
     };
 
     async searchTracks(q, offset = 0, limit = 10) {
-        const response = await fetch(this.baseUrl + '/v1/tracks/search?q=' + q + '&limit=' + limit + '&offset=' + offset, {
+        const response = await fetch(this.baseUrl + '/v1/tracks/search/?q=' + q + '&limit=' + limit + '&offset=' + offset, {
             cache: 'no-cache',
             headers: this.headers,
             method: 'GET',
