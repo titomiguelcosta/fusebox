@@ -58,7 +58,15 @@ class FuseboxApi {
     };
 
     async searchTracks(q, offset = 0, limit = 10) {
-        const json = [];
+        const response = await fetch(this.baseUrl + '/v1/tracks/search?q=' + q + '&limit=' + limit + '&offset=' + offset, {
+            cache: 'no-cache',
+            headers: this.headers,
+            method: 'GET',
+            redirect: 'follow',
+            referrer: 'no-referrer'
+        });
+
+        const json = await response.json();
 
         return json;
     };

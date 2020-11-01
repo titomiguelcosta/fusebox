@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from django.urls import path
-from django.db.models import Exists, OuterRef
+from django.db.models import Q, Exists, OuterRef
 from .views import generic, tracks, slack, users
 from .models import Track, Artist, Rate
 from rest_framework_simplejwt.views import (
@@ -66,6 +66,36 @@ class TrackViewSet(viewsets.ModelViewSet):
                 )
             )
         )[offset:max] if user.id else []
+
+        serializer = TrackSerializer(tracks, many=True, context={'request': request})
+
+        return Response(serializer.data)
+
+    @action(
+        methods=['get'],
+        detail=False,
+        url_path='search',
+        url_name='search_tracks'
+    )
+    def search(self, request):
+        q = request.GET.get("q", default="").replace(" ", "%")
+
+        try:
+            limit = int(request.GET.get('limit', 10))
+        except:
+            limit = 10
+
+        try:
+            offset = int(request.GET.get('offset', 0))
+        except:
+            offset = 0
+
+        max = offset + limit
+
+        tracks = Track.objects.filter(
+            Q(title__icontains=f"%{q}%")
+            | Q(artists__name__icontains=f"%{q}%")
+        )[offset:max]
 
         serializer = TrackSerializer(tracks, many=True, context={'request': request})
 

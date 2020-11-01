@@ -1,4 +1,4 @@
-from api.models import Played
+from api.models import Played, Track
 from api.helpers.spotify import SpotifyHelper
 from api.helpers.auth import protected
 from django.views.decorators.http import require_http_methods

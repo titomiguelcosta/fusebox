@@ -33,8 +33,7 @@ class Search extends React.Component {
     render() {
         const title = this.state.searching
             ? "Searching for " + this.state.q
-            : "Results for " + this.state.q
-            ;
+            : "Results for " + this.state.q;
 
         const tracks = this.state.tracks.map((track, item) =>
             <div key={item}> {track.album}: {track.title}</div>
