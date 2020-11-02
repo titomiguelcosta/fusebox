@@ -1,5 +1,6 @@
 import React from 'react';
 import FuseboxApi from './FuseboxApi';
+import Track from './Track';
 
 class Rate extends React.Component {
     constructor(props) {
