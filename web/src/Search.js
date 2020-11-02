@@ -1,5 +1,6 @@
 import React from 'react';
 import FuseboxApi from './FuseboxApi';
+import Track from './Track';
 
 class Search extends React.Component {
     constructor(props) {
@@ -35,8 +36,8 @@ class Search extends React.Component {
             ? "Searching for " + this.state.q
             : "Results for " + this.state.q;
 
-        const tracks = this.state.tracks.map((track, item) =>
-            <div key={item}> {track.album}: {track.title}</div>
+        const tracks = this.state.tracks.map((track) =>
+            <Track id={track.id} artists={track.artits} album={track.album} title={track.title} />
         );
 
         return (
@@ -45,7 +46,19 @@ class Search extends React.Component {
                     {title}
                 </header>
                 <section>
-                    {tracks}
+                    <table className="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Artists</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Album</th>
+                                <th scope="col">Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {tracks}
+                        </tbody>
+                    </table>
                 </section>
             </div>
         )

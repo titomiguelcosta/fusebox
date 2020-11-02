@@ -21,16 +21,24 @@ class Rate extends React.Component {
     }
 
     render() {
-        const tracks = this.state.tracks.map((track, item) =>
-            <div key={item}> {track.album}: {track.title}</div>
+        const tracks = this.state.tracks.map((track) =>
+            <Track id={track.id} artists={track.artits} album={track.album} title={track.title} />
         );
 
         return (
-            <div className="App">
-                <header className="App-header">
+            <table className="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Artists</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Album</th>
+                        <th scope="col">Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {tracks}
-                </header>
-            </div>
+                </tbody>
+            </table>
         )
     }
 }

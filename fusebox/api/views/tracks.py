@@ -1,10 +1,12 @@
-from api.models import Played, Track
+from api.models import Played, Track, Rate
 from api.helpers.spotify import SpotifyHelper
 from api.helpers.auth import protected
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpRequest
 from django.utils.module_loading import import_string
+from django.utils import timezone
+import json
 
 
 @protected
@@ -73,3 +75,27 @@ def populate(request: HttpRequest) -> JsonResponse:
     response.status_code = 200 if 0 == len(errors) else 500
 
     return response
+
+
+@protected
+@csrf_exempt
+@require_http_methods(["POST"])
+def rate(request: HttpRequest, int: id) -> JsonResponse:
+    user = request.user
+    data = json.loads(request.body)
+
+    track = Track.objects.get(pk=id)
+    score = data['score'] if 'score' in data else 0
+    category = data['category'] if 'category' in data else "like"
+    previous_rate = Rate.objects.get(user=user, track=track)
+
+    if track and score >= 0:
+        rate = previous_rate if previous_rate else Rate()
+        rate.user = user
+        rate.track = track
+        rate.category = category
+        rate.score = score
+        rate.on = timezone.now()
+        rate.save()
+
+    return JsonResponse({})

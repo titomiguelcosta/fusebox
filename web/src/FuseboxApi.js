@@ -70,6 +70,24 @@ class FuseboxApi {
 
         return json;
     };
+
+    async rateTrack(trackId, score) {
+        const response = await fetch(this.baseUrl + '/v1/tracks/' + trackId + '/rate', {
+            cache: 'no-cache',
+            headers: this.headers,
+            method: 'POST',
+            redirect: 'follow',
+            referrer: 'no-referrer',
+            json: {
+                'category': 'like',
+                'score': score
+            }
+        });
+
+        const json = await response.json();
+
+        return json;
+    };
 }
 
 export default FuseboxApi;

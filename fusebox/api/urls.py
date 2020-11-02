@@ -94,6 +94,7 @@ class TrackViewSet(viewsets.ModelViewSet):
 
         tracks = Track.objects.filter(
             Q(title__icontains=q)
+            | Q(album__icontains=q)
             | Q(artists__name__icontains=q)
         )[offset:max]
 
@@ -111,6 +112,7 @@ urlpatterns = [
     url(r'^$', generic.index, name='index'),
     url(r'^csv$', generic.dump, name='csv'),
     url(r'^tracks/playing$', tracks.playing, name='tracks_playing'),
+    url(r'^tracks/<int:id>/rate$', tracks.rate, name='tracks_rate'),
     url(r'^tracks/played$', tracks.played, name='tracks_played'),
     url(r'^tracks/populate$', tracks.populate, name='tracks_populate'),
     url(r'^tracks/queue', tracks.queue, name='tracks_queue'),
