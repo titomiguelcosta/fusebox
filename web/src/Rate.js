@@ -23,7 +23,7 @@ class Rate extends React.Component {
 
     render() {
         const tracks = this.state.tracks.map((track) =>
-            <Track id={track.id} artists={track.artits} album={track.album} title={track.title} />
+            <Track id={track.id} artists={track.artists} album={track.album} title={track.title} />
         );
 
         return (

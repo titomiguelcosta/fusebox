@@ -37,7 +37,7 @@ class Search extends React.Component {
             : "Results for " + this.state.q;
 
         const tracks = this.state.tracks.map((track) =>
-            <Track id={track.id} artists={track.artits} album={track.album} title={track.title} />
+            <Track id={track.id} artists={track.artists} album={track.album} title={track.title} />
         );
 
         return (
