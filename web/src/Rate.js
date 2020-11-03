@@ -6,6 +6,8 @@ class Rate extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            offset: 0,
+            limit: 10,
             tracks: [],
         }
         this.api = new FuseboxApi();
@@ -13,9 +15,37 @@ class Rate extends React.Component {
 
     componentDidMount() {
         if (this.api.getAccessToken()) {
-            this.api.unratedTracks().then(tracks => {
+            this.api.unratedTracks(this.state.offset, this.state.limit).then(tracks => {
                 this.setState({
                     tracks: tracks
+                });
+            });
+        }
+    }
+
+    handlePrevious(e) {
+        e.preventDefault();
+        const newOffset = this.state.offset - this.state.limit;
+
+        if (newOffset >= 0) {
+            this.api.unratedTracks(newOffset, this.state.limit).then(tracks => {
+                this.setState({
+                    offset: newOffset,
+                    tracks: tracks,
+                });
+            });
+        }
+    }
+
+    handleNext(e) {
+        e.preventDefault();
+        if (this.state.tracks.length >= this.state.limit) {
+            const newOffset = this.state.offset + this.state.limit;
+
+            this.api.unratedTracks(newOffset, this.state.limit).then(tracks => {
+                this.setState({
+                    offset: newOffset,
+                    tracks: tracks,
                 });
             });
         }
@@ -33,12 +63,24 @@ class Rate extends React.Component {
                         <th scope="col">Artists</th>
                         <th scope="col">Title</th>
                         <th scope="col">Album</th>
-                        <th scope="col">Rate</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {tracks}
                 </tbody>
+                <tfoot>
+                    <nav aria-label="navigation">
+                        <ul class="pagination justify-content-end">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" onClick={(e) => this.handlePrevious(e)}>Previous</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" onClick={(e) => this.handleNext(e)}>Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </tfoot>
             </table>
         )
     }

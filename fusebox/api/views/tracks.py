@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpRequest
 from django.utils.module_loading import import_string
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 import json
 
 
@@ -77,7 +78,7 @@ def populate(request: HttpRequest) -> JsonResponse:
     return response
 
 
-@protected
+@login_required
 @csrf_exempt
 @require_http_methods(["POST"])
 def rate(request: HttpRequest, id: int) -> JsonResponse:
@@ -98,4 +99,8 @@ def rate(request: HttpRequest, id: int) -> JsonResponse:
         rate.on = timezone.now()
         rate.save()
 
-    return JsonResponse({})
+        response = JsonResponse({}, status=201)
+    else:
+        response = JsonResponse({'error': 'invalid track or score'}, status=400)
+
+    return response

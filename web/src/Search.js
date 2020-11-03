@@ -11,6 +11,8 @@ class Search extends React.Component {
         this.state = {
             searching: true,
             tracks: [],
+            offset: 0,
+            limit: 10,
             q: q
         }
         this.api = new FuseboxApi();
@@ -26,6 +28,34 @@ class Search extends React.Component {
                 this.setState({
                     tracks: tracks,
                     searching: false,
+                });
+            });
+        }
+    }
+
+    handlePrevious(e) {
+        e.preventDefault();
+        const newOffset = this.state.offset - this.state.limit;
+
+        if (newOffset >= 0) {
+            this.api.searchTracks(this.state.q, newOffset, this.state.limit).then(tracks => {
+                this.setState({
+                    offset: newOffset,
+                    tracks: tracks,
+                });
+            });
+        }
+    }
+
+    handleNext(e) {
+        e.preventDefault();
+        if (this.state.tracks.length >= this.state.limit) {
+            const newOffset = this.state.offset + this.state.limit;
+
+            this.api.searchTracks(this.state.q, newOffset, this.state.limit).then(tracks => {
+                this.setState({
+                    offset: newOffset,
+                    tracks: tracks,
                 });
             });
         }
@@ -58,6 +88,18 @@ class Search extends React.Component {
                         <tbody>
                             {tracks}
                         </tbody>
+                        <tfoot>
+                            <nav aria-label="navigation">
+                                <ul class="pagination justify-content-end">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1" onClick={(e) => this.handlePrevious(e)}>Previous</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" onClick={(e) => this.handleNext(e)}>Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </tfoot>
                     </table>
                 </section>
             </div>
