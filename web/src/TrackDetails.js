@@ -1,20 +1,18 @@
 import React from 'react';
 import FuseboxApi from './FuseboxApi';
-import { useParams } from "react-router-dom";
-
 
 class TrackDetails extends React.Component {
     constructor(props) {
         super(props);
         this.api = new FuseboxApi();
         this.state = {
-            id: useParams(),
+            id: this.props.match.params.id,
         }
     }
 
     render() {
         return (
-            <h1>Track details for {this.state.id}</h1>
+            <h1>Track details for track with id {this.state.id}</h1>
         );
     }
 }
