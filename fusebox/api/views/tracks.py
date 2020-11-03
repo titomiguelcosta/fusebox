@@ -7,7 +7,6 @@ from django.http import JsonResponse, HttpRequest
 from django.utils.module_loading import import_string
 from django.utils import timezone
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from django.core.exceptions.Model import DoesNotExist
 import json
 
 
@@ -96,7 +95,7 @@ def rate(request: HttpRequest, id: int) -> JsonResponse:
     category = data['category'] if 'category' in data else "like"
     try:
         rate = Rate.objects.get(user=user, track=track)
-    except DoesNotExist:
+    except Rate.DoesNotExist:
         rate = Rate()
 
     if track and score >= 0:
