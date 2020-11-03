@@ -1,5 +1,5 @@
-from django.conf.urls import url, include
-from django.urls import path
+from django.conf.urls import include
+from django.urls import path, re_path
 from django.db.models import Q, Exists, OuterRef
 from .views import generic, tracks, slack, users
 from .models import Track, Artist, Rate
@@ -109,21 +109,21 @@ router.register(r'tracks', TrackViewSet)
 router.register(r'artists', ArtistViewSet)
 
 urlpatterns = [
-    url(r'^$', generic.index, name='index'),
-    url(r'^csv$', generic.dump, name='csv'),
-    url(r'^tracks/playing$', tracks.playing, name='tracks_playing'),
-    url(r'^tracks/<int:id>/rate$', tracks.rate, name='tracks_rate'),
-    url(r'^tracks/played$', tracks.played, name='tracks_played'),
-    url(r'^tracks/populate$', tracks.populate, name='tracks_populate'),
-    url(r'^tracks/queue', tracks.queue, name='tracks_queue'),
-    url(r'^tracks/dequeue', tracks.dequeue, name='tracks_dequeue'),
-    url(r'^tracks/top', tracks.top, name='tracks_top'),
-    url(r'^slack/subscribe', slack.subscribe, name='slack_subscribe'),
-    url(r'^slack/unsubscribe', slack.unsubscribe, name='slack_unsubscribe'),
-    url(r'^slack/interactive$', slack.interactive, name='slack_interactive'),
-    url(r'^slack/notify', slack.notify, name='slack_notify'),
-    url(r'^slack/proxy$', slack.proxy, name='slack_proxy'),
-    url(r'^users/populate', users.populate, name='users_populate'),
+    re_path(r'^$', generic.index, name='index'),
+    re_path(r'^csv$', generic.dump, name='csv'),
+    re_path(r'^tracks/playing$', tracks.playing, name='tracks_playing'),
+    re_path(r'^tracks/?P(<id>\d+)/rate$', tracks.rate, name='tracks_rate'),
+    re_path(r'^tracks/played$', tracks.played, name='tracks_played'),
+    re_path(r'^tracks/populate$', tracks.populate, name='tracks_populate'),
+    re_path(r'^tracks/queue$', tracks.queue, name='tracks_queue'),
+    re_path(r'^tracks/dequeue$', tracks.dequeue, name='tracks_dequeue'),
+    re_path(r'^tracks/top$', tracks.top, name='tracks_top'),
+    re_path(r'^slack/subscribe$', slack.subscribe, name='slack_subscribe'),
+    re_path(r'^slack/unsubscribe$', slack.unsubscribe, name='slack_unsubscribe'),
+    re_path(r'^slack/interactive$', slack.interactive, name='slack_interactive'),
+    re_path(r'^slack/notify$', slack.notify, name='slack_notify'),
+    re_path(r'^slack/proxy$', slack.proxy, name='slack_proxy'),
+    re_path(r'^users/populate$', users.populate, name='users_populate'),
     path('auth/', include('rest_framework.urls')),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
