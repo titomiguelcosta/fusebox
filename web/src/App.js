@@ -7,6 +7,7 @@ import {
 import Nav from './Nav';
 import Home from './Home';
 import Rate from './Rate';
+import TrackDetails from './TrackDetails';
 import Search from './Search';
 import './App.css';
 
@@ -17,6 +18,9 @@ function App() {
 
       <div class="container">
         <Switch>
+          <Route path="/tracks/:id">
+            <TrackDetails />
+          </Route>
           <Route path="/rate">
             <Rate />
           </Route>

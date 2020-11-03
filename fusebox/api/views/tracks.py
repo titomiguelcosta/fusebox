@@ -6,8 +6,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpRequest
 from django.utils.module_loading import import_string
 from django.utils import timezone
-from rest_framework.decorators import permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 import json
 
 
@@ -80,8 +81,9 @@ def populate(request: HttpRequest) -> JsonResponse:
 
 
 @csrf_exempt
-@permission_classes((IsAuthenticated, ))
-@require_http_methods(["POST"])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+@api_view(['POST'])
 def rate(request: HttpRequest, id: int) -> JsonResponse:
     user = request.user
     data = json.loads(request.body)

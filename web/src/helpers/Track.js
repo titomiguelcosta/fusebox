@@ -1,5 +1,5 @@
 import React from 'react';
-import FuseboxApi from './FuseboxApi';
+import FuseboxApi from '../FuseboxApi';
 
 class Track extends React.Component {
     constructor(props) {
