@@ -6,7 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpRequest
 from django.utils.module_loading import import_string
 from django.utils import timezone
-from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
 import json
 
 
@@ -78,8 +79,8 @@ def populate(request: HttpRequest) -> JsonResponse:
     return response
 
 
-@login_required
 @csrf_exempt
+@permission_classes((IsAuthenticated, ))
 @require_http_methods(["POST"])
 def rate(request: HttpRequest, id: int) -> JsonResponse:
     user = request.user

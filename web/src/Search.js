@@ -13,7 +13,7 @@ class Search extends React.Component {
             tracks: [],
             offset: 0,
             limit: 10,
-            q: q
+            q: q,
         }
         this.api = new FuseboxApi();
     }
@@ -38,6 +38,10 @@ class Search extends React.Component {
         const newOffset = this.state.offset - this.state.limit;
 
         if (newOffset >= 0) {
+            this.setState({
+                tracks: [],
+            });
+
             this.api.searchTracks(this.state.q, newOffset, this.state.limit).then(tracks => {
                 this.setState({
                     offset: newOffset,
@@ -50,6 +54,10 @@ class Search extends React.Component {
     handleNext(e) {
         e.preventDefault();
         if (this.state.tracks.length >= this.state.limit) {
+            this.setState({
+                tracks: [],
+            });
+
             const newOffset = this.state.offset + this.state.limit;
 
             this.api.searchTracks(this.state.q, newOffset, this.state.limit).then(tracks => {
@@ -70,8 +78,8 @@ class Search extends React.Component {
             <Track id={track.id} artists={track.artists} album={track.album} title={track.title} />
         );
 
-        const previousClasses = "page-item" + (this.state.offset === 0 ? "disabled" : "");
-        const nextClasses = "page-item" + (this.state.tracks.length < this.state.limit ? "disabled" : "");
+        const previousClasses = "page-item" + (this.state.offset === 0 ? " disabled" : "");
+        const nextClasses = "page-item" + (this.state.tracks.length < this.state.limit ? " disabled" : "");
 
         return (
             <>
