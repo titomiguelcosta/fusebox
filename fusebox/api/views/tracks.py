@@ -80,7 +80,7 @@ def populate(request: HttpRequest) -> JsonResponse:
 @protected
 @csrf_exempt
 @require_http_methods(["POST"])
-def rate(request: HttpRequest, int: id) -> JsonResponse:
+def rate(request: HttpRequest, id: int) -> JsonResponse:
     user = request.user
     data = json.loads(request.body)
 
