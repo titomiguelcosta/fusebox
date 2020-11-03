@@ -18,9 +18,7 @@ function App() {
 
       <div class="container">
         <Switch>
-          <Route path="/tracks/:id">
-            <TrackDetails />
-          </Route>
+          <Route path="/tracks/:id" component={TrackDetails} />
           <Route path="/rate">
             <Rate />
           </Route>
