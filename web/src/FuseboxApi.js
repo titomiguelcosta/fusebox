@@ -35,7 +35,7 @@ class FuseboxApi {
             body: JSON.stringify({
                 username: username,
                 password: password
-            })
+            }),
         });
 
         const json = await response.json();
@@ -49,7 +49,7 @@ class FuseboxApi {
             headers: this.headers,
             method: 'GET',
             redirect: 'follow',
-            referrer: 'no-referrer'
+            referrer: 'no-referrer',
         });
 
         const json = await response.json();
@@ -63,7 +63,7 @@ class FuseboxApi {
             headers: this.headers,
             method: 'GET',
             redirect: 'follow',
-            referrer: 'no-referrer'
+            referrer: 'no-referrer',
         });
 
         const json = await response.json();
@@ -78,10 +78,10 @@ class FuseboxApi {
             method: 'POST',
             redirect: 'follow',
             referrer: 'no-referrer',
-            json: {
+            body: JSON.stringify({
                 'category': 'like',
                 'score': score
-            }
+            }),
         });
 
         const json = await response.json();

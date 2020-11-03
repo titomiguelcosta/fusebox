@@ -17,7 +17,7 @@ class Track extends React.Component {
     render() {
         return (
             <tr>
-                <td>{this.props.artists}</td>
+                <td>{this.props.artists.join(', ')}</td>
                 <td>{this.props.title}</td>
                 <td>{this.props.album}</td>
                 <td>
