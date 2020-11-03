@@ -70,39 +70,37 @@ class Search extends React.Component {
             <Track id={track.id} artists={track.artists} album={track.album} title={track.title} />
         );
 
+        const previousClasses = "page-item" + (this.state.offset === 0 ? "disabled" : "");
+        const nextClasses = "page-item" + (this.state.tracks.length < this.state.limit ? "disabled" : "");
+
         return (
-            <div className="App">
-                <header className="App-header">
-                    {title}
-                </header>
-                <section>
-                    <table className="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">Artists</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Album</th>
-                                <th scope="col">Rate</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {tracks}
-                        </tbody>
-                        <tfoot>
-                            <nav aria-label="navigation">
-                                <ul class="pagination justify-content-end">
-                                    <li class="page-item disabled">
-                                        <a class="page-link" href="#" tabindex="-1" onClick={(e) => this.handlePrevious(e)}>Previous</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" onClick={(e) => this.handleNext(e)}>Next</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </tfoot>
-                    </table>
-                </section>
-            </div>
+            <>
+                <table className="table table-hover">
+                    <caption>{title}</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Artists</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Album</th>
+                            <th scope="col">Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tracks}
+                    </tbody>
+                </table>
+
+                <nav aria-label="navigation" className="d-flex justify-content-end">
+                    <ul className="pagination">
+                        <li className={previousClasses}>
+                            <a className="page-link" href="/#" tabindex="-1" onClick={(e) => this.handlePrevious(e)}>Previous</a>
+                        </li>
+                        <li className={nextClasses}>
+                            <a className="page-link" href="/#" onClick={(e) => this.handleNext(e)}>Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </>
         )
     }
 }
