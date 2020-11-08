@@ -1,4 +1,4 @@
-from api.models import Played, Track, Rate
+from api.models import Played, Track, Rate, Video
 from api.helpers.spotify import SpotifyHelper
 from api.helpers.auth import protected
 from django.views.decorators.http import require_http_methods
@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpRequest
 from django.utils.module_loading import import_string
 from django.utils import timezone
+from django.forms.models import model_to_dict
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import json
 
@@ -109,5 +110,37 @@ def rate(request: HttpRequest, id: int) -> JsonResponse:
         response = JsonResponse({}, status=201)
     else:
         response = JsonResponse({'error': 'invalid track or score'}, status=400)
+
+    return response
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def details(request: HttpRequest, id: int) -> JsonResponse:
+    auth = JWTAuthentication()
+
+    try:
+        user = auth.get_user(auth.get_validated_token(auth.get_raw_token(auth.get_header(request))))
+    except:
+        return JsonResponse({'error': 'not authenticated'}, status=403)
+
+    try:
+        track = Track.objects.get(pk=id)
+
+        try:
+            rate = Rate.objects.get(user=user, track=track)
+        except Rate.DoesNotExist:
+            rate = None
+
+        videos = Video.objects.filter(track=track)
+
+        data = model_to_dict(track)
+        data['rate'] = model_to_dict(rate) if rate is not None else None
+
+        data['videos'] = [model_to_dict(video) for video in videos]
+
+        response = JsonResponse(data, status=200)
+    except Track.DoesNotExist:
+        response = JsonResponse({'error': 'invalid track'}, status=400)
 
     return response

@@ -88,6 +88,20 @@ class FuseboxApi {
 
         return json;
     };
+
+    async detailsTrack(trackId) {
+        const response = await fetch(this.baseUrl + '/v1/tracks/' + trackId + '/details', {
+            cache: 'no-cache',
+            headers: this.headers,
+            method: 'GET',
+            redirect: 'follow',
+            referrer: 'no-referrer',
+        });
+
+        const json = await response.json();
+
+        return json;
+    };
 }
 
 export default FuseboxApi;

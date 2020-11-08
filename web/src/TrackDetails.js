@@ -7,12 +7,27 @@ class TrackDetails extends React.Component {
         this.api = new FuseboxApi();
         this.state = {
             id: this.props.match.params.id,
+            track: null,
+        }
+    }
+
+    componentDidMount() {
+        if (this.api.getAccessToken()) {
+            this.api.detailsTrack(this.state.id).then(track => {
+                this.setState({
+                    track: track
+                });
+            });
         }
     }
 
     render() {
+        track = this.state.track
+            ? <div>Details for track {track.title}</div>
+            : <div>No details.</div>;
+
         return (
-            <h1>Track details for track with id {this.state.id}</h1>
+            <>{track}</>
         );
     }
 }

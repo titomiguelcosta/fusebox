@@ -30,7 +30,7 @@ class TrackSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Track
-        fields = ['id', 'title', 'artists', 'album', 'popularity', 'populated']
+        fields = ['id', 'title', 'artists', 'album', 'videos', 'popularity', 'populated']
 
 
 class TrackViewSet(viewsets.ModelViewSet):
@@ -113,6 +113,7 @@ urlpatterns = [
     re_path(r'^csv$', generic.dump, name='csv'),
     re_path(r'^tracks/playing$', tracks.playing, name='tracks_playing'),
     re_path(r'^tracks/(?P<id>\d+)/rate$', tracks.rate, name='tracks_rate'),
+    re_path(r'^tracks/(?P<id>\d+)/details$', tracks.details, name='tracks_details'),
     re_path(r'^tracks/played$', tracks.played, name='tracks_played'),
     re_path(r'^tracks/populate$', tracks.populate, name='tracks_populate'),
     re_path(r'^tracks/queue$', tracks.queue, name='tracks_queue'),
