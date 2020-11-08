@@ -30,7 +30,7 @@ class TrackSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Track
-        fields = ['id', 'title', 'artists', 'album', 'videos', 'popularity', 'populated']
+        fields = ['id', 'title', 'artists', 'album', 'popularity', 'populated']
 
 
 class TrackViewSet(viewsets.ModelViewSet):
