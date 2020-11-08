@@ -1,5 +1,6 @@
 import React from 'react';
 import FuseboxApi from '../FuseboxApi';
+import { Link } from "react-router-dom";
 
 class Track extends React.Component {
     constructor(props) {
@@ -18,7 +19,11 @@ class Track extends React.Component {
         return (
             <tr>
                 <td>{this.props.artists.join(', ')}</td>
-                <td>{this.props.title}</td>
+                <td><Link
+                    to={{
+                        pathname: "/tracks/" + this.props.id
+                    }}>{this.props.title}</Link>
+                </td>
                 <td>{this.props.album}</td>
                 <td>
                     <div className="dropdown">
