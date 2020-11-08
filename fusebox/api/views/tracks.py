@@ -127,17 +127,18 @@ def details(request: HttpRequest, id: int) -> JsonResponse:
     try:
         track = Track.objects.get(pk=id)
 
+        data = model_to_dict(track, exclude=['artists', 'spotify_id'])
+        data['artists'] = [model_to_dict(artist, exclude=['spotify_id']) for artist in track.artists]
+
         try:
             rate = Rate.objects.get(user=user, track=track)
+            data['rate']['score'] = rate.score
         except Rate.DoesNotExist:
-            rate = None
+            data['rate']['score'] = None
 
         videos = Video.objects.filter(track=track)
 
-        data = model_to_dict(track)
-        data['rate'] = model_to_dict(rate) if rate is not None else None
-
-        data['videos'] = [model_to_dict(video) for video in videos]
+        data['videos'] = [model_to_dict(video, exclude=['track']) for video in videos]
 
         response = JsonResponse(data, status=200)
     except Track.DoesNotExist:
