@@ -132,9 +132,9 @@ def details(request: HttpRequest, id: int) -> JsonResponse:
 
         try:
             rate = Rate.objects.get(user=user, track=track)
-            data['rate']['score'] = rate.score
+            data['rate'] = {'score': rate.score}
         except Rate.DoesNotExist:
-            data['rate']['score'] = None
+            data['rate'] = {'score': None}
 
         videos = Video.objects.filter(track=track)
 
