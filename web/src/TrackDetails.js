@@ -22,8 +22,8 @@ class TrackDetails extends React.Component {
     }
 
     render() {
-        track = this.state.track
-            ? <div>Details for track {track.title}</div>
+        const track = this.state.track
+            ? <div>Details for track {this.state.track.title}</div>
             : <div>No details.</div>;
 
         return (
