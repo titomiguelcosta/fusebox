@@ -2,6 +2,7 @@ import React from 'react';
 import FuseboxApi from './FuseboxApi';
 import Video from './helpers/Video';
 import Rate from './helpers/Rate';
+import SpotifyPlayer from 'react-spotify-player';
 
 class TrackDetails extends React.Component {
     constructor(props) {
@@ -38,17 +39,34 @@ class TrackDetails extends React.Component {
             })
             : '';
 
+        const player = this.state.track && this.state.track.spotify_id
+            ? <SpotifyPlayer
+                uri={this.state.track.spotify_id}
+                size='compact'
+                view='coverart'
+                theme='black'
+            />
+            : '';
+
         return (
             <div>
                 {track}
+
                 <hr />
+
                 <div className="section">
                     {rate}
                     <Rate id={this.state.id} />
                 </div>
+
                 <hr />
+
+                {player}
+
+                <hr />
+
                 {videos}
-            </div>
+            </div >
         );
     }
 }

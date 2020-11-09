@@ -127,7 +127,7 @@ def details(request: HttpRequest, id: int) -> JsonResponse:
     try:
         track = Track.objects.get(pk=id)
 
-        data = model_to_dict(track, exclude=['artists', 'spotify_id'])
+        data = model_to_dict(track, exclude=['artists'])
         data['artists'] = [model_to_dict(artist, exclude=['spotify_id']) for artist in track.artists.all()[::1]]
 
         try:
