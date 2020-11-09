@@ -1,6 +1,7 @@
 import React from 'react';
 import FuseboxApi from '../FuseboxApi';
 import { Link } from "react-router-dom";
+import Rate from './Rate';
 
 class Track extends React.Component {
     constructor(props) {
@@ -19,28 +20,17 @@ class Track extends React.Component {
         return (
             <tr>
                 <td>{this.props.artists.join(', ')}</td>
-                <td><Link
-                    to={{
-                        pathname: "/tracks/" + this.props.id
-                    }}>{this.props.title}</Link>
+                <td>
+                    <Link
+                        to={{
+                            pathname: "/tracks/" + this.props.id
+                        }}>{this.props.title}
+                    </Link>
                 </td>
                 <td>{this.props.album}</td>
                 <td>
                     <div className="dropdown">
-                        <button className="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Rate</button>
-                        <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a className="dropdown-item" href="/#" onClick={(e) => this.handleRate(e, 0)}>0</a>
-                            <a className="dropdown-item" href="/#" onClick={(e) => this.handleRate(e, 1)}>1</a>
-                            <a className="dropdown-item" href="/#" onClick={(e) => this.handleRate(e, 2)}>2</a>
-                            <a className="dropdown-item" href="/#" onClick={(e) => this.handleRate(e, 3)}>3</a>
-                            <a className="dropdown-item" href="/#" onClick={(e) => this.handleRate(e, 4)}>4</a>
-                            <a className="dropdown-item" href="/#" onClick={(e) => this.handleRate(e, 5)}>5</a>
-                            <a className="dropdown-item" href="/#" onClick={(e) => this.handleRate(e, 6)}>6</a>
-                            <a className="dropdown-item" href="/#" onClick={(e) => this.handleRate(e, 7)}>7</a>
-                            <a className="dropdown-item" href="/#" onClick={(e) => this.handleRate(e, 8)}>8</a>
-                            <a className="dropdown-item" href="/#" onClick={(e) => this.handleRate(e, 9)}>9</a>
-                            <a className="dropdown-item" href="/#" onClick={(e) => this.handleRate(e, 10)}>10</a>
-                        </div>
+                        <Rate id={this.props.id} />
                     </div>
                 </td>
             </tr>

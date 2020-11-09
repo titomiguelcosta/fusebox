@@ -1,5 +1,7 @@
 import React from 'react';
 import FuseboxApi from './FuseboxApi';
+import Video from './helpers/Video';
+import Rate from './helpers/Rate';
 
 class TrackDetails extends React.Component {
     constructor(props) {
@@ -26,8 +28,25 @@ class TrackDetails extends React.Component {
             ? <div>Details for track {this.state.track.title}</div>
             : <div>No details.</div>;
 
+        const rate = this.state.track.rate.score
+            ? 'You set a score of ' + this.state.track.rate.score
+            : 'Unrated track';
+
+        const videos = this.state.track.videos.map((video) => {
+            return <Video url={video.url}></Video>;
+        });
+
         return (
-            <>{track}</>
+            <div>
+                {track}
+                <hr />
+                <div className="section">
+                    {rate}
+                    <Rate id={this.state.id} />
+                </div>
+                <hr />
+                {videos}
+            </div>
         );
     }
 }
