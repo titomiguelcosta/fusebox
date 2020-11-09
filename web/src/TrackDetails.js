@@ -28,13 +28,15 @@ class TrackDetails extends React.Component {
             ? <div>Details for track {this.state.track.title}</div>
             : <div>No details.</div>;
 
-        const rate = this.state.track.rate.score
+        const rate = this.state.track && this.state.track.rate.score
             ? 'You set a score of ' + this.state.track.rate.score
             : 'Unrated track';
 
-        const videos = this.state.track.videos.map((video) => {
-            return <Video url={video.url}></Video>;
-        });
+        const videos = this.state.track
+            ? this.state.track.videos.map((video) => {
+                return <Video url={video.url}></Video>;
+            })
+            : '';
 
         return (
             <div>
