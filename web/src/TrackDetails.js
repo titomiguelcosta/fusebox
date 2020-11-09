@@ -29,6 +29,37 @@ class TrackDetails extends React.Component {
             ? <div>Details for track {this.state.track.title}</div>
             : <div>No details.</div>;
 
+        const details = this.state.track
+            ? <dl>
+                <dt>danceability</dt>
+                <dd>{this.state.track.danceability}</dd>
+
+                <dt>energy</dt>
+                <dd>{this.state.track.energy}</dd>
+
+                <dt>loudness</dt>
+                <dd>{this.state.track.loudness}</dd>
+
+                <dt>speechiness</dt>
+                <dd>{this.state.track.speechiness}</dd>
+
+                <dt>acousticness</dt>
+                <dd>{this.state.track.acousticness}</dd>
+
+                <dt>instrumentalness</dt>
+                <dd>{this.state.track.instrumentalness}</dd>
+
+                <dt>liveness</dt>
+                <dd>{this.state.track.liveness}</dd>
+
+                <dt>valence</dt>
+                <dd>{this.state.track.valence}</dd>
+
+                <dt>tempo</dt>
+                <dd>{this.state.track.tempo}</dd>
+            </dl>
+            : '';
+
         const rate = this.state.track && this.state.track.rate.score
             ? 'You set a score of ' + this.state.track.rate.score
             : 'Unrated track';
@@ -51,7 +82,7 @@ class TrackDetails extends React.Component {
         return (
             <div>
                 {track}
-
+                {details}
                 <hr />
 
                 <div className="section">
