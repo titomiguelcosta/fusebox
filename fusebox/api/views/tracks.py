@@ -3,7 +3,7 @@ from api.helpers.spotify import SpotifyHelper
 from api.helpers.auth import protected
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse, HttpRequest
+from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.utils.module_loading import import_string
 from django.utils import timezone
 from django.forms.models import model_to_dict
@@ -143,5 +143,58 @@ def details(request: HttpRequest, id: int) -> JsonResponse:
         response = JsonResponse(data, status=200)
     except Track.DoesNotExist:
         response = JsonResponse({'error': 'invalid track'}, status=400)
+
+    return response
+
+
+@csrf_exempt
+@require_http_methods(["GET"])
+def dump(request: HttpRequest) -> HttpResponse:
+    auth = JWTAuthentication()
+
+    try:
+        user = auth.get_user(auth.get_validated_token(auth.get_raw_token(auth.get_header(request))))
+    except:
+        return JsonResponse({'error': 'not authenticated'}, status=401)
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="fusebox.csv"'
+
+    fieldnames = [
+        "id", "artist", "album", "title", "danceability", "energy", "loudness",
+        "speechiness", "acousticness", "instrumentalness", "liveness",
+        "valence", "tempo", "duration_ms", "num_played", "rate"
+    ]
+    tracks = Track.objects.raw(
+        f'''select
+                t.*, r.score as rate, count(distinct p.id) as num_played
+            from api_track t
+            inner join api_played p on t.id = p.track_id
+            inner join api_rate r on r.track_id = t.id and r.user_id = {user.id}
+            group by t.id'''
+    )
+
+    writer = csv.writer(response)
+    writer.writerow(fieldnames)
+
+    for track in tracks:
+        writer.writerow([
+            track.spotify_id,
+            track.artists_to_str,
+            track.album,
+            track.title,
+            track.danceability,
+            track.energy,
+            track.loudness,
+            track.speechiness,
+            track.acousticness,
+            track.instrumentalness,
+            track.liveness,
+            track.valence,
+            track.tempo,
+            track.duration_ms,
+            track.num_played,
+            track.rate
+        ])
 
     return response

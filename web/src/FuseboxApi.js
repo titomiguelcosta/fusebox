@@ -94,6 +94,20 @@ class FuseboxApi {
         return json;
     };
 
+    dumpTracks() {
+        fetch(this.baseUrl + '/v1/tracks/dump', {
+            cache: 'no-cache',
+            headers: this.headers,
+            method: 'GET',
+            redirect: 'follow',
+            referrer: 'no-referrer',
+        })
+            .then(res => res.text())
+            .then(text => {
+                window.location.assign(window.URL.createObjectURL(text));
+            });
+    };
+
     async detailsTrack(trackId) {
         const response = await fetch(this.baseUrl + '/v1/tracks/' + trackId + '/details', {
             cache: 'no-cache',

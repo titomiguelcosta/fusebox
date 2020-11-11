@@ -26,6 +26,12 @@ class Nav extends React.Component {
         });
     }
 
+    handleDownload() {
+        this.setState({
+            authenticated: true
+        });
+    }
+
     render() {
         return (
             <nav className="navbar navbar-expand-md fixed-top">
@@ -57,6 +63,15 @@ class Nav extends React.Component {
                                         aria-haspopup="true" aria-expanded="false">Login</a>
                                     <Login onAuthentication={() => this.handleAuthentication()} />
                                 </li>
+                        }
+                        {
+                            this.state.authenticated
+                                ?
+                                <li className="nav-item">
+                                    <a onClick={(e) => this.handleDownload(e)} className="nav-link" href="/#" aria-expanded="false">Download</a>
+                                </li>
+                                :
+                                ''
                         }
                     </ul>
                 </div>
