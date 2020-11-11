@@ -13,8 +13,9 @@ class Nav extends React.Component {
     }
 
     handleAuthentication() {
+        window.console.log("you are now authenticated")
         this.setState({
-            authenticated: true
+            authenticated: true,
         });
     }
 
@@ -22,7 +23,7 @@ class Nav extends React.Component {
         e.preventDefault();
         this.api.removeAccessToken();
         this.setState({
-            authenticated: false
+            authenticated: false,
         });
     }
 

@@ -17,20 +17,20 @@ class Login extends React.Component {
     componentDidMount() {
         if (this.api.getAccessToken()) {
             this.setState({
-                loggedIn: true
+                loggedIn: true,
             });
         }
     }
 
     handleUsernameChange(e) {
         this.setState({
-            username: e.target.value
+            username: e.target.value,
         });
     }
 
     handlePasswordChange(e) {
         this.setState({
-            password: e.target.value
+            password: e.target.value,
         });
     }
 
@@ -38,7 +38,7 @@ class Login extends React.Component {
         e.preventDefault();
 
         this.setState({
-            authenticating: true
+            authenticating: true,
         })
 
         this.api.auth(this.state.username, this.state.password)
@@ -53,8 +53,12 @@ class Login extends React.Component {
                         errors: false,
                         authenticating: false
                     });
-                    if (this.props.handleAuthentication) {
-                        this.props.handleAuthentication();
+
+                    window.console.log("Login was successful!!");
+
+                    if (this.props.onAuthentication) {
+                        window.console.log("Notifying successful login!!");
+                        this.props.onAuthentication();
                     }
                 } else {
                     this.setState({
