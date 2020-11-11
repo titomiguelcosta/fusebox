@@ -102,9 +102,9 @@ class FuseboxApi {
             redirect: 'follow',
             referrer: 'no-referrer',
         })
-            .then(res => res.text())
-            .then(text => {
-                window.location.assign(window.URL.createObjectURL(text));
+            .then(res => res.blob())
+            .then(blob => {
+                window.location.assign(window.URL.createObjectURL(blob));
             });
     };
 
