@@ -26,10 +26,9 @@ class Nav extends React.Component {
         });
     }
 
-    handleDownload() {
-        this.setState({
-            authenticated: true
-        });
+    handleDownload(e) {
+        e.preventDefault();
+        this.api.dumpTracks();
     }
 
     render() {
@@ -46,9 +45,14 @@ class Nav extends React.Component {
                         {
                             this.state.authenticated
                                 ?
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/rate">Unrated</Link>
-                                </li>
+                                <>
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to="/rate">Unrated</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a onClick={(e) => this.handleDownload(e)} className="nav-link" href="/#" aria-expanded="false">Download</a>
+                                    </li>
+                                </>
                                 : ''
                         }
                         {
@@ -63,15 +67,6 @@ class Nav extends React.Component {
                                         aria-haspopup="true" aria-expanded="false">Login</a>
                                     <Login onAuthentication={() => this.handleAuthentication()} />
                                 </li>
-                        }
-                        {
-                            this.state.authenticated
-                                ?
-                                <li className="nav-item">
-                                    <a onClick={(e) => this.handleDownload(e)} className="nav-link" href="/#" aria-expanded="false">Download</a>
-                                </li>
-                                :
-                                ''
                         }
                     </ul>
                 </div>
