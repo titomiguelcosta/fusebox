@@ -19,12 +19,12 @@ class Nav extends React.Component {
         });
     }
 
-    handleLogout(e) {
-        e.preventDefault();
+    handleLogout() {
         this.api.removeAccessToken();
         this.setState({
             authenticated: false,
         });
+        window.console.log("you are now logged out");
     }
 
     handleDownload(e) {
@@ -60,7 +60,7 @@ class Nav extends React.Component {
                             this.state.authenticated
                                 ?
                                 <li className="nav-item">
-                                    <a onClick={(e) => this.handleLogout(e)} className="nav-link" href="/#" aria-expanded="false">Logout</a>
+                                    <Link onClick={() => this.handleLogout()} className="nav-link" to="/">Logout</Link>
                                 </li>
                                 :
                                 <li className="nav-item dropdown">
