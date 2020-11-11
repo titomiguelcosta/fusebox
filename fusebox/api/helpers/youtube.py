@@ -51,20 +51,21 @@ class YouTubeHelper(object):
             for track in tracks:
                 youtube_videos = self.search("%s - %s" % (track.artists_to_str, track.title))
 
-                for youtube_video in youtube_videos:
-                    try:
-                        video = Video()
-                        video.track = track
-                        video.source = "youtube"
-                        video.description = youtube_video["snippet"]["description"]
-                        video.title = youtube_video["snippet"]["title"]
-                        video.channel_id = youtube_video["snippet"]["channelId"]
-                        video.url = "https://www.youtube.com/watch?v=%s" % youtube_video["id"]["videoId"]
-                        video.video_id = youtube_video["id"]["videoId"]
-                        video.save()
-                    except Exception as e:
-                        errors.append(str(e))
-                        continue
+                if len(youtube_videos) > 0:
+                    for youtube_video in youtube_videos:
+                        try:
+                            video = Video()
+                            video.track = track
+                            video.source = "youtube"
+                            video.description = youtube_video["snippet"]["description"]
+                            video.title = youtube_video["snippet"]["title"]
+                            video.channel_id = youtube_video["snippet"]["channelId"]
+                            video.url = "https://www.youtube.com/watch?v=%s" % youtube_video["id"]["videoId"]
+                            video.video_id = youtube_video["id"]["videoId"]
+                            video.save()
+                        except Exception as e:
+                            errors.append(str(e))
+                            continue
                 else:
                     errors.append("No videos for track %s by %s" % (track.title, track.artists_to_str))
 

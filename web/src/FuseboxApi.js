@@ -9,6 +9,11 @@ class FuseboxApi {
         };
     }
 
+    removeAccessToken() {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('refreshToken');
+    }
+
     getAccessToken() {
         return sessionStorage.getItem('accessToken');
     }

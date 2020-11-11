@@ -1,8 +1,31 @@
 import React from 'react';
 import Login from './Login';
 import { Link } from "react-router-dom";
+import FuseboxApi from './FuseboxApi';
 
 class Nav extends React.Component {
+    constructor(props) {
+        super(props);
+        this.api = new FuseboxApi();
+        this.state = {
+            authenticated: !!this.api.getAccessToken(),
+        }
+    }
+
+    handleAuthentication() {
+        this.setState({
+            authenticated: true
+        });
+    }
+
+    handleLogout(e) {
+        e.preventDefault();
+        this.api.removeAccessToken();
+        this.setState({
+            authenticated: false
+        });
+    }
+
     render() {
         return (
             <nav className="navbar navbar-expand-md fixed-top">
@@ -14,20 +37,40 @@ class Nav extends React.Component {
 
                 <div className="collapse navbar-collapse" id="navbarsExampleDefault">
                     <ul className="navbar-nav mr-auto">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/rate">Rate</Link>
-                        </li>
-                        <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="?#" id="dropdown01" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">Login</a>
-                            <Login />
-                        </li>
+                        {
+                            this.state.authenticated
+                                ?
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/rate">Unrated</Link>
+                                </li>
+                                : ''
+                        }
+                        {
+                            this.state.authenticated
+                                ?
+                                <li className="nav-item">
+                                    <a onClick={(e) => this.handleLogout(e)} className="nav-link" href="/#" aria-expanded="false">Logout</a>
+                                </li>
+                                :
+                                <li className="nav-item dropdown">
+                                    <a className="nav-link dropdown-toggle" href="?#" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">Login</a>
+                                    <Login onAuthentication={() => this.handleAuthentication()} />
+                                </li>
+                        }
                     </ul>
                 </div>
-                <form method="get" action="/search" className="form-inline my-2 my-lg-0">
-                    <input name="q" className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"></input>
-                    <button className="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-                </form>
+
+                {
+                    this.state.authenticated
+                        ?
+                        <form method="get" action="/search" className="form-inline my-2 my-lg-0">
+                            <input name="q" className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search"></input>
+                            <button className="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
+                        </form>
+                        :
+                        ''
+                }
             </nav>
         )
     }

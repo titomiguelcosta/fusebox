@@ -53,6 +53,9 @@ class Login extends React.Component {
                         errors: false,
                         authenticating: false
                     });
+                    if (this.props.handleAuthentication) {
+                        this.props.handleAuthentication();
+                    }
                 } else {
                     this.setState({
                         errors: true,
