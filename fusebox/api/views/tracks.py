@@ -168,7 +168,7 @@ def dump(request: HttpRequest) -> HttpResponse:
     ]
     tracks = Track.objects.raw(
         f'''select
-                t.*, r.score as rate, count(distinct p.id) as num_played
+                t.*, avg(r.score) as rate, count(distinct p.id) as num_played
             from api_track t
             inner join api_played p on t.id = p.track_id
             inner join api_rate r on r.track_id = t.id and r.user_id = {user.id}
