@@ -162,9 +162,9 @@ def dump(request: HttpRequest) -> HttpResponse:
     response['Content-Disposition'] = 'attachment; filename="fusebox.csv"'
 
     fieldnames = [
-        "id", "artist", "album", "title", "danceability", "energy", "loudness",
-        "speechiness", "acousticness", "instrumentalness", "liveness",
-        "valence", "tempo", "duration_ms", "num_played", "rate"
+        "id", "artist", "album", "title", "key", "time_signature", "danceability",
+        "energy", "loudness", "speechiness", "acousticness", "instrumentalness",
+        "liveness", "valence", "tempo", "duration_ms", "num_played", "rate"
     ]
     tracks = Track.objects.raw(
         f'''select
@@ -184,6 +184,8 @@ def dump(request: HttpRequest) -> HttpResponse:
             track.artists_to_str,
             track.album,
             track.title,
+            track.key,
+            track.time_signature,
             track.danceability,
             track.energy,
             track.loudness,

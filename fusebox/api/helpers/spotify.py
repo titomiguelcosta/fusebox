@@ -71,6 +71,9 @@ class SpotifyHelper(object):
                 errors.append(str(e))
                 continue
 
+            track.analysis_url = data["analysis_url"]
+            track.key = data["key"]
+            track.time_signature = data["time_signature"]
             track.danceability = data["danceability"]
             track.energy = data["energy"]
             track.loudness = data["loudness"]
@@ -87,6 +90,13 @@ class SpotifyHelper(object):
             youtube_videos = YouTubeHelper().search("%s - %s" % (track.artists_to_str, track.title))
 
             for youtube_video in youtube_videos:
+                try:
+                    # do not load the same video twice
+                    Video.objects.get(video_id=youtube_video["id"]["videoId"])
+                    continue
+                except Video.DoesNotExist:
+                    pass
+
                 try:
                     video = Video()
                     video.track = track
