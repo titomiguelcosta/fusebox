@@ -7,11 +7,11 @@ from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.utils.module_loading import import_string
 from django.utils import timezone
 from django.forms.models import model_to_dict
+from django.conf import settings
 import joblib
 import json
 import csv
 import os
-from settings import BASE_DIR
 
 
 @query_auth
@@ -207,7 +207,7 @@ def predictions(request: HttpRequest, id: int) -> JsonResponse:
         # ]
 
         for f in ["perceptron", "svn", "logistic_regression"]:
-            # model = joblib.load(os.path.join(BASE_DIR, "machinelearning", "models", f, "model.joblib"))
+            # model = joblib.load(os.path.join(settings.BASE_DIR, "machinelearning", "models", f, "model.joblib"))
             # result = model.predict([features])
 
             data.append(
