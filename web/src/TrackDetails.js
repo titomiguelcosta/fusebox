@@ -25,7 +25,7 @@ class TrackDetails extends React.Component {
     }
 
     onRating(rate) {
-        track = this.state.track;
+        let track = this.state.track;
         track.rate.score = rate;
         this.setState({
             track: track,
