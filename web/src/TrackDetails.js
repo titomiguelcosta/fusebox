@@ -31,14 +31,12 @@ class TrackDetails extends React.Component {
             this.setState({
                 track: track,
             });
-        } else {
-            window.alert(rate);
         }
     }
 
     render() {
         const track = this.state.track
-            ? <h1>{this.state.track.title} by {this.state.track.artists.join(', ')} from {this.state.track.album}</h1>
+            ? <h1>{this.state.track.title} <i>by</i> {this.state.track.artists.join(', ')} <i>from</i> {this.state.track.album}</h1>
             : <div>No details.</div>;
 
         const details = this.state.track

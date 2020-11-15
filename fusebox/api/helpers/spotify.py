@@ -96,6 +96,8 @@ class SpotifyHelper(object):
                     continue
                 except Video.DoesNotExist:
                     pass
+                except Video.MultipleObjectsReturned:
+                    continue
 
                 try:
                     video = Video()

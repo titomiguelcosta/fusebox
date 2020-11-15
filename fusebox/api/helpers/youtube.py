@@ -54,6 +54,15 @@ class YouTubeHelper(object):
                 if len(youtube_videos) > 0:
                     for youtube_video in youtube_videos:
                         try:
+                            # do not load the same video twice
+                            Video.objects.get(video_id=youtube_video["id"]["videoId"])
+                            continue
+                        except Video.DoesNotExist:
+                            pass
+                        except Video.MultipleObjectsReturned:
+                            continue
+
+                        try:
                             video = Video()
                             video.track = track
                             video.source = "youtube"
