@@ -18,7 +18,7 @@ def category(value):
         return OK
     elif 5 <= value < 7:
         return GREAT
-    elif 7 <= value <= 9:
+    elif 7 <= value <= 10:
         return AWESOME
     else:
         return np.nan

@@ -1,18 +1,20 @@
 from api.models import Played, Track, Rate, Video
 from api.helpers.spotify import SpotifyHelper
-from api.helpers.auth import protected
+from api.helpers.auth import query_auth, jwt_auth, get_user_from_jwt_token
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.utils.module_loading import import_string
 from django.utils import timezone
 from django.forms.models import model_to_dict
-from rest_framework_simplejwt.authentication import JWTAuthentication
+import joblib
 import json
 import csv
+import os
+from settings import BASE_DIR
 
 
-@protected
+@query_auth
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def playing(request: HttpRequest) -> JsonResponse:
@@ -21,7 +23,7 @@ def playing(request: HttpRequest) -> JsonResponse:
     return handler(request)
 
 
-@protected
+@query_auth
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def played(request: HttpRequest) -> JsonResponse:
@@ -30,7 +32,7 @@ def played(request: HttpRequest) -> JsonResponse:
     return handler(request)
 
 
-@protected
+@query_auth
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def queue(request: HttpRequest) -> JsonResponse:
@@ -39,7 +41,7 @@ def queue(request: HttpRequest) -> JsonResponse:
     return handler(request)
 
 
-@protected
+@query_auth
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def dequeue(request: HttpRequest) -> JsonResponse:
@@ -48,7 +50,7 @@ def dequeue(request: HttpRequest) -> JsonResponse:
     return handler(request)
 
 
-@protected
+@query_auth
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def top(request: HttpRequest) -> JsonResponse:
@@ -68,7 +70,7 @@ def top(request: HttpRequest) -> JsonResponse:
     return JsonResponse(data)
 
 
-@protected
+@query_auth
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def populate(request: HttpRequest) -> JsonResponse:
@@ -80,15 +82,11 @@ def populate(request: HttpRequest) -> JsonResponse:
     return response
 
 
+@jwt_auth
 @csrf_exempt
 @require_http_methods(["POST"])
 def rate(request: HttpRequest, id: int) -> JsonResponse:
-    auth = JWTAuthentication()
-
-    try:
-        user = auth.get_user(auth.get_validated_token(auth.get_raw_token(auth.get_header(request))))
-    except:
-        return JsonResponse({'error': 'not authenticated'}, status=403)
+    user = get_user_from_jwt_token(request)
 
     data = json.loads(request.body)
 
@@ -115,15 +113,11 @@ def rate(request: HttpRequest, id: int) -> JsonResponse:
     return response
 
 
+@jwt_auth
 @csrf_exempt
 @require_http_methods(["GET"])
 def details(request: HttpRequest, id: int) -> JsonResponse:
-    auth = JWTAuthentication()
-
-    try:
-        user = auth.get_user(auth.get_validated_token(auth.get_raw_token(auth.get_header(request))))
-    except:
-        return JsonResponse({'error': 'not authenticated'}, status=403)
+    user = get_user_from_jwt_token(request)
 
     try:
         track = Track.objects.get(pk=id)
@@ -148,15 +142,11 @@ def details(request: HttpRequest, id: int) -> JsonResponse:
     return response
 
 
+@jwt_auth
 @csrf_exempt
 @require_http_methods(["GET"])
 def dump(request: HttpRequest) -> HttpResponse:
-    auth = JWTAuthentication()
-
-    try:
-        user = auth.get_user(auth.get_validated_token(auth.get_raw_token(auth.get_header(request))))
-    except:
-        return JsonResponse({'error': 'not authenticated'}, status=401)
+    user = get_user_from_jwt_token(request)
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="fusebox.csv"'
@@ -199,5 +189,36 @@ def dump(request: HttpRequest) -> HttpResponse:
             track.num_played,
             track.rate
         ])
+
+    return response
+
+
+@jwt_auth
+@csrf_exempt
+@require_http_methods(["GET"])
+def predictions(request: HttpRequest, id: int) -> JsonResponse:
+    data = []
+
+    try:
+        track = Track.objects.get(pk=id)
+
+        # features = [
+        #     track.liveness
+        # ]
+
+        for f in ["perceptron", "svn", "logistic_regression"]:
+            # model = joblib.load(os.path.join(BASE_DIR, "machinelearning", "models", f, "model.joblib"))
+            # result = model.predict([features])
+
+            data.append(
+                {
+                    "model": f,
+                    "score": 2.31,
+                }
+            )
+
+        response = JsonResponse({"predictions": data}, status=200)
+    except Track.DoesNotExist:
+        response = JsonResponse({'error': 'invalid track'}, status=404)
 
     return response

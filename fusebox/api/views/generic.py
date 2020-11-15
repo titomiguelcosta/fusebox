@@ -1,7 +1,7 @@
 import socket
 from django.http import JsonResponse, HttpRequest, HttpResponse
 from django.utils import timezone
-from api.helpers.auth import protected
+from api.helpers.auth import query_auth
 from api.models import Track
 import csv
 
@@ -10,7 +10,7 @@ def index(request: HttpRequest) -> JsonResponse:
     return JsonResponse({"status": "ok", "host": socket.gethostname(), "date": timezone.now()})
 
 
-@protected
+@query_auth
 def dump(request: HttpRequest) -> HttpResponse:
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="fusebox.csv"'

@@ -4,10 +4,10 @@ import string
 from django.http import JsonResponse, HttpRequest
 from api.models import UserProfile, User
 from slack import WebClient
-from api.helpers.auth import protected
+from api.helpers.auth import query_auth
 
 
-@protected
+@query_auth
 def populate(request: HttpRequest) -> JsonResponse:
     sc = WebClient(os.getenv("SLACK_API_TOKEN"))
     response = sc.api_call("users.list")

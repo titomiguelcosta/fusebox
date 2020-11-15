@@ -11,6 +11,7 @@ class TrackDetails extends React.Component {
         this.state = {
             id: this.props.match.params.id,
             track: null,
+            predictions: [],
         }
     }
 
@@ -18,7 +19,12 @@ class TrackDetails extends React.Component {
         if (this.api.getAccessToken()) {
             this.api.detailsTrack(this.state.id).then(track => {
                 this.setState({
-                    track: track
+                    track: track,
+                });
+            });
+            this.api.predictionsTrack(this.state.id).then(predictions => {
+                this.setState({
+                    predictions: predictions.predictions,
                 });
             });
         }
@@ -74,6 +80,19 @@ class TrackDetails extends React.Component {
             </table>
             : '';
 
+        const predictions = this.state.predictions.length > 0
+            ? <dl>
+                {this.state.predictions.map(prediction => {
+                    return (
+                        <>
+                            <dt>{prediction.model}</dt>
+                            <dd>{prediction.score}</dd>
+                        </>
+                    );
+                })}
+            </dl>
+            : '';
+
         const rate = this.state.track && this.state.track.rate.score
             ? 'You set a score of ' + this.state.track.rate.score
             : 'Unrated track';
@@ -83,7 +102,7 @@ class TrackDetails extends React.Component {
             <div id="videos" className="carousel slide" data-ride="carousel">
                 <div className="carousel-inner">
                     {this.state.track.videos.map((video, index) => {
-                        let itemClasses = "carousel-item" + (0 == index ? " active" : "");
+                        let itemClasses = "carousel-item" + (0 === index ? " active" : "");
 
                         return (
                             <div className={itemClasses} key={index}>
@@ -119,9 +138,17 @@ class TrackDetails extends React.Component {
                 <hr />
 
                 <div className="section">
+                    <h2>Rating</h2>
+
                     {rate}
+
                     <Rate id={this.state.id} onRating={(rate) => this.onRating(rate)} />
                 </div>
+
+                <hr />
+
+                <h2>Predictions</h2>
+                {predictions}
 
                 <hr />
 

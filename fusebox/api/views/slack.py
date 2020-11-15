@@ -10,10 +10,10 @@ from api.helpers.spotify import SpotifyHelper
 from api.models import UserProfile
 from api.handlers.slack import RATE_CATEGORY_LIKE
 from slack import WebClient
-from api.helpers.auth import protected
+from api.helpers.auth import query_auth
 
 
-@protected
+@query_auth
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def subscribe(request: HttpRequest) -> HttpResponse:
@@ -22,7 +22,7 @@ def subscribe(request: HttpRequest) -> HttpResponse:
     return handler(request)
 
 
-@protected
+@query_auth
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def unsubscribe(request: HttpRequest) -> HttpResponse:
@@ -31,7 +31,7 @@ def unsubscribe(request: HttpRequest) -> HttpResponse:
     return handler(request)
 
 
-@protected
+@query_auth
 @csrf_exempt
 @require_http_methods(["GET", "POST"])
 def notify(request: HttpRequest) -> HttpResponse:
@@ -66,7 +66,7 @@ def notify(request: HttpRequest) -> HttpResponse:
         return HttpResponse("Nothing playing at the moment.")
 
 
-@protected
+@query_auth
 @csrf_exempt
 @require_http_methods(["POST"])
 def proxy(request: HttpRequest) -> JsonResponse:
@@ -81,7 +81,7 @@ def proxy(request: HttpRequest) -> JsonResponse:
     return handler(request)
 
 
-@protected
+@query_auth
 @csrf_exempt
 @require_http_methods(["POST"])
 def interactive(request: HttpRequest) -> HttpResponse:
