@@ -7,10 +7,10 @@ class Home extends React.Component {
             <>
                 <div className="jumbotron">
                     <div className="media">
-                        <div class="media-left">
+                        <div className="media-left">
                             <img src={logo} alt="Fusebox" width="185" />
                         </div>
-                        <div class="media-body">
+                        <div className="media-body">
                             <h1>Fusebox</h1>
                             <p>music recommendation system</p>
                         </div>

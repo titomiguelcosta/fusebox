@@ -16,7 +16,7 @@ function App() {
     <Router>
       <Nav />
 
-      <div class="container">
+      <div className="container">
         <Switch>
           <Route path="/tracks/:id" component={TrackDetails} />
           <Route path="/rate">

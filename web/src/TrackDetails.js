@@ -26,10 +26,14 @@ class TrackDetails extends React.Component {
 
     onRating(rate) {
         let track = this.state.track;
-        track.rate.score = rate;
-        this.setState({
-            track: track,
-        });
+        if (track) {
+            track.rate.score = rate;
+            this.setState({
+                track: track,
+            });
+        } else {
+            window.alert(rate);
+        }
     }
 
     render() {
@@ -55,17 +59,19 @@ class TrackDetails extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    <td>{this.state.track.danceability}</td>
-                    <td>{this.state.track.energy}</td>
-                    <td>{this.state.track.loudness}</td>
-                    <td>{this.state.track.speechiness}</td>
-                    <td>{this.state.track.acousticness}</td>
-                    <td>{this.state.track.instrumentalness}</td>
-                    <td>{this.state.track.liveness}</td>
-                    <td>{this.state.track.valence}</td>
-                    <td>{this.state.track.tempo}</td>
-                    <td>{this.state.track.key}</td>
-                    <td>{this.state.track.time_signature}</td>
+                    <tr>
+                        <td>{this.state.track.danceability}</td>
+                        <td>{this.state.track.energy}</td>
+                        <td>{this.state.track.loudness}</td>
+                        <td>{this.state.track.speechiness}</td>
+                        <td>{this.state.track.acousticness}</td>
+                        <td>{this.state.track.instrumentalness}</td>
+                        <td>{this.state.track.liveness}</td>
+                        <td>{this.state.track.valence}</td>
+                        <td>{this.state.track.tempo}</td>
+                        <td>{this.state.track.key}</td>
+                        <td>{this.state.track.time_signature}</td>
+                    </tr>
                 </tbody>
             </table>
             : '';
@@ -76,16 +82,26 @@ class TrackDetails extends React.Component {
 
         const videos = this.state.track && this.state.track.videos.length > 0
             ?
-            <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    {this.state.track.videos.map((video) => {
+            <div id="videos" className="carousel slide" data-ride="carousel">
+                <div className="carousel-inner">
+                    {this.state.track.videos.map((video, index) => {
+                        let itemClasses = "carousel-item" + (0 == index ? " active" : "");
+
                         return (
-                            <div class="carousel-item">
+                            <div className={itemClasses} key={index}>
                                 <Video url={video.url}></Video>
                             </div>
                         );
                     })}
                 </div>
+                <a className="carousel-control-prev" href="#videos" role="button" data-slide="prev">
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span className="sr-only">Previous</span>
+                </a>
+                <a className="carousel-control-next" href="#videos" role="button" data-slide="next">
+                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span className="sr-only">Next</span>
+                </a>
             </div>
             : '';
 
@@ -106,7 +122,7 @@ class TrackDetails extends React.Component {
 
                 <div className="section">
                     {rate}
-                    <Rate id={this.state.id} onRating={this.onRating} />
+                    <Rate id={this.state.id} onRating={(rate) => this.onRating(rate)} />
                 </div>
 
                 <hr />
@@ -116,7 +132,7 @@ class TrackDetails extends React.Component {
                 <hr />
 
                 {videos}
-            </div >
+            </div>
         );
     }
 }

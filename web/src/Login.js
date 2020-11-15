@@ -80,7 +80,7 @@ class Login extends React.Component {
             );
 
         const errorMessage = this.state.errors ? (
-            (<div class="alert alert-danger">Failed to authenticate</div>)
+            (<div className="alert alert-danger">Failed to authenticate</div>)
         ) : (<></>);
 
         const auth = this.state.loggedIn ? (
