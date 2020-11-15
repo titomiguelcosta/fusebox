@@ -24,50 +24,69 @@ class TrackDetails extends React.Component {
         }
     }
 
+    onRating(rate) {
+        track = this.state.track;
+        track.rate.score = rate;
+        this.setState({
+            track: track,
+        });
+    }
+
     render() {
         const track = this.state.track
-            ? <div>Details for track {this.state.track.title}</div>
+            ? <h1>{this.state.track.title} by {this.state.track.artist.join(', ')} from {this.state.track.album}</h1>
             : <div>No details.</div>;
 
         const details = this.state.track
-            ? <dl>
-                <dt>danceability</dt>
-                <dd>{this.state.track.danceability}</dd>
-
-                <dt>energy</dt>
-                <dd>{this.state.track.energy}</dd>
-
-                <dt>loudness</dt>
-                <dd>{this.state.track.loudness}</dd>
-
-                <dt>speechiness</dt>
-                <dd>{this.state.track.speechiness}</dd>
-
-                <dt>acousticness</dt>
-                <dd>{this.state.track.acousticness}</dd>
-
-                <dt>instrumentalness</dt>
-                <dd>{this.state.track.instrumentalness}</dd>
-
-                <dt>liveness</dt>
-                <dd>{this.state.track.liveness}</dd>
-
-                <dt>valence</dt>
-                <dd>{this.state.track.valence}</dd>
-
-                <dt>tempo</dt>
-                <dd>{this.state.track.tempo}</dd>
-            </dl>
+            ? <table className="table">
+                <thead className="thead-dark">
+                    <tr>
+                        <th>danceability</th>
+                        <th>energy</th>
+                        <th>loudness</th>
+                        <th>speechiness</th>
+                        <th>acousticness</th>
+                        <th>instrumentalness</th>
+                        <th>liveness</th>
+                        <th>valence</th>
+                        <th>tempo</th>
+                        <th>key</th>
+                        <th>time signature</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <td>{this.state.track.danceability}</td>
+                    <td>{this.state.track.energy}</td>
+                    <td>{this.state.track.loudness}</td>
+                    <td>{this.state.track.speechiness}</td>
+                    <td>{this.state.track.acousticness}</td>
+                    <td>{this.state.track.instrumentalness}</td>
+                    <td>{this.state.track.liveness}</td>
+                    <td>{this.state.track.valence}</td>
+                    <td>{this.state.track.tempo}</td>
+                    <td>{this.state.track.key}</td>
+                    <td>{this.state.track.time_signature}</td>
+                </tbody>
+            </table>
             : '';
 
         const rate = this.state.track && this.state.track.rate.score
             ? 'You set a score of ' + this.state.track.rate.score
             : 'Unrated track';
 
-        const videos = this.state.track
-            ? this.state.track.videos.map((video) => {
-                return <Video url={video.url}></Video>;
-            })
+        const videos = this.state.track && this.state.track.videos.length > 0
+            ?
+            <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    {this.state.track.videos.map((video) => {
+                        return (
+                            <div class="carousel-item">
+                                <Video url={video.url}></Video>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
             : '';
 
         const player = this.state.track && this.state.track.spotify_id
@@ -87,7 +106,7 @@ class TrackDetails extends React.Component {
 
                 <div className="section">
                     {rate}
-                    <Rate id={this.state.id} />
+                    <Rate id={this.state.id} onRating={this.onRating} />
                 </div>
 
                 <hr />

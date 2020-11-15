@@ -12,6 +12,10 @@ class Rate extends React.Component {
         e.preventDefault();
 
         this.api.rateTrack(this.props.id, rate);
+
+        if (this.props.onRating) {
+            this.props.onRating(rate);
+        }
     }
 
     render() {

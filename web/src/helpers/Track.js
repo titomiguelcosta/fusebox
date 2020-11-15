@@ -10,12 +10,6 @@ class Track extends React.Component {
         this.api = new FuseboxApi();
     }
 
-    handleRate(e, rate) {
-        e.preventDefault();
-
-        this.api.rateTrack(this.props.id, rate);
-    }
-
     render() {
         return (
             <tr>
