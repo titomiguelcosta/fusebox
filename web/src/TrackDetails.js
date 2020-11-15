@@ -34,7 +34,7 @@ class TrackDetails extends React.Component {
 
     render() {
         const track = this.state.track
-            ? <h1>{this.state.track.title} by {this.state.track.artist.join(', ')} from {this.state.track.album}</h1>
+            ? <h1>{this.state.track.title} by {this.state.track.artists.join(', ')} from {this.state.track.album}</h1>
             : <div>No details.</div>;
 
         const details = this.state.track
