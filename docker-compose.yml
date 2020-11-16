@@ -24,7 +24,7 @@ services:
     volumes:
       - ./web:/home/node/app
     stdin_open: true
-    command: bash -c "npm install && yarn build && yarn start"
+    command: bash -c "yarn upgrade && yarn build && yarn start"
     ports:
       - "9003:3000"
   fusebox-api:
