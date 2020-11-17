@@ -1,7 +1,7 @@
 from django.conf.urls import include
 from django.urls import path, re_path
 from django.db.models import Q, Exists, OuterRef
-from .views import generic, tracks, slack, users
+from .views import generic, tracks, slack, users, stats
 from .models import Track, Artist, Rate
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -126,6 +126,7 @@ urlpatterns = [
     re_path(r'^slack/interactive$', slack.interactive, name='slack_interactive'),
     re_path(r'^slack/notify$', slack.notify, name='slack_notify'),
     re_path(r'^slack/proxy$', slack.proxy, name='slack_proxy'),
+    re_path(r'^stats/tracks-per-artist$', stats.tracks_per_artist, name='stats_tracks_per_artist'),
     re_path(r'^users/populate$', users.populate, name='users_populate'),
     path('auth/', include('rest_framework.urls')),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

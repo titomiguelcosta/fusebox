@@ -9,6 +9,7 @@ import Home from './Home';
 import Rate from './Rate';
 import TrackDetails from './TrackDetails';
 import Search from './Search';
+import Dashboard from './Dashboard';
 import './App.css';
 
 function App() {
@@ -24,6 +25,9 @@ function App() {
           </Route>
           <Route path="/search">
             <Search />
+          </Route>
+          <Route path="/dashboard">
+            <Dashboard />
           </Route>
           <Route path="/">
             <Home />

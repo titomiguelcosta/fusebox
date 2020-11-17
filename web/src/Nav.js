@@ -51,6 +51,9 @@ class Nav extends React.Component {
                                         <Link className="nav-link" to="/rate">Unrated</Link>
                                     </li>
                                     <li className="nav-item">
+                                        <Link className="nav-link" to="/dashboard">Dashboard</Link>
+                                    </li>
+                                    <li className="nav-item">
                                         <a onClick={(e) => this.handleDownload(e)} className="nav-link" href="/#" aria-expanded="false">Download</a>
                                     </li>
                                 </>
