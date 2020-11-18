@@ -135,6 +135,48 @@ class FuseboxApi {
 
         return json;
     };
+
+    async statsRatePerArtist() {
+        const response = await fetch(this.baseUrl + '/v1/stats/rate-per-artist', {
+            cache: 'no-cache',
+            headers: this.headers,
+            method: 'GET',
+            redirect: 'follow',
+            referrer: 'no-referrer',
+        });
+
+        const json = await response.json();
+
+        return json;
+    };
+
+    async statsTracksPerArtist() {
+        const response = await fetch(this.baseUrl + '/v1/stats/tracks-per-artist', {
+            cache: 'no-cache',
+            headers: this.headers,
+            method: 'GET',
+            redirect: 'follow',
+            referrer: 'no-referrer',
+        });
+
+        const json = await response.json();
+
+        return json;
+    };
+
+    async statsTracksPerRate() {
+        const response = await fetch(this.baseUrl + '/v1/stats/tracks-per-rate', {
+            cache: 'no-cache',
+            headers: this.headers,
+            method: 'GET',
+            redirect: 'follow',
+            referrer: 'no-referrer',
+        });
+
+        const json = await response.json();
+
+        return json;
+    };
 }
 
 export default FuseboxApi;

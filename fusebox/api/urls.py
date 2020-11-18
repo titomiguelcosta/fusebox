@@ -127,6 +127,8 @@ urlpatterns = [
     re_path(r'^slack/notify$', slack.notify, name='slack_notify'),
     re_path(r'^slack/proxy$', slack.proxy, name='slack_proxy'),
     re_path(r'^stats/tracks-per-artist$', stats.tracks_per_artist, name='stats_tracks_per_artist'),
+    re_path(r'^stats/rate-per-artist$', stats.rate_per_artist, name='stats_rate_per_artist'),
+    re_path(r'^stats/tracks-per-rate$', stats.tracks_per_rate, name='stats_tracks_per_rate'),
     re_path(r'^users/populate$', users.populate, name='users_populate'),
     path('auth/', include('rest_framework.urls')),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
