@@ -93,3 +93,52 @@ def tracks_per_rate(request: HttpRequest) -> JsonResponse:
             ratings = ratings + 1
 
     return JsonResponse(data)
+
+
+@jwt_auth
+@csrf_exempt
+@require_http_methods(["GET"])
+def audio_features(request: HttpRequest, id: int) -> JsonResponse:
+    try:
+        track = Track.objects.get(pk=id)
+
+        data = [
+            {
+                "name": "acousticness",
+                "value": "%.2f" % (track.acousticness * 100, )
+            },
+            {
+                "name": "danceability",
+                "value": "%.2f" % (track.danceability * 100, )
+            },
+            {
+                "name": "energy",
+                "value": "%.2f" % (track.energy * 100, )
+            },
+            {
+                "name": "instrumentalness",
+                "value": "%.2f" % (track.instrumentalness * 100, )
+            },
+            {
+                "name": "liveness",
+                "value": "%.2f" % (track.liveness * 100, )
+            },
+            {
+                "name": "loudness",
+                "value": "%.2f" % (((-60 - track.loudness) * (100 / -60)), )
+            },
+            {
+                "name": "speechiness",
+                "value": "%.2f" % (track.speechiness * 100, )
+            },
+            {
+                "name": "valence",
+                "value": "%.2f" % (track.valence * 100, )
+            },
+        ]
+
+        response = JsonResponse({"results": data}, status=200)
+    except Track.DoesNotExist:
+        response = JsonResponse({'error': 'invalid track'}, status=404)
+
+    return response

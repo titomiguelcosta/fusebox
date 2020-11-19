@@ -3,6 +3,7 @@ import FuseboxApi from './FuseboxApi';
 import Video from './helpers/Video';
 import Rate from './helpers/Rate';
 import SpotifyPlayer from 'react-spotify-player';
+import AudioFeatures from './charts/AudioFeatures';
 
 class TrackDetails extends React.Component {
     constructor(props) {
@@ -135,6 +136,10 @@ class TrackDetails extends React.Component {
             <div>
                 {track}
                 {details}
+                <hr />
+
+                <AudioFeatures id={this.state.id} />
+
                 <hr />
 
                 <div className="section">

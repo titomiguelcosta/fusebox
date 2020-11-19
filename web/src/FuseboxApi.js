@@ -150,6 +150,20 @@ class FuseboxApi {
         return json;
     };
 
+    async statsAudioFeatures(trackId) {
+        const response = await fetch(this.baseUrl + '/v1/tracks/' + trackId + '/stats/audio-features', {
+            cache: 'no-cache',
+            headers: this.headers,
+            method: 'GET',
+            redirect: 'follow',
+            referrer: 'no-referrer',
+        });
+
+        const json = await response.json();
+
+        return json;
+    };
+
     async statsTracksPerArtist() {
         const response = await fetch(this.baseUrl + '/v1/stats/tracks-per-artist', {
             cache: 'no-cache',
