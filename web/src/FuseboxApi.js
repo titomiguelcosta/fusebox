@@ -94,6 +94,18 @@ class FuseboxApi {
         return json;
     };
 
+    async deleteTrack(trackId) {
+        const response = await fetch(this.baseUrl + '/v1/tracks/' + trackId + '/', {
+            cache: 'no-cache',
+            headers: this.headers,
+            method: 'DELETE',
+            redirect: 'follow',
+            referrer: 'no-referrer',
+        });
+
+        return response;
+    };
+
     dumpTracks() {
         fetch(this.baseUrl + '/v1/tracks/dump', {
             cache: 'no-cache',

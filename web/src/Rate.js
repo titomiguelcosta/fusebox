@@ -60,7 +60,7 @@ class Rate extends React.Component {
 
     render() {
         const tracks = this.state.tracks.map((track) =>
-            <Track id={track.id} artists={track.artists} album={track.album} title={track.title} />
+            <Track key={track.id} id={track.id} artists={track.artists} album={track.album} title={track.title} />
         );
 
         const previousClasses = "page-item" + (this.state.offset === 0 ? " disabled" : "");
@@ -77,17 +77,15 @@ class Rate extends React.Component {
                             <th scope="col">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {tracks}
-                    </tbody>
+                    <tbody>{tracks}</tbody>
                 </table>
 
                 <nav aria-label="navigation">
                     <ul className="pagination justify-content-end">
-                        <li className={previousClasses}>
-                            <a className="page-link" href="/#" tabindex="-1" onClick={(e) => this.handlePrevious(e)}>Previous</a>
+                        <li key="previous" className={previousClasses}>
+                            <a className="page-link" href="/#" tabIndex="-1" onClick={(e) => this.handlePrevious(e)}>Previous</a>
                         </li>
-                        <li className={nextClasses}>
+                        <li key="next" className={nextClasses}>
                             <a className="page-link" href="/#" onClick={(e) => this.handleNext(e)}>Next</a>
                         </li>
                     </ul>

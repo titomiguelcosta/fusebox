@@ -75,7 +75,7 @@ class Search extends React.Component {
             : "Results for " + this.state.q;
 
         const tracks = this.state.tracks.map((track) =>
-            <Track id={track.id} artists={track.artists} album={track.album} title={track.title} />
+            <Track key={track.id} id={track.id} artists={track.artists} album={track.album} title={track.title} />
         );
 
         const previousClasses = "page-item" + (this.state.offset === 0 ? " disabled" : "");
@@ -101,7 +101,7 @@ class Search extends React.Component {
                 <nav aria-label="navigation" className="d-flex justify-content-end">
                     <ul className="pagination">
                         <li className={previousClasses}>
-                            <a className="page-link" href="/#" tabindex="-1" onClick={(e) => this.handlePrevious(e)}>Previous</a>
+                            <a className="page-link" href="/#" tabIndex="-1" onClick={(e) => this.handlePrevious(e)}>Previous</a>
                         </li>
                         <li className={nextClasses}>
                             <a className="page-link" href="/#" onClick={(e) => this.handleNext(e)}>Next</a>
