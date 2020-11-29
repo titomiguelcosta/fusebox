@@ -205,4 +205,6 @@ class FuseboxApi {
     };
 }
 
-export default FuseboxApi;
+let FuseboxApiClient = new FuseboxApi();
+
+export default FuseboxApiClient;

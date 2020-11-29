@@ -1,14 +1,13 @@
 import React from 'react';
 import Login from './Login';
 import { Link } from "react-router-dom";
-import FuseboxApi from './FuseboxApi';
+import FuseboxApiClient from './FuseboxApi';
 
 class Nav extends React.Component {
     constructor(props) {
         super(props);
-        this.api = new FuseboxApi();
         this.state = {
-            authenticated: !!this.api.getAccessToken(),
+            authenticated: !!FuseboxApiClient.getAccessToken(),
         }
     }
 
@@ -20,7 +19,7 @@ class Nav extends React.Component {
     }
 
     handleLogout() {
-        this.api.removeAccessToken();
+        FuseboxApiClient.removeAccessToken();
         this.setState({
             authenticated: false,
         });
@@ -29,7 +28,7 @@ class Nav extends React.Component {
 
     handleDownload(e) {
         e.preventDefault();
-        this.api.dumpTracks();
+        FuseboxApiClient.dumpTracks();
     }
 
     render() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import FuseboxApi from './FuseboxApi';
+import FuseboxApiClient from './FuseboxApi';
 import Track from './helpers/Track';
 
 class Search extends React.Component {
@@ -15,7 +15,6 @@ class Search extends React.Component {
             limit: 10,
             q: q,
         }
-        this.api = new FuseboxApi();
     }
 
     componentDidMount() {
@@ -23,8 +22,8 @@ class Search extends React.Component {
             searching: true,
         });
 
-        if (this.api.getAccessToken()) {
-            this.api.searchTracks(this.state.q).then(tracks => {
+        if (FuseboxApiClient.getAccessToken()) {
+            FuseboxApiClient.searchTracks(this.state.q).then(tracks => {
                 this.setState({
                     tracks: tracks,
                     searching: false,
@@ -42,7 +41,7 @@ class Search extends React.Component {
                 tracks: [],
             });
 
-            this.api.searchTracks(this.state.q, newOffset, this.state.limit).then(tracks => {
+            FuseboxApiClient.searchTracks(this.state.q, newOffset, this.state.limit).then(tracks => {
                 this.setState({
                     offset: newOffset,
                     tracks: tracks,
@@ -60,7 +59,7 @@ class Search extends React.Component {
 
             const newOffset = this.state.offset + this.state.limit;
 
-            this.api.searchTracks(this.state.q, newOffset, this.state.limit).then(tracks => {
+            FuseboxApiClient.searchTracks(this.state.q, newOffset, this.state.limit).then(tracks => {
                 this.setState({
                     offset: newOffset,
                     tracks: tracks,

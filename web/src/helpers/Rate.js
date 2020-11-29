@@ -1,17 +1,11 @@
 import React from 'react';
-import FuseboxApi from '../FuseboxApi';
+import FuseboxApiClient from '../FuseboxApi';
 
 class Rate extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.api = new FuseboxApi();
-    }
-
     handleRate(e, rate) {
         e.preventDefault();
 
-        this.api.rateTrack(this.props.id, rate);
+        FuseboxApiClient.rateTrack(this.props.id, rate);
 
         if (this.props.onRating) {
             this.props.onRating(rate);

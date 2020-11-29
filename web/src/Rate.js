@@ -1,5 +1,5 @@
 import React from 'react';
-import FuseboxApi from './FuseboxApi';
+import FuseboxApiClient from './FuseboxApi';
 import Track from './helpers/Track';
 
 class Rate extends React.Component {
@@ -10,12 +10,11 @@ class Rate extends React.Component {
             limit: 10,
             tracks: [],
         }
-        this.api = new FuseboxApi();
     }
 
     componentDidMount() {
-        if (this.api.getAccessToken()) {
-            this.api.unratedTracks(this.state.offset, this.state.limit).then(tracks => {
+        if (FuseboxApiClient.getAccessToken()) {
+            FuseboxApiClient.unratedTracks(this.state.offset, this.state.limit).then(tracks => {
                 this.setState({
                     tracks: tracks
                 });
@@ -32,7 +31,7 @@ class Rate extends React.Component {
                 tracks: [],
             });
 
-            this.api.unratedTracks(newOffset, this.state.limit).then(tracks => {
+            FuseboxApiClient.unratedTracks(newOffset, this.state.limit).then(tracks => {
                 this.setState({
                     offset: newOffset,
                     tracks: tracks,
@@ -49,7 +48,7 @@ class Rate extends React.Component {
             });
             const newOffset = this.state.offset + this.state.limit;
 
-            this.api.unratedTracks(newOffset, this.state.limit).then(tracks => {
+            FuseboxApiClient.unratedTracks(newOffset, this.state.limit).then(tracks => {
                 this.setState({
                     offset: newOffset,
                     tracks: tracks,

@@ -1,5 +1,5 @@
 import React from 'react';
-import FuseboxApi from './FuseboxApi';
+import FuseboxApiClient from './FuseboxApi';
 import Video from './helpers/Video';
 import Rate from './helpers/Rate';
 import SpotifyPlayer from 'react-spotify-player';
@@ -8,7 +8,6 @@ import AudioFeatures from './charts/AudioFeatures';
 class TrackDetails extends React.Component {
     constructor(props) {
         super(props);
-        this.api = new FuseboxApi();
         this.state = {
             id: this.props.match.params.id,
             track: null,
@@ -17,13 +16,13 @@ class TrackDetails extends React.Component {
     }
 
     componentDidMount() {
-        if (this.api.getAccessToken()) {
-            this.api.detailsTrack(this.state.id).then(track => {
+        if (FuseboxApiClient.getAccessToken()) {
+            FuseboxApiClient.detailsTrack(this.state.id).then(track => {
                 this.setState({
                     track: track,
                 });
             });
-            this.api.predictionsTrack(this.state.id).then(predictions => {
+            FuseboxApiClient.predictionsTrack(this.state.id).then(predictions => {
                 this.setState({
                     predictions: predictions.predictions,
                 });
@@ -47,38 +46,20 @@ class TrackDetails extends React.Component {
             : <div>No details.</div>;
 
         const details = this.state.track
-            ? <table className="table">
-                <thead className="thead-dark">
-                    <tr>
-                        <th>danceability</th>
-                        <th>energy</th>
-                        <th>loudness</th>
-                        <th>speechiness</th>
-                        <th>acousticness</th>
-                        <th>instrumentalness</th>
-                        <th>liveness</th>
-                        <th>valence</th>
-                        <th>tempo</th>
-                        <th>key</th>
-                        <th>time signature</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{this.state.track.danceability}</td>
-                        <td>{this.state.track.energy}</td>
-                        <td>{this.state.track.loudness}</td>
-                        <td>{this.state.track.speechiness}</td>
-                        <td>{this.state.track.acousticness}</td>
-                        <td>{this.state.track.instrumentalness}</td>
-                        <td>{this.state.track.liveness}</td>
-                        <td>{this.state.track.valence}</td>
-                        <td>{this.state.track.tempo}</td>
-                        <td>{this.state.track.key}</td>
-                        <td>{this.state.track.time_signature}</td>
-                    </tr>
-                </tbody>
-            </table>
+            ?
+            <ul>
+                <li>danceability: {this.state.track.danceability}</li>
+                <li>energy: {this.state.track.energy}</li>
+                <li>loudness: {this.state.track.loudness}</li>
+                <li>speechiness: {this.state.track.speechiness}</li>
+                <li>acousticness: {this.state.track.acousticness}</li>
+                <li>instrumentalness: {this.state.track.instrumentalness}</li>
+                <li>liveness: {this.state.track.liveness}</li>
+                <li>valence: {this.state.track.valence}</li>
+                <li>tempo: {this.state.track.tempo}</li>
+                <li>key: {this.state.track.key}</li>
+                <li>time signature: {this.state.track.time_signature}</li>
+            </ul>
             : '';
 
         const predictions = this.state.predictions.length > 0
@@ -135,10 +116,19 @@ class TrackDetails extends React.Component {
         return (
             <div>
                 {track}
-                {details}
                 <hr />
 
-                <AudioFeatures id={this.state.id} />
+                <div className="card">
+                    <div className="card-header">Audio features</div>
+                    <div className="card-body row">
+                        <div className="col-sm">
+                            <AudioFeatures id={this.state.id} />
+                        </div>
+                        <div className="col-sm">
+                            {details}
+                        </div>
+                    </div>
+                </div>
 
                 <hr />
 

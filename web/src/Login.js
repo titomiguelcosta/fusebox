@@ -1,5 +1,5 @@
 import React from 'react';
-import FuseboxApi from './FuseboxApi';
+import FuseboxApiClient from './FuseboxApi';
 
 class Login extends React.Component {
     constructor(props) {
@@ -11,11 +11,10 @@ class Login extends React.Component {
             errors: false,
             loggedIn: false
         }
-        this.api = new FuseboxApi();
     }
 
     componentDidMount() {
-        if (this.api.getAccessToken()) {
+        if (FuseboxApiClient.getAccessToken()) {
             this.setState({
                 loggedIn: true,
             });
@@ -41,11 +40,11 @@ class Login extends React.Component {
             authenticating: true,
         })
 
-        this.api.auth(this.state.username, this.state.password)
+        FuseboxApiClient.auth(this.state.username, this.state.password)
             .then(response => {
                 if (response['access']) {
-                    this.api.setAccessToken(response['access']);
-                    this.api.setRefreshToken(response['refresh']);
+                    FuseboxApiClient.setAccessToken(response['access']);
+                    FuseboxApiClient.setRefreshToken(response['refresh']);
                     this.setState({
                         username: '',
                         password: '',

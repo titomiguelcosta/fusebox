@@ -1,13 +1,11 @@
 import React from 'react';
-import FuseboxApi from '../FuseboxApi';
+import FuseboxApiClient from '../FuseboxApi';
 import { Link } from "react-router-dom";
 import Rate from './Rate';
 
 class Track extends React.Component {
     constructor(props) {
         super(props);
-
-        this.api = new FuseboxApi();
 
         this.state = {
             deleted: false,
@@ -16,8 +14,7 @@ class Track extends React.Component {
 
     handleDelete(e) {
         e.preventDefault();
-        this
-            .api
+        FuseboxApiClient
             .deleteTrack(this.props.id)
             .then(response => {
                 this.setState({
