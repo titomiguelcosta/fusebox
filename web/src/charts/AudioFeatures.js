@@ -28,7 +28,6 @@ class AudioFeatures extends React.Component {
         return (
             this.state.data
                 ?
-
                 <ResponsiveContainer width="100%" height={260}>
                     <RadarChart
                         data={this.state.data}

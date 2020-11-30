@@ -47,7 +47,7 @@ class Nav extends React.Component {
                                 ?
                                 <>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/rate">Unrated</Link>
+                                        <Link className="nav-link" to="/rate?offset=0">Unrated</Link>
                                     </li>
                                     <li className="nav-item">
                                         <Link className="nav-link" to="/dashboard">Dashboard</Link>

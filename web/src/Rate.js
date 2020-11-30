@@ -1,60 +1,32 @@
 import React from 'react';
 import FuseboxApiClient from './FuseboxApi';
 import Track from './helpers/Track';
+import { Link } from "react-router-dom";
 
 class Rate extends React.Component {
     constructor(props) {
         super(props);
+        let params = new URLSearchParams(window.location.search);
+
         this.state = {
-            offset: 0,
+            offset: parseInt(params.get('offset')) || 0,
             limit: 10,
             tracks: [],
         }
-    }
 
-    componentDidMount() {
-        if (FuseboxApiClient.getAccessToken()) {
-            FuseboxApiClient.unratedTracks(this.state.offset, this.state.limit).then(tracks => {
-                this.setState({
-                    tracks: tracks
-                });
-            });
-        }
-    }
-
-    handlePrevious(e) {
-        e.preventDefault();
-        const newOffset = this.state.offset - this.state.limit;
-
-        if (newOffset >= 0) {
+        FuseboxApiClient.unratedTracks(this.state.offset, this.state.limit).then(tracks => {
             this.setState({
-                tracks: [],
+                tracks: tracks
             });
-
-            FuseboxApiClient.unratedTracks(newOffset, this.state.limit).then(tracks => {
-                this.setState({
-                    offset: newOffset,
-                    tracks: tracks,
-                });
-            });
-        }
+        });
     }
 
-    handleNext(e) {
-        e.preventDefault();
-        if (this.state.tracks.length >= this.state.limit) {
+    componentDidUpdate() {
+        FuseboxApiClient.unratedTracks(this.state.offset, this.state.limit).then(tracks => {
             this.setState({
-                tracks: [],
+                tracks: tracks
             });
-            const newOffset = this.state.offset + this.state.limit;
-
-            FuseboxApiClient.unratedTracks(newOffset, this.state.limit).then(tracks => {
-                this.setState({
-                    offset: newOffset,
-                    tracks: tracks,
-                });
-            });
-        }
+        });
     }
 
     render() {
@@ -82,10 +54,24 @@ class Rate extends React.Component {
                 <nav aria-label="navigation">
                     <ul className="pagination justify-content-end">
                         <li key="previous" className={previousClasses}>
-                            <a className="page-link" href="/#" tabIndex="-1" onClick={(e) => this.handlePrevious(e)}>Previous</a>
+                            <Link
+                                onClick={() => this.setState({ tracks: [], offset: (this.state.offset - this.state.limit) })}
+                                className="page-link"
+                                to={"/rate?offset=" + (this.state.offset - this.state.limit)}
+                                tabIndex="-1">
+                                Previous
+                                </Link>
                         </li>
                         <li key="next" className={nextClasses}>
-                            <a className="page-link" href="/#" onClick={(e) => this.handleNext(e)}>Next</a>
+                            <Link
+                                onClick={() => {
+                                    window.console.log("clicked");
+                                    this.setState({ tracks: [], offset: (this.state.offset + this.state.limit) })
+                                }}
+                                className="page-link"
+                                to={"/rate?offset=" + (this.state.offset + this.state.limit)}>
+                                Next
+                            </Link>
                         </li>
                     </ul>
                 </nav>

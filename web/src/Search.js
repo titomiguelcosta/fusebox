@@ -1,6 +1,7 @@
 import React from 'react';
 import FuseboxApiClient from './FuseboxApi';
 import Track from './helpers/Track';
+import { Link } from "react-router-dom";
 
 class Search extends React.Component {
     constructor(props) {
@@ -11,58 +12,29 @@ class Search extends React.Component {
         this.state = {
             searching: true,
             tracks: [],
-            offset: 0,
+            offset: parseInt(params.get('offset')) || 0,
             limit: 10,
             q: q,
         }
+
+        FuseboxApiClient.searchTracks(this.state.q, this.state.offset, this.state.limit).then(tracks => {
+            this.setState({
+                tracks: tracks,
+                searching: false,
+            });
+        });
     }
 
-    componentDidMount() {
-        this.setState({
-            searching: true,
-        });
+    componentDidUpdate() {
+        if (!this.state.searching) {
+            this.setState({
+                searching: true,
+            });
 
-        if (FuseboxApiClient.getAccessToken()) {
-            FuseboxApiClient.searchTracks(this.state.q).then(tracks => {
+            FuseboxApiClient.searchTracks(this.state.q, this.state.offset, this.state.limit).then(tracks => {
                 this.setState({
                     tracks: tracks,
                     searching: false,
-                });
-            });
-        }
-    }
-
-    handlePrevious(e) {
-        e.preventDefault();
-        const newOffset = this.state.offset - this.state.limit;
-
-        if (newOffset >= 0) {
-            this.setState({
-                tracks: [],
-            });
-
-            FuseboxApiClient.searchTracks(this.state.q, newOffset, this.state.limit).then(tracks => {
-                this.setState({
-                    offset: newOffset,
-                    tracks: tracks,
-                });
-            });
-        }
-    }
-
-    handleNext(e) {
-        e.preventDefault();
-        if (this.state.tracks.length >= this.state.limit) {
-            this.setState({
-                tracks: [],
-            });
-
-            const newOffset = this.state.offset + this.state.limit;
-
-            FuseboxApiClient.searchTracks(this.state.q, newOffset, this.state.limit).then(tracks => {
-                this.setState({
-                    offset: newOffset,
-                    tracks: tracks,
                 });
             });
         }
@@ -100,10 +72,21 @@ class Search extends React.Component {
                 <nav aria-label="navigation" className="d-flex justify-content-end">
                     <ul className="pagination">
                         <li className={previousClasses}>
-                            <a className="page-link" href="/#" tabIndex="-1" onClick={(e) => this.handlePrevious(e)}>Previous</a>
+                            <Link
+                                className="page-link"
+                                to={"/search?q=" + this.state.q + "&offset=" + (this.state.offset - this.state.limit)}
+                                tabIndex="-1"
+                                onClick={() => { this.setState({ offset: (this.state.offset - this.state.limit) }) }}>
+                                Previous
+                            </Link>
                         </li>
                         <li className={nextClasses}>
-                            <a className="page-link" href="/#" onClick={(e) => this.handleNext(e)}>Next</a>
+                            <Link
+                                className="page-link"
+                                to={"/search?q=" + this.state.q + "&offset=" + (this.state.offset + this.state.limit)}
+                                onClick={() => { this.setState({ offset: (this.state.offset + this.state.limit) }) }}>
+                                Next
+                            </Link>
                         </li>
                     </ul>
                 </nav>
