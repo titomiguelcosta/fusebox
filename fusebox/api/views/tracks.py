@@ -202,18 +202,32 @@ def predictions(request: HttpRequest, id: int) -> JsonResponse:
     try:
         track = Track.objects.get(pk=id)
 
-        # features = [
-        #     track.liveness
-        # ]
+        features = [[
+            track.key,
+            track.time_signature,
+            track.danceability,
+            track.energy,
+            track.loudness,
+            track.speechiness,
+            track.acousticness,
+            track.instrumentalness,
+            track.liveness,
+            track.valence,
+            track.tempo,
+        ]]
 
-        for f in ["perceptron", "svn", "logistic_regression"]:
-            # model = joblib.load(os.path.join(settings.BASE_DIR, "machinelearning", "models", f, "model.joblib"))
-            # result = model.predict([features])
+        for f in ["linear_regression"]:
+            pipeline = joblib.load(os.path.join(settings.BASE_DIR, "api",
+                                                "machinelearning", "models", f, "pipeline.joblib"))
+            model = joblib.load(os.path.join(settings.BASE_DIR, "api", "machinelearning", "models", f, "model.joblib"))
+            features_transformed = pipeline.transform(features)
+
+            result = model.predict(features_transformed)
 
             data.append(
                 {
                     "model": f,
-                    "score": 2.31,
+                    "score": float("%.2f" % result[0]),
                 }
             )
 
