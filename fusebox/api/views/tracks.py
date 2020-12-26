@@ -216,9 +216,17 @@ def predictions(request: HttpRequest, id: int) -> JsonResponse:
             track.tempo,
         ]]
 
-        for f in ["linear_regression"]:
-            pipeline = joblib.load(os.path.join(settings.BASE_DIR, "api",
-                                                "machinelearning", "models", f, "pipeline.joblib"))
+        for f in ["linear_regression", "decision_tree", "random_forest"]:
+            pipeline = joblib.load(
+                os.path.join(
+                    settings.BASE_DIR,
+                    "api",
+                    "machinelearning",
+                    "models",
+                    f,
+                    "pipeline.joblib"
+                )
+            )
             model = joblib.load(os.path.join(settings.BASE_DIR, "api", "machinelearning", "models", f, "model.joblib"))
             features_transformed = pipeline.transform(features)
 
@@ -226,7 +234,7 @@ def predictions(request: HttpRequest, id: int) -> JsonResponse:
 
             data.append(
                 {
-                    "model": f,
+                    "model": f.replace("_", " "),
                     "score": float("%.2f" % result[0]),
                 }
             )
