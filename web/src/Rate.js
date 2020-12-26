@@ -15,7 +15,7 @@ class Rate extends React.Component {
         }
     }
 
-    componentDidUpdate() {
+    componentDidMount() {
         FuseboxApiClient.unratedTracks(this.state.offset, this.state.limit).then(tracks => {
             this.setState({
                 tracks: tracks

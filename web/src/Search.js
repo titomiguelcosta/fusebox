@@ -18,7 +18,7 @@ class Search extends React.Component {
         }
     }
 
-    componentDidUpdate() {
+    componentDidMount() {
         if (!this.state.searching) {
             this.setState({
                 searching: true,
