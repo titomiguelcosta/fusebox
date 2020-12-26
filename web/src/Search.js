@@ -10,19 +10,12 @@ class Search extends React.Component {
         let q = params.get('q');
 
         this.state = {
-            searching: true,
+            searching: false,
             tracks: [],
             offset: parseInt(params.get('offset')) || 0,
             limit: 10,
             q: q,
         }
-
-        FuseboxApiClient.searchTracks(this.state.q, this.state.offset, this.state.limit).then(tracks => {
-            this.setState({
-                tracks: tracks,
-                searching: false,
-            });
-        });
     }
 
     componentDidUpdate() {
