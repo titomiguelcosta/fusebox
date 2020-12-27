@@ -216,7 +216,7 @@ def predictions(request: HttpRequest, id: int) -> JsonResponse:
             track.tempo,
         ]]
 
-        for f in ["linear_regression", "decision_tree", "random_forest"]:
+        for f in ["linear_regression", "decision_tree", "random_forest", "knn"]:
             pipeline = joblib.load(
                 os.path.join(
                     settings.BASE_DIR,
