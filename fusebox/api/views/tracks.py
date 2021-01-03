@@ -279,7 +279,7 @@ def predictions(request: HttpRequest, id: int) -> JsonResponse:
                 }
             )
 
-        for f in ["stochastic_gradient_descent"]:
+        for f in ["stochastic_gradient_descent", "random_forest"]:
             model = joblib.load(os.path.join(
                 settings.BASE_DIR,
                 "api",
