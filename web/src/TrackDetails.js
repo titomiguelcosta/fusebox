@@ -63,16 +63,43 @@ class TrackDetails extends React.Component {
             : '';
 
         const predictions = this.state.predictions.length > 0
-            ? <dl>
-                {this.state.predictions.map(prediction => {
-                    return (
-                        <>
-                            <dt>{prediction.model}</dt>
-                            <dd>{prediction.score}</dd>
-                        </>
-                    );
-                })}
-            </dl>
+            ?
+            <>
+                <h3>Regression</h3> 
+                <dl>
+                    {this.state.predictions.regression.map(prediction => {
+                        return (
+                            <>
+                                <dt>{prediction.model}</dt>
+                                <dd>{prediction.score}</dd>
+                            </>
+                        );
+                    })}
+                </dl>
+                <h3>Binary</h3>
+                <dl>
+                    {this.state.predictions.classification.binary.map(prediction => {
+                        return (
+                            <>
+                                <dt>{prediction.model}</dt>
+                                <dd>{prediction.score ? 'You like it' : 'Not your cup of tea'}</dd>
+                            </>
+                        );
+                    })}
+                </dl>
+
+                <h3>Multiclass</h3>
+                <dl>
+                    {this.state.predictions.classification.multiclass.map(prediction => {
+                        return (
+                            <>
+                                <dt>{prediction.model}</dt>
+                                <dd>{prediction.score}</dd>
+                            </>
+                        );
+                    })}
+                </dl>
+            </>
             : '';
 
         const rate = this.state.track && this.state.track.rate.score

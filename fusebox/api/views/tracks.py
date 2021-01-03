@@ -197,7 +197,13 @@ def dump(request: HttpRequest) -> HttpResponse:
 @csrf_exempt
 @require_http_methods(["GET"])
 def predictions(request: HttpRequest, id: int) -> JsonResponse:
-    data = []
+    data = {
+        "regression": [],
+        "classification": {
+            "binary": [],
+            "multiclass": [],
+        }
+    }
 
     try:
         track = Track.objects.get(pk=id)
@@ -216,26 +222,70 @@ def predictions(request: HttpRequest, id: int) -> JsonResponse:
             track.tempo,
         ]]
 
-        for f in ["linear_regression", "decision_tree", "random_forest", "knn"]:
-            pipeline = joblib.load(
-                os.path.join(
-                    settings.BASE_DIR,
-                    "api",
-                    "machinelearning",
-                    "models",
-                    f,
-                    "pipeline.joblib"
-                )
+        pipeline = joblib.load(
+            os.path.join(
+                settings.BASE_DIR,
+                "api",
+                "machinelearning",
+                "models",
+                "regression",
+                "pipeline.joblib"
             )
-            model = joblib.load(os.path.join(settings.BASE_DIR, "api", "machinelearning", "models", f, "model.joblib"))
+        )
+
+        for f in ["linear_regression", "decision_tree", "random_forest", "knn"]:
+            model = joblib.load(os.path.join(
+                settings.BASE_DIR,
+                "api",
+                "machinelearning",
+                "models",
+                "regression",
+                f + ".joblib"
+            ))
             features_transformed = pipeline.transform(features)
-
             result = model.predict(features_transformed)
-
-            data.append(
+            data["regression"].append(
                 {
                     "model": f.replace("_", " "),
                     "score": float("%.2f" % result[0]),
+                }
+            )
+
+        for f in ["stochastic_gradient_descent"]:
+            model = joblib.load(os.path.join(
+                settings.BASE_DIR,
+                "api",
+                "machinelearning",
+                "models",
+                "classification",
+                "binary",
+                f + ".joblib"
+            ))
+            features_transformed = pipeline.transform(features)
+            result = model.predict(features_transformed)
+            data["classification"]["binary"].append(
+                {
+                    "model": f.replace("_", " "),
+                    "score": result[0],
+                }
+            )
+
+        for f in []:
+            model = joblib.load(os.path.join(
+                settings.BASE_DIR,
+                "api",
+                "machinelearning",
+                "models",
+                "classification",
+                "multiclass",
+                f + ".joblib"
+            ))
+            features_transformed = pipeline.transform(features)
+            result = model.predict(features_transformed)
+            data["classification"]["multiclass"].append(
+                {
+                    "model": f.replace("_", " "),
+                    "score": result[0],
                 }
             )
 
