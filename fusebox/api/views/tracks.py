@@ -12,6 +12,7 @@ import joblib
 import json
 import csv
 import os
+import pandas as pd
 
 
 @query_auth
@@ -207,20 +208,46 @@ def predictions(request: HttpRequest, id: int) -> JsonResponse:
 
     try:
         track = Track.objects.get(pk=id)
-
-        features = [[
-            track.key,
-            track.time_signature,
-            track.danceability,
-            track.energy,
-            track.loudness,
-            track.speechiness,
-            track.acousticness,
-            track.instrumentalness,
-            track.liveness,
-            track.valence,
-            track.tempo,
-        ]]
+        features = pd.DataFrame(
+            data=[[
+                None,
+                None,
+                None,
+                None,
+                track.key,
+                track.time_signature,
+                track.danceability,
+                track.energy,
+                track.loudness,
+                track.speechiness,
+                track.acousticness,
+                track.instrumentalness,
+                track.liveness,
+                track.valence,
+                track.tempo,
+                None,
+                None,
+            ]],
+            columns=[
+                "id",
+                "artist",
+                "album",
+                "title",
+                "key",
+                "time_signature",
+                "danceability",
+                "energy",
+                "loudness",
+                "speechiness",
+                "acousticness",
+                "instrumentalness",
+                "liveness",
+                "valence",
+                "tempo",
+                "duration_ms",
+                "num_played",
+            ]
+        )
 
         pipeline = joblib.load(
             os.path.join(
@@ -232,6 +259,7 @@ def predictions(request: HttpRequest, id: int) -> JsonResponse:
                 "pipeline.joblib"
             )
         )
+        features_transformed = pipeline.transform(features)
 
         for f in ["linear_regression", "decision_tree", "random_forest", "knn"]:
             model = joblib.load(os.path.join(
@@ -242,7 +270,7 @@ def predictions(request: HttpRequest, id: int) -> JsonResponse:
                 "regression",
                 f + ".joblib"
             ))
-            features_transformed = pipeline.transform(features)
+
             result = model.predict(features_transformed)
             data["regression"].append(
                 {
@@ -266,7 +294,7 @@ def predictions(request: HttpRequest, id: int) -> JsonResponse:
             data["classification"]["binary"].append(
                 {
                     "model": f.replace("_", " "),
-                    "score": result[0],
+                    "score": bool(result[0]),
                 }
             )
 

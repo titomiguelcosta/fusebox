@@ -11,7 +11,7 @@ class TrackDetails extends React.Component {
         this.state = {
             id: this.props.match.params.id,
             track: null,
-            predictions: [],
+            predictions: null,
         }
     }
 
@@ -62,7 +62,7 @@ class TrackDetails extends React.Component {
             </ul>
             : '';
 
-        const predictions = this.state.predictions.length > 0
+        const predictions = this.state.predictions
             ?
             <>
                 <h3>Regression</h3> 
