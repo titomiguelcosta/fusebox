@@ -298,7 +298,7 @@ def predictions(request: HttpRequest, id: int) -> JsonResponse:
                 }
             )
 
-        for f in []:
+        for f in ["support_vector_machine"]:
             model = joblib.load(os.path.join(
                 settings.BASE_DIR,
                 "api",
