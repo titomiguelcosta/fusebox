@@ -72,7 +72,7 @@ Markdown==3.3
 MarkupSafe==1.1.1
 matplotlib==3.3.2
 mccabe==0.6.1
-mistune==0.8.4
+mistune==2.0.3
 multidict==4.5.2
 mysqlclient==1.4.2.post1
 nbclient==0.5.0
