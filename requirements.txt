@@ -31,7 +31,7 @@ django-cors-headers==3.5.0
 django-extensions
 django-filter==2.4.0
 djangorestframework==3.12.1
-djangorestframework-simplejwt==4.4.0
+djangorestframework-simplejwt==4.5.0
 dm-tree==0.1.5
 docutils==0.14
 durationpy==0.5

@@ -21,7 +21,7 @@ host('fusebox.titomiguelcosta.com')
     ->set('deploy_path', '/mnt/websites/fusebox')
     ->set('shared_files', ['.env', 'web/.env'])
     ->set('branch', 'master')
-    ->set('env', ['PATH' => '/mnt/websites/.pyenv/plugins/pyenv-virtualenv/shims:/mnt/websites/.pyenv/shims:/mnt/websites/.pyenv/bin:/home/ubuntu/.nvm/versions/node/v12.18.4/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin']);
+    ->set('env', ['PATH' => '/home/ubuntu/.pyenv/plugins/pyenv-virtualenv/shims:/home/ubuntu/.pyenv/shims:/home/ubuntu/.pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin']);
 
 task('workers:restart', function () {
     run('sudo supervisorctl reload');
